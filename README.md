@@ -1,6 +1,7 @@
-# directChillFoam
+directChillFoam
+======
 
-* About OpenFOAM
+## About OpenFOAM  
   OpenFOAM is a free, open source computational fluid dynamics (CFD) software
   package released by the OpenFOAM Foundation. It has a large user base across
   most areas of engineering and science, from both commercial and academic
@@ -8,7 +9,7 @@
   from complex fluid flows involving chemical reactions, turbulence and heat
   transfer, to solid dynamics and electromagnetics.
 
-* Copyright
+## Copyright  
   OpenFOAM is free software: you can redistribute it and/or modify it under the
   terms of the GNU General Public License as published by the Free Software
   Foundation, either version 3 of the License, or (at your option) any later
@@ -16,7 +17,7 @@
   [http://www.gnu.org/licenses/](http://www.gnu.org/licenses/), for a description of the GNU General Public
   License terms under which you can copy the files.
 
-* Direct-Chill (DC) Casting Application
+## Direct-Chill (DC) Casting Application  
   This repository contains developments for modeling direct-chill (DC) casting
   by Bruno Lebon at BCAST, Brunel University London using OpenFOAM.
 
@@ -27,6 +28,7 @@
   formulation", IJHMT **30** (1987) 2161-2170.
 
   as well as a test case from:
+  
   C.J. Vreeman, J.D. Schloz and M.J.M. Krane, "Direct Chill Casting of Aluminium
   Alloys: Modelling and Experiments on Industrial Scale Ingots", Journal of Heat
   Transfer **124** (2002) 947-953.
