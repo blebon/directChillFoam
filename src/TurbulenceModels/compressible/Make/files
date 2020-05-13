@@ -1,0 +1,5 @@
+BCs = turbulentFluidThermoModels/derivedFvPatchFields
+$(BCs)/mouldHTC/mouldHTCFvPatchScalarField.C
+$(BCs)/waterFilmHTC/waterFilmHTCFvPatchScalarField.C
+
+LIB = $(FOAM_USER_LIBBIN)/libmyCompressibleTurbulenceModels

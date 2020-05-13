@@ -1,0 +1,93 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+  =========                 |
+  \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
+   \\    /   O peration     | Website:  https://openfoam.org
+    \\  /    A nd           | Version:  7
+     \\/     M anipulation  |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       volVectorField;
+    location    "0";
+    object      U;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+UCast    (0 0 -0.001);
+UInitial    (0 0 0);
+
+dimensions      [0 1 -1 0 0 0 0];
+
+internalField   uniform $UCast;
+
+boundaryField
+{
+    ram
+    {
+        type            fixedValue;
+        value           uniform $UCast;
+        // type            zeroGradient;
+    }
+
+    "(ceramic|hot-top)"
+    {
+        type            noSlip;
+    }
+
+    "(graphite|mould|air-gap|water-film)"
+    {
+        type            codedFixedValue;
+        value           $internalField;
+        redirectType    movingShell;
+
+        code
+        #{
+            // Initialize velocity with zeroes
+            vectorField U(patch().size(), vector(0, 0, 0));
+
+            // Find liquid fraction
+            const scalarField& fL = this->patch().lookupPatchField<volScalarField, scalar>("melt1_alpha1");
+
+            // Go through all face centres
+            const vectorField& centre(patch().Cf());
+            forAll(centre, i)
+            {
+                U[i].z() = -0.001*(1-fL[i]);
+            }
+
+            // Apply the calculated velocities
+             operator==(U);
+        #};
+
+        codeInclude
+        #{
+            // #include "fvCFD.H";
+        #};
+
+        // codeOptions
+        // #{
+        //     -I$(LIB_SRC)/finiteVolume/lnInclude \
+        //     -I$(LIB_SRC)/meshTools/lnInclude
+        // #};
+
+        // codeLibs
+        // #{
+        //     -lmeshTools \
+        //     -lfiniteVolume
+        // #};
+    }
+
+    free-surface
+    {
+        type            zeroGradient;
+    }
+
+    symmetry_planes
+    {
+        type            symmetry;
+    }
+}
+
+// ************************************************************************* //

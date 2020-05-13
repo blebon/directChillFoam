@@ -1,0 +1,42 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+  =========                 |
+  \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
+   \\    /   O peration     |
+    \\  /    A nd           | Web:      www.OpenFOAM.org
+     \\/     M anipulation  |
+-------------------------------------------------------------------------------
+Description
+    Writes out surface files with interpolated field data in VTK format, e.g.
+    cutting planes, iso-surfaces and patch boundary surfaces.
+
+    This file includes a selection of example surfaces, each of which the user
+    should configure and/or remove.
+
+\*---------------------------------------------------------------------------*/
+
+#includeEtc "caseDicts/postProcessing/visualization/surfaces.cfg"
+
+fields       (U T melt1_alpha1 grad(T));
+
+writeControl writeTime;
+
+// surfaceFormat vtk;
+interpolationScheme cell;
+
+surfaces
+(
+    yNormal
+    {
+        type cuttingPlane;
+        planeType pointAndNormal;
+        pointAndNormalDict
+        {
+            basePoint (1e3 0 0);
+            normalVector (0 1 0);
+        }
+        triangulate  false;
+        interpolate  true;
+    }
+);
+
+// ************************************************************************* //

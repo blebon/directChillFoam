@@ -1,0 +1,21 @@
+#!/bin/bash
+
+# Source tutorial run functions
+source $WM_PROJECT_DIR/bin/tools/RunFunctions
+
+# Get application name
+application=`getApplication`
+
+rm -rf 0
+cp -rfL 0.orig 0
+
+# Mesh
+runApplication blockMesh
+
+# Initialization
+runApplication setFields
+
+# Decompose domain for parallelization
+runApplication decomposePar
+
+#------------------------------------------------------------------------------
