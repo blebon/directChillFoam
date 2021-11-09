@@ -1,0 +1,3 @@
+derived/mushyZoneSource/mushyZoneSource.C
+
+LIB = $(FOAM_USER_LIBBIN)/libmyFvModels

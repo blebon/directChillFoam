@@ -1,7 +1,0 @@
-/* Sources */
-
-derivedSources=sources/derived
-$(derivedSources)/mushyZoneSource/mushyZoneSource.C
-$(derivedSources)/mushyZoneSource/mushyZoneSourceIO.C
-
-LIB = $(FOAM_USER_LIBBIN)/libmyFvOptions

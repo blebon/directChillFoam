@@ -1,7 +1,9 @@
+#include "createRDeltaT.H"
+
 Info<< "Reading thermophysical properties\n" << endl;
 
-autoPtr<rhoThermo> pThermo(rhoThermo::New(mesh));
-rhoThermo& thermo = pThermo();
+autoPtr<fluidThermo> pThermo(fluidThermo::New(mesh));
+fluidThermo& thermo = pThermo();
 thermo.validate(args.executable(), "h", "e");
 
 // Reading transport properties for Us 
@@ -18,7 +20,7 @@ IOdictionary transportProperties
     )
 );
 
-#include "createFieldRefs.H"
+volScalarField& p = thermo.p();
 
 volScalarField rho
 (
@@ -45,8 +47,6 @@ volScalarField mu
     ),
     thermo.mu()
 );
-
-volScalarField& p = thermo.p();
 
 Info<< "Reading field U\n" << endl;
 volVectorField U
@@ -93,9 +93,9 @@ volScalarField alpha
 #include "compressibleCreatePhi.H"
 
 Info<< "Creating turbulence model\n" << endl;
-autoPtr<compressible::turbulenceModel> turbulence
+autoPtr<compressible::momentumTransportModel> turbulence
 (
-    compressible::turbulenceModel::New
+    compressible::momentumTransportModel::New
     (
         rho,
         U,
@@ -104,10 +104,17 @@ autoPtr<compressible::turbulenceModel> turbulence
     )
 );
 
+Info<< "Creating thermophysical transport model\n" << endl;
+autoPtr<fluidThermophysicalTransportModel> thermophysicalTransport
+(
+    fluidThermophysicalTransportModel::New(turbulence(), thermo)
+);
+
 
 #include "readGravitationalAcceleration.H"
 #include "readhRef.H"
 #include "gh.H"
+#include "readpRef.H"
 
 
 Info<< "Reading field p_rgh\n" << endl;
@@ -124,25 +131,28 @@ volScalarField p_rgh
     mesh
 );
 
-// Force p_rgh to be consistent with p
-p_rgh = p - rho*gh;
-
-label pRefCell = 0;
-scalar pRefValue = 0.0;
-
-if (thermo.incompressible())
-{
-    setRefCell
-    (
-        p,
-        p_rgh,
-        pimple.dict(),
-        pRefCell,
-        pRefValue
-    );
-}
+pressureReference pressureReference
+(
+    p,
+    p_rgh,
+    pimple.dict(),
+    thermo.incompressible()
+);
 
 mesh.setFluxRequired(p_rgh.name());
+
+hydrostaticInitialisation
+(
+    p_rgh,
+    p,
+    rho,
+    U,
+    gh,
+    ghf,
+    pRef,
+    thermo,
+    pimple.dict()
+);
 
 Info<< "Creating field dpdt\n" << endl;
 volScalarField dpdt
@@ -154,12 +164,15 @@ volScalarField dpdt
         mesh
     ),
     mesh,
-    dimensionedScalar("dpdt", p.dimensions()/dimTime, 0)
+    dimensionedScalar(p.dimensions()/dimTime, 0)
 );
 
 Info<< "Creating field kinetic energy K\n" << endl;
 volScalarField K("K", 0.5*magSqr(U));
 
+dimensionedScalar initialMass = fvc::domainIntegrate(rho);
+
 #include "createMRF.H"
-#include "createRadiationModel.H"
-#include "createFvOptions.H"
+#include "createFvModels.H"
+#include "createFvConstraints.H"
+#include "checkRadiationModel.H"

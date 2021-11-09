@@ -1,3 +1,0 @@
-tableThermos.C
-
-LIB = $(FOAM_USER_LIBBIN)/libtableThermophysicalModels

@@ -25,9 +25,9 @@ regions
 (
     cylinderToCell
     {
-        p1 (0 0 -0.501);
+        p1 (0 0 -0.901);
         p2 (0 0 -0.401);
-        radius 0.0775;
+        radius 0.225;
 
         fieldValues
         (
@@ -40,7 +40,7 @@ regions
     {
         p1 (0 0 -0.401);
         p2 (0 0 -0.301);
-        radius 0.0775;
+        radius 0.225;
 
         fieldValues
         (
@@ -53,7 +53,7 @@ regions
     {
         p1 (0 0 -0.301);
         p2 (0 0 -0.251);
-        radius 0.0775;
+        radius 0.225;
 
         fieldValues
         (
@@ -66,7 +66,7 @@ regions
     {
         p1 (0 0 -0.251);
         p2 (0 0 -0.131);
-        radius 0.0775;
+        radius 0.225;
 
         fieldValues
         (
@@ -79,7 +79,7 @@ regions
     {
         p1 (0 0 -0.131);
         p2 (0 0 -0.121);
-        radius 0.0775;
+        radius 0.225;
 
         fieldValues
         (
@@ -92,7 +92,7 @@ regions
     {
         p1 (0 0 -0.121);
         p2 (0 0 -0.107);
-        radius 0.0775;
+        radius 0.225;
 
         fieldValues
         (
@@ -105,7 +105,7 @@ regions
     {
         p1 (0 0 -0.107);
         p2 (0 0 -0.095);
-        radius 0.0775;
+        radius 0.225;
 
         fieldValues
         (
@@ -118,7 +118,7 @@ regions
     {
         p1 (0 0 -0.095);
         p2 (0 0 -0.061);
-        radius 0.0775;
+        radius 0.225;
 
         fieldValues
         (
@@ -131,7 +131,7 @@ regions
     {
         p1 (0 0 -0.061);
         p2 (0 0 -0.041);
-        radius 0.0775;
+        radius 0.225;
 
         fieldValues
         (

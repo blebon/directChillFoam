@@ -8,13 +8,23 @@
 FoamFile
 {
     format      ascii;
-    class       uniformDimensionedVectorField;
+    class       dictionary;
     location    "constant";
-    object      g;
+    object      momentumTransport;
 }
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
-dimensions      [0 1 -2 0 0 0 0];
-value           (0 0 -9.81);
+simulationType laminar;
+// simulationType RAS;
+
+RAS
+{
+    RASModel            kOmegaSST;
+    // RASModel            realizableKE;
+
+    turbulence          on;
+
+    printCoeffs         on;
+}
 
 // ************************************************************************* //

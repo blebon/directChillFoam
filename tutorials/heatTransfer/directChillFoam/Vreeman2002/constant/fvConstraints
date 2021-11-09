@@ -8,13 +8,19 @@
 FoamFile
 {
     format      ascii;
-    class       uniformDimensionedVectorField;
+    class       dictionary;
     location    "constant";
-    object      g;
+    object      fvConstraints;
 }
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
-dimensions      [0 1 -2 0 0 0 0];
-value           (0 0 -9.81);
+limitT
+{
+    type            limitTemperature;
+    active          yes;
+    selectionMode   all;
+    min             291.13;
+    max             943.48;
+}
 
 // ************************************************************************* //

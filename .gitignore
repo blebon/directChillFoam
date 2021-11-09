@@ -50,7 +50,7 @@ thicknessFraction
 # Folders
 platforms/
 mingw_w64GccDPInt32Opt/
-linux64GccDPInt32Opt/
+linux64Gcc*Int32Opt/
 lnInclude/
 
 # run Folders
