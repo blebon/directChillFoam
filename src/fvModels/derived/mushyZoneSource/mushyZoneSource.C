@@ -24,6 +24,7 @@ License
 \*---------------------------------------------------------------------------*/
 
 #include "mushyZoneSource.H"
+#include "multicomponentAlloy.H"
 #include "fvMatrices.H"
 #include "basicThermo.H"
 #include "uniformDimensionedFields.H"
@@ -75,7 +76,6 @@ void Foam::fv::mushyZoneSource::readCoeffs()
 
     relax_ = coeffs().lookupOrDefault("relax", 0.9);
 
-    // castingVelocity_ = coeffs().lookup<vector>("castingVelocity");
     tStar_ = Function1<scalar>::New("tStar", coeffs());
 
     mode_ = thermoModeTypeNames_.read(coeffs().lookup("thermoMode"));
@@ -163,11 +163,6 @@ void Foam::fv::mushyZoneSource::update
     const volScalarField& Cp
 ) const
 {
-    if (curTimeIndex_ == mesh().time().timeIndex())
-    {
-        return;
-    }
-
     if (debug)
     {
         Info<< type() << ": " << name()
@@ -187,19 +182,15 @@ void Foam::fv::mushyZoneSource::update
 
         const scalar Tc = T[celli];
         const scalar Cpc = Cp[celli];
-        scalar alpha1New;
-        scalar Tstar;
-
+        
         scalar alpha1_star = alpha1_[celli];
-        Tstar = tStar_->value(max(0, min(alpha1_star, 1)));
-        alpha1New = alpha1_star + relax_*Cpc*(Tc - Tstar)/L_;
+        scalar Tstar = tStar_->value(max(0, min(alpha1_star, 1)));
+        scalar alpha1New = alpha1_star + relax_*Cpc*(Tc - Tstar)/L_;
         
         alpha1_[celli] = max(0, min(alpha1New, 1));
     }
 
     alpha1_.correctBoundaryConditions();
-
-    curTimeIndex_ = mesh().time().timeIndex();
 }
 
 
@@ -256,8 +247,7 @@ Foam::fv::mushyZoneSource::mushyZoneSource
         mesh,
         dimensionedScalar(dimless, 0),
         zeroGradientFvPatchScalarField::typeName
-    ),
-    curTimeIndex_(-1)
+    )
 {
     readCoeffs();
 }
@@ -320,7 +310,8 @@ void Foam::fv::mushyZoneSource::addSup
 
     const volScalarField Cp(this->Cp());
 
-    update(Cp);
+    // Don't update alpha in momentum solver stage
+    // update(Cp);
 
     vector g = this->g();
 
@@ -351,6 +342,27 @@ void Foam::fv::mushyZoneSource::addSup
         {
             const vector Sb = rhoRef_*g*beta_*(T[celli] - Tsol_);
             Su[celli] += Vc*Sb;
+        }
+    }
+
+    const multicomponentAlloy& alloy = mesh().lookupObject<multicomponentAlloy>("soluteProperties");
+
+    forAllConstIter(PtrDictionary<soluteModel>, alloy.solutes(), iter)
+    {
+        const soluteModel& solute = iter();
+        const volScalarField& C = solute;
+
+        forAll(cells, i)
+        {
+            label celli = cells[i];
+
+            scalar Vc = V[celli];
+
+            if (T[celli] > Tsol_)
+            {
+                vector Sb = rhoRef_*g*solute.beta().value()*(C[celli] - solute.C0().value());
+                Su[celli] += Vc*Sb;
+            }
         }
     }
 }

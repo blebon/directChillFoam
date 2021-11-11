@@ -14,6 +14,12 @@ FoamFile
 }
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
+DebugSwitches
+{
+    // mushyZoneSource 1;
+    // limitSolute     1;
+}
+
 application     directChillFoam;
 
 // startFrom       startTime;
@@ -24,7 +30,7 @@ startTime       0;
 stopAt          endTime;
 // stopAt          writeNow;
 
-endTime         600.0;
+endTime         800.0;
 
 deltaT          0.01;
 
@@ -100,7 +106,7 @@ surfaceFunctions
         funcName=yNormal,
         point=(1e3 0 0),
         normal=(0 1 0),
-        fields=(U T melt1_alpha1 grad(T))
+        fields=(U T melt1_alpha1 C.Cu grad(T))
     )
 }
 
@@ -119,6 +125,7 @@ OptimisationSwitches
 
 libs (
     "libmyFvModels.so"
+    "libmyFvConstraints.so"
     "libmythermophysicalTransportModels.so"
 );
 

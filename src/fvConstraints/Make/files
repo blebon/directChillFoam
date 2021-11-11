@@ -1,0 +1,3 @@
+limitSolute/limitSolute.C
+
+LIB = $(FOAM_USER_LIBBIN)/libmyFvConstraints

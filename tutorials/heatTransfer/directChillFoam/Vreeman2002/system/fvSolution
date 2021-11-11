@@ -82,15 +82,10 @@ solvers
 PIMPLE
 {
     momentumPredictor no;
-    nOuterCorrectors  2;
-    nCorrectors       1;
+    nOuterCorrectors  1;
+    nCorrectors       2;
     nNonOrthogonalCorrectors 0;
     nEnergyCorrectors 3;
-}
-
-SIMPLE
-{
-    nNonOrthogonalCorrectors 0;
 }
 
 relaxationFactors
@@ -104,6 +99,7 @@ relaxationFactors
     {
         "(h|E)"               1.0;
         "(U|k|omega|epsilon)" 1.0;
+        C.Cu            0.5;
         ".*"            1.0;
     }
 }

@@ -46,8 +46,8 @@ melt1
 
         phi             phi;
 
-        Cu              3.078608e+06; // Assuming K0 = 3.75e-11
-        // Cu              1.0e+05;
+        // Cu              3.078608e+06; // Assuming K0 = 3.75e-11
+        Cu              1.0e+05;
         q               1.0e-06;
     }
 }

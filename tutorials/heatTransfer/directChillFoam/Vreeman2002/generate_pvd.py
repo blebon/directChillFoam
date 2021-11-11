@@ -1,4 +1,4 @@
-#!/usr/bin/env python2
+#!/usr/bin/env python3
 """Generate .pvd XML file to post-process surfaces function
 object
 
@@ -59,7 +59,7 @@ def create_xml(variable="U", surface="yNormal", file_format="vtp"):
 
 
 if __name__ == "__main__":
-    variables = ["grad(T)", "melt1_alpha1", "T", "U"]
+    variables = ["grad(T)", "C.Cu", "melt1_alpha1", "T", "U"]
     surfaces = ["yNormal"]
     for variable in variables:
         for surface in surfaces:

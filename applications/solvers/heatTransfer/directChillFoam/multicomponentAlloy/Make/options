@@ -1,0 +1,17 @@
+EXE_INC = \
+    -I. \
+    -IsoluteModel/lnInclude \
+    -I$(LIB_SRC)/finiteVolume/cfdTools \
+    -I$(LIB_SRC)/finiteVolume/lnInclude \
+    -I$(LIB_SRC)/meshTools/lnInclude \
+    -I$(LIB_SRC)/sampling/lnInclude \
+    -I$(LIB_SRC)/dynamicFvMesh/lnInclude
+
+EXE_LIBS = \
+    -lfiniteVolume \
+    -ldynamicFvMesh \
+    -ltopoChangerFvMesh \
+    -lmeshTools \
+    -lsampling \
+    -lfvModels \
+    -lfvConstraints

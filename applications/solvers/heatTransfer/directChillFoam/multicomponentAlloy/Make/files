@@ -1,0 +1,4 @@
+soluteModel/soluteModel.C
+multicomponentAlloy.C
+
+LIB = $(FOAM_USER_LIBBIN)/libmulticomponentAlloy

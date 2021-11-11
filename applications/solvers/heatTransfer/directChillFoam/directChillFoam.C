@@ -36,6 +36,7 @@ Description
 
 #include "fvCFD.H"
 #include "dynamicFvMesh.H"
+#include "multicomponentAlloy.H"
 #include "fluidThermo.H"
 #include "dynamicMomentumTransportModel.H"
 #include "fluidThermophysicalTransportModel.H"
@@ -60,7 +61,6 @@ int main(int argc, char *argv[])
     #include "createDyMControls.H"
     #include "initContinuityErrs.H"
     #include "createFields.H"
-    #include "createFieldRefs.H"
     #include "createRhoUfIfPresent.H"
 
     turbulence->validate();
@@ -116,9 +116,6 @@ int main(int argc, char *argv[])
         {
             const volScalarField& melt1_alpha1 =
                 mesh.lookupObject<volScalarField>("melt1_alpha1");
-            // Used in mushyZoneSource
-            const volVectorField& castingVelocity_ =
-                mesh.lookupObject<volVectorField>("castingVelocity_");
 
             if (!pimple.flow())
             {

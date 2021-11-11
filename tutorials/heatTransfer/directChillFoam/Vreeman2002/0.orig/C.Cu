@@ -8,19 +8,39 @@
 FoamFile
 {
     format      ascii;
-    class       dictionary;
-    location    "constant";
-    object      fvConstraints;
+    class       volScalarField;
+    location    "0";
+    object      C.Cu;
 }
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
-limitT
+dimensions      [0 0 0 0 0 0 0];
+
+internalField   uniform 0.06;
+
+boundaryField
 {
-    type            limitTemperature;
-    active          yes;
-    selectionMode   all;
-    min             291.13;
-    max             943.48;
+    "(water-film|mould|air-gap|graphite|ceramic|hot-top)"
+    {
+        type            zeroGradient;
+    }
+
+    free-surface
+    {
+	type            fixedValue;
+	value		$internalField;
+    }
+
+    ram
+    {
+        type            zeroGradient;
+    }
+
+    symmetry_planes
+    {
+        type            symmetry;
+    }
 }
+
 
 // ************************************************************************* //

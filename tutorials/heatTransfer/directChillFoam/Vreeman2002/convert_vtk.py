@@ -1,3 +1,19 @@
+#!/usr/bin/env python3
+"""Convert VTK files to VTP
+
+Example:
+    Run python script in case root directory:
+
+        $ python3 convert_vtk.py
+
+Todo:
+    * None
+
+.. _Google Python Style Guide:
+   http://google.github.io/styleguide/pyguide.html
+
+"""
+
 from __future__ import division, print_function
 
 from itertools import chain

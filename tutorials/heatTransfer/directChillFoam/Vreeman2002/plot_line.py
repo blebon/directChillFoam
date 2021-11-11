@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 """Plot temperature profiles at centre and side
 
 This script plots the comparison between numerical and experimental
@@ -8,7 +8,7 @@ postProcessing directory.
 Example:
     Run python script in case root directory:
 
-        $ python3 system/plot_line.py
+        $ python3 plot_line.py
 
 Todo:
     * None
@@ -95,7 +95,7 @@ def plot_single_image(plot_time, Experimental, Image_Path="."):
         label="Side measurement",
     )
 
-    plt.plot(Numerical["z"], Numerical["tcC"] - 27, label="Centre numerical")
+    plt.plot(Numerical["z"], Numerical["tcC"], label="Centre numerical")
     plt.plot(Numerical["z"], Numerical["tmC"], label="Midradius numerical")
     plt.plot(Numerical["z"], Numerical["tsC"], label="Side numerical")
 

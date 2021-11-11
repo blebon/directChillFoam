@@ -20,6 +20,8 @@ IOdictionary transportProperties
     )
 );
 
+#include "createFieldRefs.H"
+
 volScalarField& p = thermo.p();
 
 volScalarField rho
@@ -176,3 +178,5 @@ dimensionedScalar initialMass = fvc::domainIntegrate(rho);
 #include "createFvModels.H"
 #include "createFvConstraints.H"
 #include "checkRadiationModel.H"
+
+multicomponentAlloy alloy("alloy", U, rho, rho2, phi, fvModels, fvConstraints);

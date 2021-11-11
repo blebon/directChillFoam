@@ -10,49 +10,27 @@ FoamFile
     format      ascii;
     class       dictionary;
     location    "system";
-    object      fvSchemes;
+    object      fvConstraints;
 }
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
-ddtSchemes
+limitT
 {
-    default         Euler;
-    ddt(melt1_alpha1) localEuler;
+    type            limitTemperature;
+    active          yes;
+    selectionMode   all;
+    min             358.00;
+    max             943.48;
 }
 
-gradSchemes
+limitC.Cu
 {
-    default         Gauss linear;
-    grad(h)	    cellLimited leastSquares 1;
-}
-
-divSchemes
-{
-    default         Gauss upwind;   
-    div(((rho*nuEff)*dev2(T(grad(U))))) Gauss linear;
-
-    div(phi,U)      bounded Gauss linearUpwindV grad(U);
-    div(phi,C.Cu)    bounded Gauss upwind;
-}
-
-laplacianSchemes
-{
-    default         Gauss linear uncorrected;
-}
-
-interpolationSchemes
-{
-    default         linear;
-}
-
-snGradSchemes
-{
-    default         uncorrected;
-}
-
-wallDist
-{
-    method meshWave;
+    type            limitSolute;
+    active          yes;
+    selectionMode   all;
+    solute          C.Cu;
+    min             0.0;
+    max             1.0;
 }
 
 // ************************************************************************* //

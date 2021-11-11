@@ -192,9 +192,6 @@ private:
         //- Phase fraction indicator field
         mutable volScalarField alpha1_;
 
-        //- Current time index (used for updating)
-        mutable label curTimeIndex_;
-
 
     // Private Member Functions
 

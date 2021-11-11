@@ -9,13 +9,21 @@ FoamFile
 {
     format      ascii;
     class       dictionary;
-    location    "system";
-    object      decomposeParDict;
+    location    "constant";
+    object      soluteProperties;
 }
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
-numberOfSubdomains  8;
-
-method          scotch;
+solutes
+(
+    Cu
+    {
+        D_l   5.66e-09;
+        kp    0.171;
+        C0    0.06;
+        Ceut  0.32;
+        beta  -7.3e-3;
+    }
+);
 
 // ************************************************************************* //

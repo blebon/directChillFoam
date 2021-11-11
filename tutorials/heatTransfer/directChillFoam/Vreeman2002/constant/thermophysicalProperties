@@ -42,7 +42,13 @@ mixture
         {
             values
             (
-                (  1.0000    2490.0)
+                // (  1.0000    1750.0)
+                // (  820.98    1750.0)
+                // (  880.88    1824.0)
+                (  1.0000    2450.0)
+		(  820.98    2460.0)
+		(  880.88    2490.0)
+		(  913.13    2490.0)
                 (  9999.0    2490.0)
             );
         }
@@ -54,6 +60,11 @@ mixture
         Sf          0;
         Cp
         {
+	    // type                table;
+            // format              foam;
+            // file		"constant/Cp";
+            // outOfBounds         clamp;
+            // interpolationScheme linear;
             values
             (
                 (  1.0000    1030.0)

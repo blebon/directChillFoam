@@ -3,11 +3,13 @@ for (int Ecorr=0; Ecorr<nEnergyCorrectors; Ecorr++)
     volScalarField alpha0(melt1_alpha1);
 
     #include "EEqn.H"
+    fvModels.correct();
 
     rho = thermo.rho();
     mu = thermo.mu();
     
     alpha = melt1_alpha1;
+    alloy.solve(Us, fvModels, fvConstraints);
 
     scalarField residualField
     (
