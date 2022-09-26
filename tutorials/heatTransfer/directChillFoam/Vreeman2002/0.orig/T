@@ -57,10 +57,10 @@ boundaryField
         type            waterFilmHTC;
         mode            coefficient;
         htc
-	{
-	    type		table;
-            format		foam;
-	    file		"constant/HTC_Tw";
+        {
+            type                table;
+            format              foam;
+            file                "constant/HTC_Tw";
             outOfBounds         clamp;
             interpolationScheme linear;
         }

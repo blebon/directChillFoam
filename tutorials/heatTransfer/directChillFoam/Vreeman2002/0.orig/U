@@ -39,7 +39,7 @@ boundaryField
         type            codedFixedValue;
         value           $internalField;
         redirectType    movingShell;
-        name		movingShell;
+        name            movingShell;
 
         code
         #{

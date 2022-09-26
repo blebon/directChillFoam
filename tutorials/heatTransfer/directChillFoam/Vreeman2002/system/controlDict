@@ -73,10 +73,10 @@ graphFunctions
 {
     #includeFunc graphCell
     (
-	funcName=centreline,
-	start=(1e-3 0  0.0),
-	end=(1e-3 0 -0.9),
-	fields=(T),
+        funcName=centreline,
+        start=(1e-3 0  0.0),
+        end=(1e-3 0 -0.9),
+        fields=(T),
         axis=z
     )
 

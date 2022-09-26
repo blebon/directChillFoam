@@ -27,8 +27,8 @@ boundaryField
 
     free-surface
     {
-	type            fixedValue;
-	value		$internalField;
+        type            fixedValue;
+        value           $internalField;
     }
 
     ram

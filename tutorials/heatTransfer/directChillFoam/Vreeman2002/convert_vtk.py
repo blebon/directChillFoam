@@ -1,30 +1,15 @@
-#!/usr/bin/env python3
-"""Convert VTK files to VTP
-
-Example:
-    Run python script in case root directory:
-
-        $ python3 convert_vtk.py
-
-Todo:
-    * None
-
-.. _Google Python Style Guide:
-   http://google.github.io/styleguide/pyguide.html
-
-"""
-
 from __future__ import division, print_function
 
 from itertools import chain
 import multiprocessing
 from os import listdir, makedirs, path, remove, walk
-from natsort import natsorted
+from natsort import natsorted, ns
+from sys import argv
 
 import vtk
 
 __author__ = "Bruno Lebon"
-__copyright__ = "Copyright, 2021, Brunel University London"
+__copyright__ = "Copyright, 2022, Brunel University London"
 __credits__ = ["Bruno Lebon"]
 __email__ = "Bruno.Lebon@brunel.ac.uk"
 __status__ = "Production"
@@ -37,11 +22,9 @@ def vtk2vtp(invtkfile, outvtpfile):
     reader.Update()
     writer = vtk.vtkXMLPolyDataWriter()
     writer.SetFileName(outvtpfile)
-    # writer.SetFileTypeToBinary()
     writer.SetDataModeToBinary()
     writer.SetInputData(reader.GetOutput())
     writer.Update()
-    # writer.Write()
 
 
 def convert_surfaces(vtkFile):
@@ -55,11 +38,13 @@ def convert_surfaces(vtkFile):
 
 
 if __name__ == "__main__":
-    with multiprocessing.Pool(8) as pool:
-        Walk = walk("postProcessing")
+    with multiprocessing.Pool(160) as pool:
+        try:
+            Walk = walk(f"postProcessing/{argv[1]}")
+        except:
+            Walk = walk(f"postProcessing")
         files_gen = chain.from_iterable(
             (path.join(root, f) for f in files if ".vtk" in f)
             for root, dirs, files in Walk
         )
-        # pool.map(print, files_gen)
-        pool.map(convert_surfaces, natsorted(files_gen))
+        pool.map(convert_surfaces, natsorted(files_gen, alg=ns.FLOAT))

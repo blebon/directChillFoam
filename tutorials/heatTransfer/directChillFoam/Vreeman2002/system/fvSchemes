@@ -23,7 +23,7 @@ ddtSchemes
 gradSchemes
 {
     default         Gauss linear;
-    grad(h)	    cellLimited leastSquares 1;
+    grad(h)         cellLimited leastSquares 1;
 }
 
 divSchemes

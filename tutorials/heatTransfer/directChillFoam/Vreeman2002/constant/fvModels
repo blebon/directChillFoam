@@ -32,10 +32,10 @@ melt1
 
         tStar
         {
-            type		table;
-            format		foam;
-	    file		"constant/tStar";
-	    outOfBounds         clamp;
+            type                table;
+            format              foam;
+            file                "constant/tStar";
+            outOfBounds         clamp;
             interpolationScheme linear;
         }
 

@@ -19,7 +19,7 @@ thermoType
     type            heRhoThermo;
     mixture         pureMixture;
 
-    transport	    tabulated;
+    transport       tabulated;
     thermo          hIcoTabulated;
     equationOfState icoTabulated;
 
@@ -46,9 +46,9 @@ mixture
                 // (  820.98    1750.0)
                 // (  880.88    1824.0)
                 (  1.0000    2450.0)
-		(  820.98    2460.0)
-		(  880.88    2490.0)
-		(  913.13    2490.0)
+                (  820.98    2460.0)
+                (  880.88    2490.0)
+                (  913.13    2490.0)
                 (  9999.0    2490.0)
             );
         }
@@ -60,9 +60,9 @@ mixture
         Sf          0;
         Cp
         {
-	    // type                table;
+            // type                table;
             // format              foam;
-            // file		"constant/Cp";
+            // file        "constant/Cp";
             // outOfBounds         clamp;
             // interpolationScheme linear;
             values
@@ -77,18 +77,18 @@ mixture
     {
         mu
         {
-            type		table;
-            format		foam;
-	        file		"constant/mu";
+            type                table;
+            format              foam;
+            file                "constant/mu";
             outOfBounds         clamp;
             interpolationScheme linear;
         }
 
         kappa
         {
-            type		table;
-            format		foam;
-	        file		"constant/kappa";
+            type                table;
+            format              foam;
+            file                "constant/kappa";
             outOfBounds         clamp;
             interpolationScheme linear;
         }
