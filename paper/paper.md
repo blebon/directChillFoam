@@ -22,7 +22,7 @@ bibliography: paper.bib
 
 Direct-chill (DC) casting is a semi-continuous casting process that is used for producing aluminium and magnesium alloy billets [@Eskin2008]. As illustrated in (\autoref{fig:DC_Sketch}), the process consists of feeding melt (liquid metal) into a mould containing a movable bottom (the ram). The ram is lowered and the billet is pulled downwards by gravity. As the billet exists the mould, its exposed outer surface is chilled with water jets to hasten cooling (hence the term direct-chill).
 
-![The direct-chill casting process.\label{fig:DC_Sketch}](../docs/source/images/DC_Schematic.png){ width=40% }
+![The direct-chill casting process.\label{fig:DC_Sketch}](../docs/source/images/DC_Schematic.png){ width=60% }
 
 After DC casting, the billets are subject to further energy intensive processing (e.g. extrusion, rolling, forging ...). If billets contain defects or are of poor quality, they are either rejected or will ultimately result in components of poor quality: this makes DC casting a crucial step in alloy processing. In a push for lower carbon emissions and greater recyclability of metallic components, DC casting is currently the subject of various optimization studies involving the presence of external fields. These studies include:  
 
