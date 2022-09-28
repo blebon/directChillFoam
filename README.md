@@ -1,6 +1,10 @@
 directChillFoam
 ======
 
+<!-- badges: start -->
+[![status](https://joss.theoj.org/papers/71097ad0617d8fd3da4c5196877ccb73/status.svg)](https://joss.theoj.org/papers/71097ad0617d8fd3da4c5196877ccb73)
+<!-- badges: end -->
+
 ## About OpenFOAM  
   OpenFOAM is a free, open source computational fluid dynamics (CFD) software
   package released by the OpenFOAM Foundation. It has a large user base across
