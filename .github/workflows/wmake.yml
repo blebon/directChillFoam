@@ -38,16 +38,16 @@ jobs:
       shell: bash
       working-directory: ${{runner.workspace}}
       run: |
-        echo . /opt/openfoam9/etc/bashrc >> ~/.bashrc
-        cat ~/.bashrc
+        echo source /opt/openfoam9/etc/bashrc >> ~/.bashrc
         source ~/.bashrc
+        which wmake
   
     - name: wmake fvConstraints
       shell: bash
       working-directory: src/fvConstraints
       run: |
         source /opt/openfoam9/etc/bashrc
-        wmake libso
+        /opt/openfoam9/wmake/wmake libso
     
     - name: wmake fvModels
       shell: bash
