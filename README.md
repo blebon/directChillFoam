@@ -3,6 +3,7 @@ directChillFoam
 
 <!-- badges: start -->
 [![status](https://joss.theoj.org/papers/71097ad0617d8fd3da4c5196877ccb73/status.svg)](https://joss.theoj.org/papers/71097ad0617d8fd3da4c5196877ccb73)
+[![DOI](https://zenodo.org/badge/263608946.svg)](https://zenodo.org/badge/latestdoi/263608946)
 <!-- badges: end -->
 
 ## About OpenFOAM  
