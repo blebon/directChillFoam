@@ -32,7 +32,13 @@ jobs:
         sudo add-apt-repository http://dl.openfoam.org/ubuntu
         sudo apt-get update
         sudo apt-get -y install openfoam9
-        source /opt/openfoam9/etc/bashrc
+
+    - name: Append OF environment variables to .bashrc 
+      shell: bash
+      working-directory: ${{runner.workspace}}
+      run:
+        echo source /opt/openfoam9/etc/bashrc >> ~/.bashrc
+        source ~/.bashrc
   
     - name: wmake fvConstraints
       shell: bash
