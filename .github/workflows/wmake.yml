@@ -1,0 +1,67 @@
+name: wmake
+
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - 'applications/solvers/heatTransfer/directChillFoam/**'
+      - 'src/fvConstraints/**'
+      - 'src/fvModels/**'
+      - 'src/ThermophysicalTransportModels/**'
+  pull_request:
+    branches:
+      - master
+    paths:
+      - 'src/fvModels/**'
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    name: wmake
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Install OpenFOAM 9
+      run: |
+        sudo sh -c "wget -O - https://dl.openfoam.org/gpg.key > /etc/apt/trusted.gpg.d/openfoam.asc"
+        sudo add-apt-repository http://dl.openfoam.org/ubuntu
+        sudo apt-get update
+        sudo apt-get -y install openfoam9
+        source /opt/openfoam9/etc/bashrc
+  
+    - name: wmake fvConstraints
+      shell: bash
+      working-directory: ${{runner.workspace}}/src/fvConstraints
+      run: |
+        wmake libso
+    
+    - name: wmake fvModels
+      shell: bash
+      working-directory: ${{runner.workspace}}/src/fvModels
+      run: |
+        wmake libso
+    
+    - name: wmake ThermophysicalTransportModels
+      shell: bash
+      working-directory: ${{runner.workspace}}/src/ThermophysicalTransportModels
+      run: |
+        wmake libso
+
+    - name: wmake multicomponentAlloy
+      shell: bash
+      working-directory: ${{runner.workspace}}/applications/solvers/heatTransfer/directChillFoam/multicomponentAlloy
+      run: |
+        wmake libso
+    
+    - name: wmake directChillFoam
+      shell: bash
+      working-directory: ${{runner.workspace}}/applications/solvers/heatTransfer/directChillFoam
+      run: |
+        wmake
+
+    - name: Upload Ubuntu artefact
+        uses: actions/upload-artifact@v1
+        with:
+          name: directChillFoam

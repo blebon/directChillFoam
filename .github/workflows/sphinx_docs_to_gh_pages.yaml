@@ -3,7 +3,7 @@ name: Sphinx docs to gh-pages
 on:
   push:
     branches:
-      - main
+      - master
     paths:
       - 'paper/**'
   workflow_dispatch:
