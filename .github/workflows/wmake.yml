@@ -37,8 +37,9 @@ jobs:
     - name: Append OF environment variables to .bashrc 
       shell: bash
       working-directory: ${{runner.workspace}}
-      run:
-        echo source /opt/openfoam9/etc/bashrc >> ~/.bashrc
+      run: |
+        echo . /opt/openfoam9/etc/bashrc >> ~/.bashrc
+        cat ~/.bashrc
         source ~/.bashrc
   
     - name: wmake fvConstraints
