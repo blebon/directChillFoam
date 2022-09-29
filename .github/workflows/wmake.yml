@@ -39,27 +39,24 @@ jobs:
       continue-on-error: true
       run: |
         echo OpenFOAM 9 already installed
-        ls /opt/openfoam9/wmake
 
-    - name: Install OpenFOAM 9
+    - if: ${{ steps.cache-OF9.outputs.cache-hit != 'true' }}
+      name: Install OpenFOAM 9
       shell: bash
       run: |
         sudo sh -c "wget -O - https://dl.openfoam.org/gpg.key > /etc/apt/trusted.gpg.d/openfoam.asc"
         sudo add-apt-repository http://dl.openfoam.org/ubuntu
         sudo apt-get update
         sudo apt-get -y install openfoam9
-
-    - name: Append OF environment variables to .bashrc 
+    
+    - name: wmake multicomponentAlloy
       shell: bash
-      working-directory: ${{runner.workspace}}
+      working-directory: applications/solvers/heatTransfer/directChillFoam/multicomponentAlloy
       continue-on-error: true
       run: |
-        set -x
-        ls -lh /opt/openfoam9/etc/bashrc
-        echo source /opt/openfoam9/etc/bashrc || true >> ~/.bashrc
-        source ~/.bashrc
-        which wmake
-  
+        source /opt/openfoam9/etc/bashrc || true
+        wmake libso
+ 
     - name: wmake fvConstraints
       shell: bash
       working-directory: src/fvConstraints
@@ -79,14 +76,6 @@ jobs:
     - name: wmake ThermophysicalTransportModels
       shell: bash
       working-directory: src/ThermophysicalTransportModels
-      continue-on-error: true
-      run: |
-        source /opt/openfoam9/etc/bashrc || true
-        wmake libso
-
-    - name: wmake multicomponentAlloy
-      shell: bash
-      working-directory: applications/solvers/heatTransfer/directChillFoam/multicomponentAlloy
       continue-on-error: true
       run: |
         source /opt/openfoam9/etc/bashrc || true
