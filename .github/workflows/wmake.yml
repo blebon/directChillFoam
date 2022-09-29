@@ -27,6 +27,7 @@ jobs:
     - uses: actions/checkout@v2
 
     - name: Install OpenFOAM 9
+      shell: bash
       run: |
         sudo sh -c "wget -O - https://dl.openfoam.org/gpg.key > /etc/apt/trusted.gpg.d/openfoam.asc"
         sudo add-apt-repository http://dl.openfoam.org/ubuntu
@@ -44,28 +45,33 @@ jobs:
       shell: bash
       working-directory: src/fvConstraints
       run: |
+        source /opt/openfoam9/etc/bashrc
         wmake libso
     
     - name: wmake fvModels
       shell: bash
       working-directory: src/fvModels
       run: |
+        source /opt/openfoam9/etc/bashrc
         wmake libso
     
     - name: wmake ThermophysicalTransportModels
       shell: bash
       working-directory: src/ThermophysicalTransportModels
       run: |
+        source /opt/openfoam9/etc/bashrc
         wmake libso
 
     - name: wmake multicomponentAlloy
       shell: bash
       working-directory: applications/solvers/heatTransfer/directChillFoam/multicomponentAlloy
       run: |
+        source /opt/openfoam9/etc/bashrc
         wmake libso
     
     - name: wmake directChillFoam
       shell: bash
       working-directory: applications/solvers/heatTransfer/directChillFoam
       run: |
+        source /opt/openfoam9/etc/bashrc
         wmake
