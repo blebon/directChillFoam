@@ -24,7 +24,16 @@ jobs:
     runs-on: ubuntu-latest
     name: wmake
     steps:
-    - uses: actions/cache@v3
+    - uses: actions/checkout@v3
+
+    - name: Cache OpenFOAM 9
+      id: cache-OF9
+      uses: actions/cache@v3
+      with:
+        path: |
+          ~
+          /opt
+        key: ${{ runner.os }}-OF9
 
     - name: Install OpenFOAM 9
       shell: bash
