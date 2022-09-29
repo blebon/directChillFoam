@@ -26,12 +26,12 @@ jobs:
           /opt/openfoam9
         key: ${{ runner.os }}-OF9
     
-    - if: ${{ steps.cache-OF9.outputs.cache-hit != 'true' }}
-        name: OF9 cache hit
-        continue-on-error: true
-        run: |
-          echo OpenFOAM 9 already installed
-          ls /opt/openfoam9/wmake
+    - if: ${{ steps.cache-OF9.outputs.cache-hit == 'true' }}
+      name: OF9 cache hit
+      continue-on-error: true
+      run: |
+        echo OpenFOAM 9 already installed
+        ls /opt/openfoam9/wmake
 
     - name: Install OpenFOAM 9
       shell: bash
