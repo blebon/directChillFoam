@@ -47,7 +47,7 @@ All these studies benefit from numerical modeling to cut down on the number of e
 `directChillFoam` was designed to be used by both academics involved in fundamental casting research and industry practitioners for optimization problems. It has already been used in a number of scientific publications involving melt-conditioned direct-chill (MC-DC) casting [@Lebon2018; @Lebon2020;] and ultrasonic processing [@Lebon2019a; @Lebon2019b; @Subroto2021]. It has also been presented in introductory modeling doctoral courses that are provided by the Liquid Metal Engineering training centre at Brunel University.
 
 # Availability
-`directChillFoam` is available on [Github](https://github.com/blebon/directChillFoam). [Documentation](https://github.com/blebon/directChillFoam/tree/master/docs) is provided for a description of its functionality and included libraries. A [tutorial case](https://github.com/blebon/directChillFoam/tree/master/tutorials/heatTransfer/directChillFoam/Vreeman2002) including code validation using experimental data is also available.
+`directChillFoam` is available on [Github](https://github.com/blebon/directChillFoam). [Documentation](https://blebon.com/directChillFoam/) is provided for a description of its functionality and included libraries. A [tutorial case](https://github.com/blebon/directChillFoam/tree/master/tutorials/heatTransfer/directChillFoam/Vreeman2002) including code validation using experimental data is also available.
 
 # Acknowledgements
 
