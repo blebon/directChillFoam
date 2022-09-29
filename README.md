@@ -38,5 +38,6 @@ directChillFoam
   Alloys: Modelling and Experiments on Industrial Scale Ingots", Journal of Heat
   Transfer **124** (2002) 947-953.
 
-  * [DC Casting solver](applications/solvers/heatTransfer/directChillFoam) - Updated verions of the DC casting solver
+  * [DC Casting solver](applications/solvers/heatTransfer/directChillFoam) - Updated verions of the DC casting solver 
   * [Test case](tutorials/heatTransfer/directChillFoam/Vreeman2002) - Tutorial case corresponding to the above reference 
+  * [Documentation](https://blebon.com/directChillFoam/) - Documentation
