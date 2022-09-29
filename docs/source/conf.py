@@ -62,5 +62,6 @@ html_theme_options = {
     'github_user': 'blebon',
     'github_repo': 'directChillFoam',
     'github_banner': True,
+    'github_button': False,
     'sidebar_width': '300px',
 }
