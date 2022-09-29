@@ -1,15 +1,7 @@
 name: wmake
 
 on:
-  push:
-    branches:
-      - master
-    paths:
-      - 'applications/solvers/heatTransfer/directChillFoam/**'
-      - 'src/fvConstraints/**'
-      - 'src/fvModels/**'
-      - 'src/ThermophysicalTransportModels/**'
-  pull_request:
+  [push, pull_request]:
     branches:
       - master
     paths:
@@ -31,9 +23,15 @@ jobs:
       uses: actions/cache@v3
       with:
         path: |
-          ~
-          /opt
+          /opt/openfoam9
         key: ${{ runner.os }}-OF9
+    
+    - if: ${{ steps.cache-OF9.outputs.cache-hit != 'true' }}
+        name: OF9 cache hit
+        continue-on-error: true
+        run: |
+          echo OpenFOAM 9 already installed
+          ls /opt/openfoam9/wmake
 
     - name: Install OpenFOAM 9
       shell: bash
@@ -46,6 +44,7 @@ jobs:
     - name: Append OF environment variables to .bashrc 
       shell: bash
       working-directory: ${{runner.workspace}}
+      continue-on-error: true
       run: |
         echo source /opt/openfoam9/etc/bashrc >> ~/.bashrc
         source ~/.bashrc
@@ -54,6 +53,7 @@ jobs:
     - name: wmake fvConstraints
       shell: bash
       working-directory: src/fvConstraints
+      continue-on-error: true
       run: |
         source /opt/openfoam9/etc/bashrc
         wmake libso
@@ -61,6 +61,7 @@ jobs:
     - name: wmake fvModels
       shell: bash
       working-directory: src/fvModels
+      continue-on-error: true
       run: |
         source /opt/openfoam9/etc/bashrc
         wmake libso
@@ -68,6 +69,7 @@ jobs:
     - name: wmake ThermophysicalTransportModels
       shell: bash
       working-directory: src/ThermophysicalTransportModels
+      continue-on-error: true
       run: |
         source /opt/openfoam9/etc/bashrc
         wmake libso
@@ -75,6 +77,7 @@ jobs:
     - name: wmake multicomponentAlloy
       shell: bash
       working-directory: applications/solvers/heatTransfer/directChillFoam/multicomponentAlloy
+      continue-on-error: true
       run: |
         source /opt/openfoam9/etc/bashrc
         wmake libso
@@ -82,6 +85,7 @@ jobs:
     - name: wmake directChillFoam
       shell: bash
       working-directory: applications/solvers/heatTransfer/directChillFoam
+      continue-on-error: true
       run: |
         source /opt/openfoam9/etc/bashrc
         wmake
