@@ -4,8 +4,9 @@ on:
   push:
     branches:
       - main
-
-# workflow_dispatch:        # Uncomment line if you also want to trigger action manually
+    paths:
+      - 'paper/**'
+  workflow_dispatch:
 
 jobs:
   sphinx_docs_to_gh-pages:
