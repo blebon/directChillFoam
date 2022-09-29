@@ -1,7 +1,15 @@
 name: wmake
 
 on:
-  [push, pull_request]:
+  push:
+    branches:
+      - master
+    paths:
+      - 'applications/solvers/heatTransfer/directChillFoam/**'
+      - 'src/fvConstraints/**'
+      - 'src/fvModels/**'
+      - 'src/ThermophysicalTransportModels/**'
+  pull-request:
     branches:
       - master
     paths:
