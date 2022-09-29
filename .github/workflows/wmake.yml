@@ -26,22 +26,30 @@ jobs:
     steps:
     - uses: actions/checkout@v3
 
-    - name: Cache OpenFOAM 9
-      id: cache-OF9
-      uses: actions/cache@v3
-      with:
-        path: |
-          /opt/openfoam9
-        key: ${{ runner.os }}-OF9
+    # - name: Cache OpenFOAM 9
+    #   id: cache-OF9
+    #   uses: actions/cache@v3
+    #   with:
+    #     path: |
+    #       /opt/openfoam9
+    #     key: ${{ runner.os }}-OF9
     
-    - if: ${{ steps.cache-OF9.outputs.cache-hit == 'true' }}
-      name: OF9 cache hit
-      continue-on-error: true
-      run: |
-        echo OpenFOAM 9 already installed
+    # - if: ${{ steps.cache-OF9.outputs.cache-hit == 'true' }}
+    #   name: OF9 cache hit
+    #   continue-on-error: true
+    #   run: |
+    #     echo OpenFOAM 9 already installed
 
-    - if: ${{ steps.cache-OF9.outputs.cache-hit != 'true' }}
-      name: Install OpenFOAM 9
+    # - if: ${{ steps.cache-OF9.outputs.cache-hit != 'true' }}
+    #   name: Install OpenFOAM 9
+    #   shell: bash
+    #   run: |
+    #     sudo sh -c "wget -O - https://dl.openfoam.org/gpg.key > /etc/apt/trusted.gpg.d/openfoam.asc"
+    #     sudo add-apt-repository http://dl.openfoam.org/ubuntu
+    #     sudo apt-get update
+    #     sudo apt-get -y install openfoam9
+
+    - name: Install OpenFOAM 9
       shell: bash
       run: |
         sudo sh -c "wget -O - https://dl.openfoam.org/gpg.key > /etc/apt/trusted.gpg.d/openfoam.asc"
@@ -63,6 +71,7 @@ jobs:
       continue-on-error: true
       run: |
         source /opt/openfoam9/etc/bashrc || true
+        export WM_PROJECT_USER_DIR=../../
         wmake libso
     
     - name: wmake fvModels
@@ -71,6 +80,7 @@ jobs:
       continue-on-error: true
       run: |
         source /opt/openfoam9/etc/bashrc || true
+        export WM_PROJECT_USER_DIR=../../
         wmake libso
     
     - name: wmake ThermophysicalTransportModels
@@ -79,6 +89,7 @@ jobs:
       continue-on-error: true
       run: |
         source /opt/openfoam9/etc/bashrc || true
+        export WM_PROJECT_USER_DIR=../../
         wmake libso
     
     - name: wmake directChillFoam
