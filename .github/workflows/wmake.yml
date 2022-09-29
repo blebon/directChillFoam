@@ -54,7 +54,9 @@ jobs:
       working-directory: ${{runner.workspace}}
       continue-on-error: true
       run: |
-        echo source /opt/openfoam9/etc/bashrc >> ~/.bashrc
+        set -x
+        ls -lh /opt/openfoam9/etc/bashrc
+        echo source /opt/openfoam9/etc/bashrc || true >> ~/.bashrc
         source ~/.bashrc
         which wmake
   
@@ -63,7 +65,7 @@ jobs:
       working-directory: src/fvConstraints
       continue-on-error: true
       run: |
-        source /opt/openfoam9/etc/bashrc
+        source /opt/openfoam9/etc/bashrc || true
         wmake libso
     
     - name: wmake fvModels
@@ -71,7 +73,7 @@ jobs:
       working-directory: src/fvModels
       continue-on-error: true
       run: |
-        source /opt/openfoam9/etc/bashrc
+        source /opt/openfoam9/etc/bashrc || true
         wmake libso
     
     - name: wmake ThermophysicalTransportModels
@@ -79,7 +81,7 @@ jobs:
       working-directory: src/ThermophysicalTransportModels
       continue-on-error: true
       run: |
-        source /opt/openfoam9/etc/bashrc
+        source /opt/openfoam9/etc/bashrc || true
         wmake libso
 
     - name: wmake multicomponentAlloy
@@ -87,7 +89,7 @@ jobs:
       working-directory: applications/solvers/heatTransfer/directChillFoam/multicomponentAlloy
       continue-on-error: true
       run: |
-        source /opt/openfoam9/etc/bashrc
+        source /opt/openfoam9/etc/bashrc || true
         wmake libso
     
     - name: wmake directChillFoam
@@ -95,5 +97,5 @@ jobs:
       working-directory: applications/solvers/heatTransfer/directChillFoam
       continue-on-error: true
       run: |
-        source /opt/openfoam9/etc/bashrc
+        source /opt/openfoam9/etc/bashrc || true
         wmake
