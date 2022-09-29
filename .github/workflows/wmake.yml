@@ -13,7 +13,10 @@ on:
     branches:
       - master
     paths:
+      - 'applications/solvers/heatTransfer/directChillFoam/**'
+      - 'src/fvConstraints/**'
       - 'src/fvModels/**'
+      - 'src/ThermophysicalTransportModels/**'
   workflow_dispatch:
 
 jobs:
@@ -60,8 +63,3 @@ jobs:
       working-directory: ${{runner.workspace}}/applications/solvers/heatTransfer/directChillFoam
       run: |
         wmake
-
-    - name: Upload Ubuntu artefact
-        uses: actions/upload-artifact@v1
-        with:
-          name: directChillFoam
