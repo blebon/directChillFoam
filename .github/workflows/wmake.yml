@@ -9,7 +9,7 @@ on:
       - 'src/fvConstraints/**'
       - 'src/fvModels/**'
       - 'src/ThermophysicalTransportModels/**'
-  pull-request:
+  pull_request:
     branches:
       - master
     paths:
