@@ -42,30 +42,30 @@ jobs:
   
     - name: wmake fvConstraints
       shell: bash
-      working-directory: ${{runner.workspace}}/src/fvConstraints
+      working-directory: src/fvConstraints
       run: |
         wmake libso
     
     - name: wmake fvModels
       shell: bash
-      working-directory: ${{runner.workspace}}/src/fvModels
+      working-directory: src/fvModels
       run: |
         wmake libso
     
     - name: wmake ThermophysicalTransportModels
       shell: bash
-      working-directory: ${{runner.workspace}}/src/ThermophysicalTransportModels
+      working-directory: src/ThermophysicalTransportModels
       run: |
         wmake libso
 
     - name: wmake multicomponentAlloy
       shell: bash
-      working-directory: ${{runner.workspace}}/applications/solvers/heatTransfer/directChillFoam/multicomponentAlloy
+      working-directory: applications/solvers/heatTransfer/directChillFoam/multicomponentAlloy
       run: |
         wmake libso
     
     - name: wmake directChillFoam
       shell: bash
-      working-directory: ${{runner.workspace}}/applications/solvers/heatTransfer/directChillFoam
+      working-directory: applications/solvers/heatTransfer/directChillFoam
       run: |
         wmake
