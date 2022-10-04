@@ -26,13 +26,13 @@ Class
 
 Description
 This boundary condition applies a heat flux condition to temperature
-on an external wall in one of three modes:    
-    
-    - fixed power: supply \c Q  
-    - fixed heat flux: supply \c q  
-    - fixed heat transfer coefficient: supply \c h and \c Ta
+on an external wall in one of three modes:
+    <ul>
+    <li> fixed power: supply \f$ Q \f$
+    <li> fixed heat flux: supply \f$ q \f$
+    <li> fixed heat transfer coefficient: supply \f$ h \f$ and \f$ Ta \f$
+    </ul>
 
-    .
 where:
     \vartable
         Q  | Power [W]
@@ -42,12 +42,12 @@ where:
     \endvartable
     .
     For heat transfer coefficient mode, optional thin thermal layer resistances
-    can be specified through thicknessLayers and kappaLayers entries.
+    can be specified through \c thicknessLayers and \c kappaLayers entries.
 
     The thermal conductivity \c kappa can either be retrieved from various
-    possible sources, as detailed in the class temperatureCoupledBase.
+    possible sources, as detailed in the class \c temperatureCoupledBase.
 
-    The ambient temperature Ta is specified as a Foam::Function1 of time but
+    The ambient temperature \f$ Ta \f$ is specified as a \c Foam::Function1 of time but
     uniform in space.
 
 Usage
@@ -67,20 +67,22 @@ Usage
     \endtable
     .
 Example of the boundary condition specification:
-    \verbatim
-    <patchName>
-    {
-        type            waterFilmHTC;
-
-        mode            coefficient;
-
-        Ta              constant 300.0;
-        htc             constant 10000.0;
-        thicknessLayers (0.1 0.2 0.3 0.4);
-        kappaLayers     (1 2 3 4);
-
-        value           $internalField;
-    }
+    \verbatim embed:rst
+        .. code-block:: cpp
+          
+          <patchName>
+          {
+              type            waterFilmHTC;
+              
+              mode            coefficient;
+              
+              Ta              constant 300.0;
+              htc             constant 10000.0;
+              thicknessLayers (0.1 0.2 0.3 0.4);
+              kappaLayers     (1 2 3 4);
+              
+              value           $internalField;
+          }
     \endverbatim
 
 See also

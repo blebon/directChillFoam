@@ -41,22 +41,24 @@ Description
 
 Usage
     Example usage:
-    \verbatim
-    mushyZoneSource1
-    {
-        type            mushyZoneSource;
-
-        selectionMode   cellZone;
-        cellZone        iceZone;
-
-        Tsol            273;
-        L               334000;
-        thermoMode      thermo;
-        beta            50e-6;
-        rhoRef          800;
-    }
-    \endverbatim
-
+    \verbatim embed:rst
+        .. code-block:: cpp
+          
+          mushyZoneSource1
+          {
+              type            mushyZoneSource;
+              
+              selectionMode   cellZone;
+              cellZone        iceZone;
+              
+              Tsol            273;
+              L               334000;
+              thermoMode      thermo;
+              beta            50e-6;
+              rhoRef          800;
+          }
+          \endverbatim
+    .
     where:
     \table
         Property   | Description                     | Required | Default value

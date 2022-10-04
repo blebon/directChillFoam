@@ -30,19 +30,21 @@ Description
 
 Usage
     Example usage:
-    \verbatim
-    limitS
-    {
-        type            limitSolute;
-
-        selectionMode   all;
-
-        solute          C.Cu; // solute field name
-
-        min             0.0;
-        max             1.0;
-    }
-    \endverbatim
+    \verbatim embed:rst
+        .. code-block:: cpp
+          
+          limitS
+          {
+              type            limitSolute;
+              
+              selectionMode   all;
+              
+              solute          C.Cu; // solute field name
+              
+              min             0.0;
+              max             1.0;
+          }
+          \endverbatim
 
 SourceFiles
     limitSolute.C

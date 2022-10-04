@@ -43,6 +43,7 @@ extensions = [
     "sphinx.ext.autodoc",
     "sphinx.ext.autosectionlabel",
     "breathe",
+    "sphinx.ext.mathjax",
 ]
 autosectionlabel_prefix_document = True
 
