@@ -38,8 +38,12 @@
 
 if [ "$#" -gt 0 ]
 then
-
-    realFilePath=$(echo $1 | sed -e s@^$OUTPUT_DIRECTORY@../../..@ )
+    if [ -n "$WM_PROJECT_DIR" ]
+    then
+        realFilePath=$(echo $1 | sed -e s@^$WM_PROJECT_DIR@../../..@ )
+    else
+        realFilePath=$(echo $1 | sed -e s@^$PWD@../../..@ )
+    fi
     filePath=$realFilePath
 
     dirName=${filePath%/[^/]*}
