@@ -43,12 +43,9 @@ jobs:
 
       - name: Running the Sphinx to gh-pages Action
         uses: uibcdf/action-sphinx-docs-to-gh-pages@v1.0.0
-        shell: bash
         with:
           branch: master
           dir_docs: docs/source
           sphinxapiopts: '--separate -o . ../'
           sphinxapiexclude: '../*setup* ../*.ipynb'
           sphinxopts: ''
-        run:
-          source /opt/openfoam9/etc/bashrc || true
