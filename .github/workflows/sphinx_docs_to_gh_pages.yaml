@@ -23,6 +23,14 @@ jobs:
           sudo apt-get update
           sudo apt-get -y install graphviz libclang1-9 libclang-cpp9
           sudo apt-get -y install doxygen
+      
+      - name: Install OpenFOAM 9
+        shell: bash
+        run: |
+          sudo sh -c "wget -O - https://dl.openfoam.org/gpg.key > /etc/apt/trusted.gpg.d/openfoam.asc"
+          sudo add-apt-repository http://dl.openfoam.org/ubuntu
+          sudo apt-get update
+          sudo apt-get -y install openfoam9
           
       - name: Make conda environment
         uses: conda-incubator/setup-miniconda@v2
@@ -35,9 +43,12 @@ jobs:
 
       - name: Running the Sphinx to gh-pages Action
         uses: uibcdf/action-sphinx-docs-to-gh-pages@v1.0.0
+        shell: bash
         with:
           branch: master
           dir_docs: docs/source
           sphinxapiopts: '--separate -o . ../'
           sphinxapiexclude: '../*setup* ../*.ipynb'
           sphinxopts: ''
+        run:
+          source /opt/openfoam9/etc/bashrc || true
