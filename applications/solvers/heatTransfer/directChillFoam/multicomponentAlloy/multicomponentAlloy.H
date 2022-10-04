@@ -67,7 +67,7 @@ private:
         const surfaceScalarField& phi_;
         const fvModels& fvModels_;
         const fvConstraints& fvConstraints_;
-	const volScalarField& alpha_;
+        const volScalarField& alpha_;
 
 public:
 

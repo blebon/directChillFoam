@@ -31,3 +31,9 @@ Solve the solute transport equations in the energy corrector loop:
 .. code-block:: C
 
   alloy.solve(Us, fvModels, fvConstraints);
+
+C++ Classes
+-----------
+
+.. doxygenclass:: Foam::multicomponentAlloy
+  :members:

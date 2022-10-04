@@ -16,3 +16,4 @@ dependencies:
   - nbsphinx
   - recommonmark
   - sphinx-markdown-tables
+  - breathe

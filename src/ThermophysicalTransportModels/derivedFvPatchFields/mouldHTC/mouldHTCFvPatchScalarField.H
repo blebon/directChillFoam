@@ -25,29 +25,30 @@ Class
     Foam::mouldHTCFvPatchScalarField
 
 Description
-    This boundary condition applies a heat flux condition to temperature
-    on an external wall in one of three modes:
+This boundary condition applies a heat flux condition to temperature
+on an external wall in one of three modes:
+    
+    - fixed power: supply \c Q
+    - fixed heat flux: supply \c q
+    - fixed heat transfer coefficient: supply \c h and \c Ta
 
-      - fixed power: supply Q
-      - fixed heat flux: supply q
-      - fixed heat transfer coefficient: supply h and Ta
-
-    where:
+    .
+where:
     \vartable
         Q  | Power [W]
         q  | Heat flux [W/m^2]
         h  | Heat transfer coefficient [W/m^2/K]
         Ta | Ambient temperature [K]
     \endvartable
-
-    For heat transfer coefficient mode optional thin thermal layer resistances
+    .
+    For heat transfer coefficient mode, optional thin thermal layer resistances
     can be specified through thicknessLayers and kappaLayers entries.
 
     The thermal conductivity \c kappa can either be retrieved from various
     possible sources, as detailed in the class temperatureCoupledBase.
 
-    The ambient temperature Ta is specified as a Foam::Function1 of time but
-    uniform is space.
+    The ambient temperature \c Ta is specified as a Foam::Function1 of time but
+    uniform in space.
 
 Usage
     \table
@@ -65,8 +66,8 @@ Usage
     qr           | Name of the radiative field	    | no		| none
     qrRelaxation | Relaxation factor for radiative field | no		| 1
     \endtable
-
-    Example of the boundary condition specification:
+    .
+Example of the boundary condition specification:
     \verbatim
     <patchName>
     {
@@ -87,6 +88,7 @@ Usage
 See also
     Foam::temperatureCoupledBase
     Foam::mixedFvPatchScalarField
+    Foam::waterFilmHTCFvPatchScalarField
 
 SourceFiles
     mouldHTCFvPatchScalarField.C

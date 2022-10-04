@@ -35,3 +35,9 @@ Nomenclature
   +-----------------+--------------------------------------------------+
   | beta            | Solutal expansion coefficient                    |
   +-----------------+--------------------------------------------------+
+
+C++ Classes
+-----------
+
+.. doxygenclass:: Foam::soluteModel
+  :members:

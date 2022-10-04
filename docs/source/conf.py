@@ -10,10 +10,18 @@
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #
-# import os
-# import sys
-# sys.path.insert(0, os.path.abspath('.'))
+from os import path, sep
+import sys
+sys.path.insert(0, path.abspath(f"..{sep}..{sep}"))
 from datetime import datetime
+
+# Breathe
+import subprocess
+subprocess.call("make clean", shell=True)
+subprocess.call("cd ../../doxygen ; make clean; doxygen Doxyfile", shell=True)
+
+breathe_projects = { "directChillFoam": "../../doxygen/xml" }
+breathe_default_project = "directChillFoam"
 
 
 # -- Project information -----------------------------------------------------
@@ -24,7 +32,7 @@ copyright = f'{year}, Bruno Lebon'
 author = 'Bruno Lebon'
 
 # The full version, including alpha/beta/rc tags
-release = 'OF9.0.1'
+release = 'OF9.0.2'
 
 
 # -- General configuration ---------------------------------------------------
@@ -33,7 +41,9 @@ release = 'OF9.0.1'
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 extensions = [
-    'sphinx.ext.autosectionlabel',
+    "sphinx.ext.autodoc",
+    "sphinx.ext.autosectionlabel",
+    "breathe",
 ]
 autosectionlabel_prefix_document = True
 
@@ -43,7 +53,7 @@ templates_path = ['_templates']
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
 # This pattern also affects html_static_path and html_extra_path.
-exclude_patterns = []
+exclude_patterns = ["build", "Thumbs.db", ".DS_Store"]
 
 
 # -- Options for HTML output -------------------------------------------------

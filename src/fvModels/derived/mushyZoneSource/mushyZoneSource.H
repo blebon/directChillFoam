@@ -36,18 +36,6 @@ Description
     model as a momentum porosity contribution; the energy associated with the
     phase change is added as an enthalpy contribution.
 
-    References:
-    \verbatim
-        Voller, V. R., & Prakash, C. (1987).
-        A fixed grid numerical modelling methodology for convection-diffusion
-        mushy region phase-change problems.
-        International Journal of Heat and Mass Transfer, 30(8), 1709-1719.
-
-        Swaminathan, C. R., & Voller, V. R. (1992).
-        A general enthalpy method for modeling solidification processes.
-        Metallurgical transactions B, 23(5), 651-664.
-    \endverbatim
-
     The model generates the field \c \<name\>:alpha1 which can be visualised to
     to show the melt distribution as a fraction [0-1].
 
@@ -69,7 +57,7 @@ Usage
     }
     \endverbatim
 
-    Where:
+    where:
     \table
         Property   | Description                     | Required | Default value
         Tsol       | Solidus temperature [K]             | yes      |
@@ -91,6 +79,20 @@ Usage
         beta       | Thermal expansion coefficient [1/K] | yes      |
         g          | Accelerartion due to gravity        | no       |
     \endtable
+
+**References**
+    - Voller, V. R., & Prakash, C. (1987). A fixed grid numerical modelling 
+    methodology for convection-diffusion mushy region phase-change problems.
+    _International Journal of Heat and Mass Transfer_, **30**(8), 1709-1719. [doi:10.1016/0017-9310(87)90317-6](https://doi.org/10.1016/0017-9310&#40;87&#41;90317-6)
+
+    - Swaminathan, C. R., & Voller, V. R. (1992). A general enthalpy method 
+    for modeling solidification processes. _Metallurgical transactions B_,
+    **23**(5), 651-664. [doi:10.1007/BF02649725](https://doi.org/10.1007/BF02649725)
+
+    - G.S. Bruno Lebon, Georges Salloum-Abou-Jaoude, Dmitry Eskin, Iakovos Tzanakis,
+    Koulis Pericleous, Philippe Jarry (2019). Numerical modelling of acoustic 
+    streaming during the ultrasonic melt treatment of direct-chill (DC) casting.
+    _Ultrasonics Sonochemistry_, **54**, 171-182. [doi:10.1016/j.ultsonch.2019.02.002](https://doi.org/10.1016/j.ultsonch.2019.02.002)
 
 SourceFiles
     mushyZoneSource.C
@@ -240,57 +242,56 @@ public:
 
         // Checks
 
-            //- Return the list of fields for which the fvModel adds source term
-            //  to the transport equation
-            virtual wordList addSupFields() const;
+        //- Return the list of fields for which the fvModel adds source term to the transport equation.
+        virtual wordList addSupFields() const;
 
 
         // Add explicit and implicit contributions
 
-            //- Add explicit contribution to enthalpy equation
-            virtual void addSup
-            (
-                fvMatrix<scalar>& eqn,
-                const word& fieldName
-            ) const;
+        //- Add explicit contribution to enthalpy equation
+        virtual void addSup
+        (
+            fvMatrix<scalar>& eqn,
+            const word& fieldName
+        ) const;
 
-            //- Add implicit contribution to momentum equation
-            virtual void addSup
-            (
-                fvMatrix<vector>& eqn,
-                const word& fieldName
-            ) const;
+        //- Add implicit contribution to momentum equation
+        virtual void addSup
+        (
+            fvMatrix<vector>& eqn,
+            const word& fieldName
+        ) const;
 
 
         // Add explicit and implicit contributions to compressible equation
 
-            //- Add explicit contribution to compressible enthalpy equation
-            virtual void addSup
-            (
-                const volScalarField& rho,
-                fvMatrix<scalar>& eqn,
-                const word& fieldName
-            ) const;
+        //- Add explicit contribution to compressible enthalpy equation
+        virtual void addSup
+        (
+            const volScalarField& rho,
+            fvMatrix<scalar>& eqn,
+            const word& fieldName
+        ) const;
 
-            //- Add implicit contribution to compressible momentum equation
-            virtual void addSup
-            (
-                const volScalarField& rho,
-                fvMatrix<vector>& eqn,
-                const word& fieldName
-            ) const;
+        //- Add implicit contribution to compressible momentum equation
+        virtual void addSup
+        (
+            const volScalarField& rho,
+            fvMatrix<vector>& eqn,
+            const word& fieldName
+        ) const;
 
 
         // Mesh motion
 
-            //- Update for mesh changes
-            virtual void updateMesh(const mapPolyMesh&);
+        //- Update for mesh changes
+        virtual void updateMesh(const mapPolyMesh&);
 
 
         // IO
 
-            //- Read source dictionary
-            virtual bool read(const dictionary& dict);
+        //- Read source dictionary
+        virtual bool read(const dictionary& dict);
 
 
     // Member Operators
