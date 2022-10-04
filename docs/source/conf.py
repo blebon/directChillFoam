@@ -17,7 +17,7 @@ from datetime import datetime
 
 # Breathe
 import subprocess
-subprocess.call(f"cd ..; doxygen Doxyfile", shell=True)
+subprocess.call(f"cd ..; mkdir -p build{sep}xml; doxygen Doxyfile", shell=True)
 
 breathe_projects = { "directChillFoam": f"..{sep}build{sep}xml" }
 breathe_default_project = "directChillFoam"

@@ -44,7 +44,7 @@ PROJECT_NUMBER         = OF9.0.2
 # for a project that appears at the top of each page and should give viewer a
 # quick idea about the purpose of the project. Keep the description short.
 
-PROJECT_BRIEF          = OpenFOAM solver for direct chill casting
+PROJECT_BRIEF          = OpenFOAMsolverfordirectchillcasting
 
 # With the PROJECT_LOGO tag one can specify an logo or icon that is included in
 # the documentation. The maximum height of the logo should not exceed 55 pixels
@@ -753,7 +753,8 @@ INPUT_ENCODING         = UTF-8
 # *.md, *.mm, *.dox, *.py, *.f90, *.f, *.for, *.tcl, *.vhd, *.vhdl, *.ucf,
 # *.qsf, *.as and *.js.
 
-FILE_PATTERNS          = *.H *.C
+FILE_PATTERNS          = *.H \
+                         *.C
 
 # The RECURSIVE tag can be used to specify whether or not subdirectories should
 # be searched for input files as well.
