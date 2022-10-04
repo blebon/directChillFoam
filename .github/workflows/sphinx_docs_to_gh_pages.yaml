@@ -6,7 +6,6 @@ on:
       - master
     paths:
       - 'docs/**'
-      - 'doxygen/**'
   workflow_dispatch:
 
 jobs:
@@ -35,10 +34,11 @@ jobs:
           show-channel-urls: true
       
       - name: Build doxygen XML
-        working-directory: doxygen
+        working-directory: docs
+        continue-on-error: true
         run: |
           make clean
-          make all
+          doxygen Doxyfile
 
       - name: Running the Sphinx to gh-pages Action
         uses: uibcdf/action-sphinx-docs-to-gh-pages@v1.0.0
