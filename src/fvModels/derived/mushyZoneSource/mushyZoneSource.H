@@ -86,8 +86,8 @@ References
     _International Journal of Heat and Mass Transfer_, **30**(8), 1709-1719. [doi:10.1016/0017-9310(87)90317-6](https://doi.org/10.1016/0017-9310&#40;87&#41;90317-6)
 
     - Swaminathan, C. R., & Voller, V. R. (1992). A general enthalpy method 
-    for modeling solidification processes. _Metallurgical transactions B_, **23**
-    (5), 651-664. [doi:10.1007/BF02649725](https://doi.org/10.1007/BF02649725)
+    for modeling solidification processes. _Metallurgical transactions B_, **23**(5),
+    651-664. [doi:10.1007/BF02649725](https://doi.org/10.1007/BF02649725)
 
     - G.S. Bruno Lebon, Georges Salloum-Abou-Jaoude, Dmitry Eskin, Iakovos Tzanakis,
     Koulis Pericleous, Philippe Jarry (2019). Numerical modelling of acoustic 
