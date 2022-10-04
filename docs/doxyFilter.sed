@@ -132,6 +132,13 @@ s/^    //
 }
 
 
+/^References *$/,/^[^ ]/{
+/^References/c\
+\\par References
+s/^    //
+}
+
+
 /^SourceFiles *$/,/^$/{
 s?SourceFiles?\\par Source files\
 <ul><li><a href="%filePath%">%fileName%</a></li>?
