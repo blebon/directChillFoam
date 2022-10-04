@@ -7,4 +7,4 @@ all:
 	doxygen Doxyfile
 
 clean:
-	rm -rf html xml
+	rm -rf html ../docs/source/xml

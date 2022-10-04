@@ -18,9 +18,9 @@ from datetime import datetime
 # Breathe
 import subprocess
 subprocess.call("make clean", shell=True)
-subprocess.call("cd ../../doxygen ; make clean; doxygen Doxyfile", shell=True)
+subprocess.call(f"cd ..{sep}..{sep}doxygen ; doxygen Doxyfile", shell=True)
 
-breathe_projects = { "directChillFoam": "../../doxygen/xml" }
+breathe_projects = { "directChillFoam": "../build/xml" }
 breathe_default_project = "directChillFoam"
 
 
