@@ -31,6 +31,8 @@ jobs:
           sudo add-apt-repository http://dl.openfoam.org/ubuntu
           sudo apt-get update
           sudo apt-get -y install openfoam9
+          source /opt/openfoam9/etc/bashrc || true
+          echo source /opt/openfoam9/etc/bashrc \|\| true >> ~/.bashrc
           
       - name: Make conda environment
         uses: conda-incubator/setup-miniconda@v2
