@@ -1,3 +1,20 @@
+"""Converts all .vtk files to .vtp.
+
+This script converts all VTK files in the postProcessing directory.
+
+Example:
+    Run python script in case root directory:
+
+        $ python convert_vtk.py
+
+Todo:
+    * None
+
+.. _Google Python Style Guide:
+   http://google.github.io/styleguide/pyguide.html
+
+"""
+
 from __future__ import division, print_function
 
 from itertools import chain
@@ -16,7 +33,16 @@ __status__ = "Production"
 
 
 def vtk2vtp(invtkfile, outvtpfile):
-    """Convert vtk to vtp"""
+    """Converts a vtk file to vtp format.
+
+    :param invtkfile: VTK file path and name.
+    :type invtkfile: str
+    :param outvtpfile: VTP file path and name.
+    :type outvtpfile: str
+    :return: 0 if successful.
+    :rtype: int
+
+    """
     reader = vtk.vtkPolyDataReader()
     reader.SetFileName(invtkfile)
     reader.Update()
@@ -25,16 +51,27 @@ def vtk2vtp(invtkfile, outvtpfile):
     writer.SetDataModeToBinary()
     writer.SetInputData(reader.GetOutput())
     writer.Update()
+    return 0
 
 
 def convert_surfaces(vtkFile):
-    """Convert vtk to vtp"""
+    """Converts a vtk file to vtp format if it does not exist.
+    Deletes the vtk file upon successful conversion or if vtp
+    file exists.
+
+    :param vtkFile: VTK file path and name.
+    :type vtkFile: str
+    :return: 0 if successful.
+    :rtype: int
+
+    """
     vtpFile = vtkFile.replace(".vtk", ".vtp")
     if path.exists(vtkFile) and not path.exists(vtpFile):
         print(vtkFile)
         vtk2vtp(vtkFile, vtpFile)
     if path.exists(vtkFile) and path.exists(vtpFile):
         remove(vtkFile)
+    return 0
 
 
 if __name__ == "__main__":

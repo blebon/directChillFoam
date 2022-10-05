@@ -52,6 +52,7 @@ platforms/
 mingw_w64GccDPInt32Opt/
 linux64Gcc*Int32Opt/
 lnInclude/
+__pycache__/
 
 # run Folders
 0/

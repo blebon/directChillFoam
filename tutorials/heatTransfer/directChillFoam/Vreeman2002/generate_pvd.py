@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
-"""Generate .pvd XML file to post-process surfaces function
-object
+"""Generates a .pvd XML file to post-process surfaces function
+objects.
 
 This script assembles the VTK files in separate time directories.
 
@@ -24,8 +24,20 @@ import xml.etree.cElementTree as ET
 
 from natsort import natsorted
 
+
 def create_xml(variable="U", surface="yNormal", file_format="vtp"):
-    """Create <variable>.pvd file with existing VTK files"""
+    """Create <variable>.pvd file with existing VTK files.
+
+    :param variable: Name of field.
+    :type variable: str
+    :param surface: Surface of vtk/vtp files.
+    :type surface: str
+    :param file_format: vtp or vtk.
+    :type file_format: str
+    :return: 0 if successful.
+    :rtype: int
+
+    """
     root = ET.Element(
         "VTKFile",
         type="Collection",
@@ -56,6 +68,7 @@ def create_xml(variable="U", surface="yNormal", file_format="vtp"):
     tree.write(
         "postProcessing/{0:s}_{1:s}.pvd".format(variable, surface), xml_declaration=True
     )
+    return 0
 
 
 if __name__ == "__main__":

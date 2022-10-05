@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Plot sump profile
+"""Plots the sump profile.
 
 This script plots the sump profile using the output in the
 postProcessing directory.
@@ -45,7 +45,14 @@ __status__ = "Production"
 
 
 def load_slice(filename):
-    """Read field from .vtp file"""
+    """Read field from .vtp file.
+
+    :param filename: Filename of .vtp file, including path.
+    :type filename: str
+    :return: A tuple containing points, triangulation and scalar field.
+    :rtype: tuple[numpy.array]
+
+    """
     if not path.exists(filename):
         return None
     reader = vtk.vtkXMLPolyDataReader()
@@ -101,7 +108,16 @@ T_liq = 929.250  # Liquidus temperature in K
 
 
 def plot_sump(image_name="sump.png", cmap="jet"):
-    """Plots sump contour"""
+    """Plots sump contour.
+
+    :param image_name: Filename of image, including path.
+    :type image_name: str
+    :param cmap: Color map for plotting contour.
+    :type cmap: str or matplotlib.colormaps
+    :return: 0 if successful.
+    :rtype: int
+
+    """
     plt.clf()
     # plt.rc('text', usetex=True)
     fig, ax = plt.subplots(nrows=1, ncols=1)
@@ -193,6 +209,8 @@ def plot_sump(image_name="sump.png", cmap="jet"):
         bbox_extra_artists=(lgd1, p),
         bbox_inches="tight",
     )
+
+    return 0
 
 
 if __name__ == "__main__":

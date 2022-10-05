@@ -18,10 +18,12 @@ A tutorial case corresponding to an experiment from C.J. Vreeman, J.D. Schloz an
    src/fvConstraints
    src/fvModels
    tutorials/Vreeman2002
+   tutorials/modules
     
 
 Indices and tables
 ==================
 
 * :ref:`genindex`
+* :ref:`modindex`
 * :ref:`search`

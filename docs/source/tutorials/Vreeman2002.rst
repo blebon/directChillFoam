@@ -102,7 +102,11 @@ The mould uses the `mould HTC <../src/ThermophysicalTransportModels.html#mould-h
       value           uniform $waterTemp;
   }
 
-The surface of the billet that is sprayed with water jets uses the `water film HTC <../src/ThermophysicalTransportModels.html#water-film-heat-transfer-coefficient>`_ boundary condition:
+The surface of the billet that is sprayed with water jets uses the `water film HTC <../src/ThermophysicalTransportModels.html#water-film-heat-transfer-coefficient>`_ boundary condition.
+Use the ``Vreeman2002.write_htc.write_HTC_T()`` function to generate the Foam temperature-htc table.
+
+.. autofunction:: Vreeman2002.write_htc.write_HTC_T
+  :noindex:
 
 .. code-block:: C
   
@@ -318,7 +322,11 @@ Post-processing
 Contour plots
 -------------
 
-The sump profile can be plotted from the VTK files that are saved in the postProcessing directory.
+The sump profile can be plotted from the VTK files that are saved in the 
+postProcessing directory using the ``Vreeman2002.plot_sump.plot_sump()`` function.
+
+.. autofunction:: Vreeman2002.plot_sump.plot_sump
+  :noindex:
 
 .. Figure:: ../images/Sump.png
   :width: 80%
@@ -329,7 +337,12 @@ The sump profile can be plotted from the VTK files that are saved in the postPro
 Validation
 ----------
 
-The simulation can be verified by comparing the predicted temperatures at the billet centre line, mid-radius and surface with experimental measurements.
+The simulation can be verified by comparing the predicted temperatures at the
+billet centre line, mid-radius and surface with experimental measurements. Use
+the ``Vreeman2002.plot_line.plot_line()`` function:
+
+.. autofunction:: Vreeman2002.plot_line.plot_line
+  :noindex:
 
 .. Figure:: ../images/800.0.png
   :width: 80%

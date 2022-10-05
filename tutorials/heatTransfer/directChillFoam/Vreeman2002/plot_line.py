@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Plot temperature profiles at centre and side
+"""Plots the temperature profiles at prescribed locations.
 
 This script plots the comparison between numerical and experimental
 data. Experimental data in system/validation.dat. Numerical data in
@@ -33,14 +33,25 @@ from numpy import genfromtxt, isfinite
 from pandas import read_csv, merge
 
 __author__ = "Bruno Lebon"
-__copyright__ = "Copyright, 2021, Brunel University London"
+__copyright__ = "Copyright, 2022, Brunel University London"
 __credits__ = ["Bruno Lebon"]
 __email__ = "Bruno.Lebon@brunel.ac.uk"
 __status__ = "Production"
 
 
-def plot_single_image(plot_time, Experimental, Image_Path="."):
-    """Plot single image at plot_time"""
+def plot_line(plot_time, Experimental, Image_Path="."):
+    """Plots temperature graphs at plot_time.
+
+    :param plot_time: Time at which to plot the temperatures.
+    :type plot_time: str
+    :param Experimental: Dataframe containing experimental data.
+    :type Experimental: pandas.Dataframe
+    :param Image_Path: Absolute path of line plot.
+    :type Image_Path: str
+    :return: 0 if successful.
+    :rtype: int
+
+    """
     _plot_time_float = float(plot_time)
     print(f"{_plot_time_float:4.1f}")
 
@@ -111,7 +122,7 @@ def plot_single_image(plot_time, Experimental, Image_Path="."):
 
 
 def get_last_time():
-    """Get last time"""
+    """Get the last time for the current case."""
     return natsorted(listdir("postProcessing/centreline"))[-1]
 
 
@@ -120,5 +131,5 @@ if __name__ == "__main__":
     Experimental = read_csv(
         "system/temperature.csv", names=["z", "tcC", "tmC", "tsC"], skiprows=1
     )
-    plot_single_image(time, Experimental, ".")
+    plot_line(time, Experimental, ".")
     exit(0)
