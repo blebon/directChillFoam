@@ -17,3 +17,6 @@ dependencies:
   - recommonmark
   - sphinx-markdown-tables
   - breathe
+  - numpy
+  - natsort
+  - matplotlib
