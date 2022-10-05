@@ -1,7 +1,7 @@
 Welcome to directChillFoam's documentation!
 ===========================================
 
-directChillFoam is an OpenFOAM implementation of the `continuum mixture model <10.1016/0017-9310(87)90094-9>`_ for solving direct chill (DC) casting problems using the finite volume method.
+directChillFoam is an OpenFOAM implementation of the `continuum mixture model <https://doi.org/10.1016/0017-9310(87)90094-9>`_ for solving direct chill (DC) casting problems using the finite volume method.
 
 You will find the application source code on `Github <https://github.com/blebon/directChillFoam/blob/master/applications/solvers/heatTransfer/directChillFoam>`_. Associated libraries are also available on the repository.
 
