@@ -75,7 +75,7 @@ def convert_surfaces(vtkFile):
 
 
 if __name__ == "__main__":
-    with multiprocessing.Pool(160) as pool:
+    with multiprocessing.Pool(8) as pool:
         try:
             Walk = walk(f"postProcessing/{argv[1]}")
         except:
