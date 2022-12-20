@@ -11,11 +11,12 @@ using namespace std;
 
 struct TemperatureVectors
 {
-    TemperatureVectors(string casename)
-        : casename{casename}
+    TemperatureVectors(string casename, string end_time = "800")
+        : casename{casename},
+          end_time{end_time}
     {
         expected = read_temperature("../" + casename + "_T.xy"); // Expected in test directory when run in build subdir
-        numerical = read_temperature("../../postProcessing/" + casename + "/800/line_T.xy"); // Numerical result in postProcessing directory
+        numerical = read_temperature("../../postProcessing/" + casename + "/" + end_time + "/line_T.xy"); // Numerical result in postProcessing directory
     }
 
     ~TemperatureVectors()
@@ -35,7 +36,7 @@ struct TemperatureVectors
         {
             line_array.clear();
             boost::split(line_array, line, boost::is_any_of("\t "), boost::token_compress_on);
-            number = stod(line_array[1]); // Temperatures are in second column
+            number = stod(line_array[1]); // Temperatures are in the second column
             expected.push_back(number);
         }
 
@@ -52,8 +53,11 @@ struct TemperatureVectors
 
     private:
     //! Case name
-    /*! String holding the line along which temperatures are compated*/
+    /*! String holding the line along which temperatures are compared*/
     string casename;
+    //! Case end time
+    /*! String holding the time at which the simulation ends*/
+    string end_time;
 };
 
 struct F {
