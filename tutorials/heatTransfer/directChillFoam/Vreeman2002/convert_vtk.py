@@ -19,7 +19,7 @@ from __future__ import division, print_function
 
 from itertools import chain
 import multiprocessing
-from os import listdir, makedirs, path, remove, walk
+from os import path, remove, walk
 from natsort import natsorted, ns
 from sys import argv
 
@@ -82,6 +82,6 @@ if __name__ == "__main__":
             Walk = walk(f"postProcessing")
         files_gen = chain.from_iterable(
             (path.join(root, f) for f in files if ".vtk" in f)
-            for root, dirs, files in Walk
+            for root, _, files in Walk
         )
         pool.map(convert_surfaces, natsorted(files_gen, alg=ns.FLOAT))

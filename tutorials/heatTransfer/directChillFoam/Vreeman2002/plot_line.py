@@ -20,16 +20,13 @@ Todo:
 
 from __future__ import division, print_function
 
-import multiprocessing as mp
-from functools import partial
-from os import listdir, path, makedirs
+from os import listdir
 
 # from time import sleep
 
 import matplotlib.pyplot as plt
-import seaborn as sns
 from natsort import natsorted
-from numpy import genfromtxt, isfinite
+from numpy import isfinite
 from pandas import read_csv, merge
 
 __author__ = "Bruno Lebon"
@@ -37,6 +34,22 @@ __copyright__ = "Copyright, 2022, Brunel University London"
 __credits__ = ["Bruno Lebon"]
 __email__ = "Bruno.Lebon@brunel.ac.uk"
 __status__ = "Production"
+
+
+def read_numerical_dataframe(
+    plot_time,
+    probe_position="centreline",
+    temperature_column_name="tcK",
+):
+    """Read temperature at plot_time and return as dataframe."""
+    _df = read_csv(
+        f"postProcessing/{probe_position}/{plot_time:s}/line_T.xy",
+        header=None,
+        delimiter=r"\s+",
+    )
+    _df[0] *= -1  # z inverted in experiment
+    _df.columns = ["z", temperature_column_name]
+    return _df
 
 
 def plot_line(plot_time, Experimental, Image_Path="."):
@@ -55,35 +68,21 @@ def plot_line(plot_time, Experimental, Image_Path="."):
     _plot_time_float = float(plot_time)
     print(f"{_plot_time_float:4.1f}")
 
-    # Get numerical temperature
-    Numc = read_csv(
-        f"postProcessing/centreline/{plot_time:s}/line_T.xy",
-        header=None,
-        delimiter=r"\s+",
-    )
-    Numc[0] *= -1  # z inverted in experiment
-    Numc.columns = ["z", "tcK"]
-    Numm = read_csv(
-        f"postProcessing/midradius/{plot_time:s}/line_T.xy",
-        header=None,
-        delimiter=r"\s+",
-    )
-    Numm[0] *= -1
-    Numm.columns = ["z", "tmK"]
-    Nums = read_csv(
-        f"postProcessing/subsurface/{plot_time:s}/line_T.xy",
-        header=None,
-        delimiter=r"\s+",
-    )
-    Nums[0] *= -1
-    Nums.columns = ["z", "tsK"]
+    # Get numerical temperatures
+    Numc = read_numerical_dataframe(plot_time, probe_position="centreline", temperature_column_name="tcK")
+    Numm = read_numerical_dataframe(plot_time, probe_position="midradius", temperature_column_name="tmK")
+    Nums = read_numerical_dataframe(plot_time, probe_position="subsurface", temperature_column_name="tsK")
+    
+    # Merge dataframes
     Numerical = merge(Numc, Numm, on="z")
     Numerical = merge(Numerical, Nums, on="z")
 
+    # Convert to degrees Celcius
     Numerical["tcC"] = Numerical["tcK"] - 273.15
     Numerical["tmC"] = Numerical["tmK"] - 273.15
     Numerical["tsC"] = Numerical["tsK"] - 273.15
 
+    # Plot experimental values, masking NaNs
     centre_mask = isfinite(Experimental["tcC"])
     plt.plot(
         Experimental["z"][centre_mask],

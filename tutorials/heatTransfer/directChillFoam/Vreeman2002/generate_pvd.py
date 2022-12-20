@@ -71,9 +71,15 @@ def create_xml(variable="U", surface="yNormal", file_format="vtp"):
     return 0
 
 
-if __name__ == "__main__":
-    variables = ["grad(T)", "C.Cu", "melt1_alpha1", "T", "U"]
-    surfaces = ["yNormal"]
+def write_pvd(
+    variables=["grad(T)", "C.Cu", "melt1_alpha1", "T", "U"],
+    surfaces=["yNormal"],
+):
+    """Write PVD files for requested slices."""
     for variable in variables:
         for surface in surfaces:
             create_xml(variable, surface)
+
+
+if __name__ == "__main__":
+    write_pvd(create_xml)
