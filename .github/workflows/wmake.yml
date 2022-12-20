@@ -29,8 +29,8 @@ jobs:
     
     steps:
     - uses: szenius/set-timezone@v1.0
-        with:
-          timezoneLinux: "Europe/London"
+      with:
+        timezoneLinux: "Europe/London"
     - uses: actions/checkout@v3
 
     # - name: Cache OpenFOAM 9
