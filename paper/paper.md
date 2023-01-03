@@ -40,7 +40,7 @@ The other approach is based on the continuum model [@Bennon1987] and can also in
  
 # Statement of need
 
-`directChillFoam` is an OpenFOAM solver [@Weller1998] for the computational fluid dynamics (CFD) modelling of the DC casting process. `directChillFoam` extended OpenFOAM's `buoyantPimpleFoam` solver to include the following functionalities:  
+`directChillFoam` is an OpenFOAM [@Weller1998] solver for the computational fluid dynamics (CFD) modelling of the DC casting process. `directChillFoam` extended OpenFOAM's `buoyantPimpleFoam` solver to include the following functionalities:  
 
 * An improved solidification model that can handle alloys with more than two components and with a liquid fraction-temperature profile that can be entered with an interpolation table. These enable the use of thermophysical properties that can be calculated on the fly by a CALPHAD package e.g. [@Andersson2002].
 * Switching between mushy and slurry zones in the phase transition region to accurately handle the flow near the solidification front.
@@ -57,6 +57,6 @@ The other approach is based on the continuum model [@Bennon1987] and can also in
 
 # Acknowledgements
 
-Financial support from the Engineering and Physical Sciences Research Council (EPSRC), UK, under Grant Number EP/N007638/1, is gratefully acknowledged. We are grateful to the UK Materials and Molecular Modelling Hub for computational resources, which is partially funded by EPSRC (EP/P020194/1 and EP/T022213/1).
+Financial support from the Engineering and Physical Sciences Research Council (EPSRC), UK, under Grant Number [EP/N007638/1](https://gow.epsrc.ukri.org/NGBOViewGrant.aspx?GrantRef=EP/N007638/1), is gratefully acknowledged. I am grateful to the UK Materials and Molecular Modelling Hub for computational resources, which is partially funded by EPSRC ([EP/P020194/1](https://gow.epsrc.ukri.org/NGBOViewGrant.aspx?GrantRef=EP/P020194/1) and [EP/T022213/1](https://gow.epsrc.ukri.org/NGBOViewGrant.aspx?GrantRef=EP/T022213/1)).
 
 # References
