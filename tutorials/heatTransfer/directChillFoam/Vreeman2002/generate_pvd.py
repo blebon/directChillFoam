@@ -82,4 +82,4 @@ def write_pvd(
 
 
 if __name__ == "__main__":
-    write_pvd(create_xml)
+    write_pvd()
