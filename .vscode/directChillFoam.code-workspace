@@ -1,0 +1,60 @@
+{
+	"folders": [
+		{
+			"path": ".."
+		}
+	],
+	"settings": {
+		// pytest
+		"python.testing.unittestEnabled": false,
+		"python.testing.pytestEnabled": true,
+		"python.testing.pytestArgs": [
+			"tests"
+		],
+		// File associations
+		"files.associations": {
+			// OpenFOAM
+			"files": "shellscript",
+			"options": "shellscript",
+			"*.C": "cpp",
+			"*.H": "cpp",
+			"*.orig": "cpp",	
+			"*.xy": "cpp",
+			"fv*": "cpp",
+			"*Dict*": "cpp",
+			"*Properties": "cpp",
+			"*Transport*": "cpp",
+			"boundary": "cpp",
+			"C.*": "cpp",
+            "Cp": "cpp",
+            "HTC_T.*": "cpp",
+			"cell*": "cpp",
+			"faces": "cpp",
+            "g": "cpp",
+            "kapp": "cpp",
+            "mu": "cpp",
+			"neighbour": "cpp",
+			"owner": "cpp",
+			"points": "cpp",
+            "melt1_alpha1": "cpp",
+            "p_rgh": "cpp",
+            "p": "cpp",
+            "T": "cpp",
+            "tStar": "cpp",
+            "U": "cpp",
+            "Us": "cpp",
+            "log.*": "log",
+            "*.pvd": "xml",
+			"*.pvsm": "xml",
+			// Documentation
+			"*.awk": "shellscript",
+			"*.rst": "restructuredtext",
+			"*.sed": "shellscript",
+			"Doxyfile": "shellscript",
+			// Scripts
+			"*.py": "python",
+			// Testing
+			"*.ninja": "makefile",
+		}
+	}
+}

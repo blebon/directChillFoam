@@ -43,12 +43,14 @@
   species transport in binary solid-liquid phase change systems - 1. Model
   formulation", IJHMT **30** (1987) 2161-2170.
 
-  as well as a test case from:
+  as well as test cases from:
   
-  C.J. Vreeman, J.D. Schloz and M.J.M. Krane, "Direct Chill Casting of Aluminium
+  1. C.J. Vreeman, J.D. Schloz and M.J.M. Krane, "Direct Chill Casting of Aluminium
   Alloys: Modelling and Experiments on Industrial Scale Ingots", Journal of Heat
   Transfer **124** (2002) 947-953.
+  2. T. Subroto, B. Lebon, D. Eskin, I. Skalicky, D. Roberts, I. Tzanakis and et al. "Numerical modelling and experimental validation of the effect of ultrasonic melt treatment in a direct-chill cast AA6008 alloy billet", Journal of Materials Research and Technology **12** (2021) 1582-1596.
 
 * [DC Casting solver](applications/solvers/heatTransfer/directChillFoam) - Updated verions of the DC casting solver
-* [Test case](tutorials/heatTransfer/directChillFoam/Vreeman2002) - Tutorial case corresponding to the above reference
+* [Vreeman2002](tutorials/heatTransfer/directChillFoam/Vreeman2002) - Tutorial case corresponding to Vreeman *et al.* (2002).
+* [Subroto2021](tutorials/heatTransfer/directChillFoam/Subroto2021) - Tutorial case corresponding to Subroto *et al.* (2021).
 * [Documentation](https://blebon.com/directChillFoam/) - Documentation

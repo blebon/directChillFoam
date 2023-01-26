@@ -8,6 +8,7 @@
 #include <boost/algorithm/string.hpp>
 
 using namespace std;
+namespace utf = boost::unit_test;
 
 struct TemperatureVectors
 {
@@ -36,6 +37,7 @@ struct TemperatureVectors
         {
             line_array.clear();
             boost::split(line_array, line, boost::is_any_of("\t "), boost::token_compress_on);
+            if ( strcmp(line_array[0].c_str(), "#") == 0 ) continue; // Skip headers and comments
             number = stod(line_array[1]); // Temperatures are in the second column
             expected.push_back(number);
         }
