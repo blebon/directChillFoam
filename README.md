@@ -26,11 +26,11 @@
 
 ## Contributing to directChillFoam
 
-  Contributions to directChillFoam are welcome. To contribute, create a branch with a [pull request](https://github.com/blebon/directChillFoam/pulls), tick all the checkboxes and add a clear description of your proposed change.
+  Contributions to directChillFoam are welcome. To contribute, create a branch with a [pull request](https://github.com/blebon/directChillFoam/pulls), make sure that your changes tick all the checkboxes in the [pull request template](https://github.com/blebon/directChillFoam/blob/master/.github/PULL_REQUEST_TEMPLATE/pull_request_template.md) and add a clear description of your proposed change.
 
 ## Bug reports
 
-  If you discover a bug, open a new [issue](https://github.com/blebon/directChillFoam/issues/new) and complete all the requested sections.
+  If you discover a bug, open a new [issue](https://github.com/blebon/directChillFoam/issues/new) and complete all the requested sections from the [issue template](https://github.com/blebon/directChillFoam/blob/master/.github/ISSUE_TEMPLATE/bug_report.md).
 
 ## Direct-Chill (DC) Casting Application  
 
