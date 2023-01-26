@@ -1,6 +1,6 @@
-## How to contribute to directChillFoam
+# How to contribute to directChillFoam
 
-#### **Did you find a bug?**
+## **Did you find a bug?**
 
 * **Verify  that the bug has not already been reported** by searching on [Issues](https://github.com/blebon/directChillFoam/issues).
 
@@ -8,7 +8,7 @@
 
 * Include a **title** and **clear description**, as much relevant information as possible, and an **example case** demonstrating an unexpected behaviour.
 
-#### **Did you write a bug fix patch?**
+## **Did you write a bug fix patch?**
 
 * Open a new GitHub pull request with the patch.
 
@@ -16,7 +16,7 @@
 
 * Before submitting, please read the [How to Contribute to OpenFOAM guide](https://openfoam.org/dev/how-to-contribute/). Adhere to OpenFOAM's coding convention.
 
-#### **Is you fix purely cosmetic?**
+## **Is you fix purely cosmetic?**
 
 * Cosmetic changes (spaces/tabs ...) will be rejected.
 

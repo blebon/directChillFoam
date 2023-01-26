@@ -1,5 +1,4 @@
-directChillFoam
-======
+# directChillFoam
 
 <!-- badges: start -->
 [![status](https://joss.theoj.org/papers/71097ad0617d8fd3da4c5196877ccb73/status.svg)](https://joss.theoj.org/papers/71097ad0617d8fd3da4c5196877ccb73)
@@ -8,6 +7,7 @@ directChillFoam
 <!-- badges: end -->
 
 ## About OpenFOAM  
+
   OpenFOAM is a free, open source computational fluid dynamics (CFD) software
   package released by the OpenFOAM Foundation. It has a large user base across
   most areas of engineering and science, from both commercial and academic
@@ -16,6 +16,7 @@ directChillFoam
   transfer, to solid dynamics and electromagnetics.
 
 ## Copyright  
+
   OpenFOAM is free software: you can redistribute it and/or modify it under the
   terms of the GNU General Public License as published by the Free Software
   Foundation, either version 3 of the License, or (at your option) any later
@@ -23,7 +24,16 @@ directChillFoam
   [http://www.gnu.org/licenses/](http://www.gnu.org/licenses/), for a description of the GNU General Public
   License terms under which you can copy the files.
 
+## Contributing to directChillFoam
+
+  Contributions to directChillFoam are welcome. To contribute, create a branch with a [pull request](https://github.com/blebon/directChillFoam/pulls), tick all the checkboxes and add a clear description of your proposed change.
+
+## Bug reports
+
+  If you discover a bug, open a new [issue](https://github.com/blebon/directChillFoam/issues/new) and complete all the requested sections.
+
 ## Direct-Chill (DC) Casting Application  
+
   This repository contains developments for modeling direct-chill (DC) casting
   by Bruno Lebon at BCAST, Brunel University London using OpenFOAM.
 
@@ -39,6 +49,6 @@ directChillFoam
   Alloys: Modelling and Experiments on Industrial Scale Ingots", Journal of Heat
   Transfer **124** (2002) 947-953.
 
-  * [DC Casting solver](applications/solvers/heatTransfer/directChillFoam) - Updated verions of the DC casting solver 
-  * [Test case](tutorials/heatTransfer/directChillFoam/Vreeman2002) - Tutorial case corresponding to the above reference 
-  * [Documentation](https://blebon.com/directChillFoam/) - Documentation
+* [DC Casting solver](applications/solvers/heatTransfer/directChillFoam) - Updated verions of the DC casting solver
+* [Test case](tutorials/heatTransfer/directChillFoam/Vreeman2002) - Tutorial case corresponding to the above reference
+* [Documentation](https://blebon.com/directChillFoam/) - Documentation
