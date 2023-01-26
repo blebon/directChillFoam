@@ -1,0 +1,92 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+  =========                 |
+  \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
+   \\    /   O peration     | Website:  https://openfoam.org
+    \\  /    A nd           | Version:  9
+     \\/     M anipulation  |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    format          ascii;
+    class           volScalarField;
+    location        "0";
+    object          T;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+tInitial        946.97;
+
+waterTemp       328.5;
+
+dimensions      [ 0 0 0 1 0 0 0 ];
+
+internalField   uniform $tInitial;
+
+boundaryField
+{
+    hot-top
+    {
+        type            zeroGradient;
+    }
+
+    graphite
+    {
+        type            mouldHTC;
+        mode            coefficient;
+        h1              uniform 1325;
+        h2              uniform 40;
+        Ta              constant $waterTemp;
+        kappaMethod     fluidThermo;
+        relaxation      1.0;
+        value           uniform $waterTemp;
+    }
+
+    "(mould|air-gap)"
+    {
+        type            mouldHTC;
+        mode            coefficient;
+        h1              uniform 1250;
+        h2              uniform 40;
+        Ta              constant $waterTemp;
+        kappaMethod     fluidThermo;
+        relaxation      1.0;
+        value           uniform $waterTemp;
+    }
+
+    water-film
+    {
+        type            waterFilmHTC;
+        mode            coefficient;
+        htc
+        {
+            type            table;
+            format          foam;
+            file            "constant/HTC_Tw";
+            outOfBounds     clamp;
+            interpolationScheme linear;
+        }
+        Ta              constant $waterTemp;
+        kappaMethod     fluidThermo;
+        relaxation      0.3;
+        value           uniform $waterTemp;
+    }
+
+    ram
+    {
+        type            zeroGradient;
+    }
+
+    free-surface
+    {
+        type            fixedValue;
+        value           uniform $tInitial;
+    }
+    
+    symmetry_planes
+    {
+        type            symmetry;
+    }
+}
+
+
+// ************************************************************************* //

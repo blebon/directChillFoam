@@ -1,0 +1,124 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+  =========                 |
+  \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
+   \\    /   O peration     | Website:  https://openfoam.org
+    \\  /    A nd           | Version:  9
+     \\/     M anipulation  |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    format          ascii;
+    class           dictionary;
+    location        "system";
+    object          controlDict;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+DebugSwitches
+{
+    // mushyZoneSource 1;
+    // limitSolute     1;
+}
+
+application     directChillFoam;
+
+startFrom       latestTime;
+
+startTime       0;
+
+stopAt          endTime;
+
+endTime         100;
+
+deltaT          0.02;
+
+writeControl    adjustableRunTime;
+
+writeInterval   0.5;
+
+purgeWrite      2;
+
+writeFormat     binary;
+
+writePrecision  12;
+
+writeCompression uncompressed;
+
+timeFormat      general;
+
+timePrecision   8;
+
+runTimeModifiable yes;
+
+adjustTimeStep  no;
+
+maxCo           0.5;
+
+maxAlphaCo      0.5;
+
+numericalFunctions
+{
+    #includeFunc    residuals(funcName=residuals, p_rgh, U, h)
+}
+
+fieldsFunctions
+{
+    #includeFunc    grad(funcName=gradT, T)
+}
+
+graphFunctions
+{
+    #includeFunc    graphCell(
+	    funcName=x0mm,
+	    start=(1e-3 0  0.170),
+	    end=(1e-3 0 -0.300),
+	    fields=(T),
+        axis=z
+    )
+    #includeFunc    graphCell(
+        funcName=x325mm,
+        start=(0.0325 0  0.170),
+        end=(0.0325 0 -0.300),
+        fields=(T),
+        axis=z
+    )
+    #includeFunc    graphCell(
+        funcName=x62mm,
+        start=(0.062 0  0.170),
+        end=(0.062 0 -0.300),
+        fields=(T),
+        axis=z
+    )
+}
+
+surfaceFunctions
+{
+    #includeFunc    cutPlaneSurface(
+        funcName=yNormal,
+        point=(1e3 0 0),
+        normal=(0 1 0),
+        fields=(U T melt1_alpha1 C.Si C.Mg grad(T))
+    )
+}
+
+functions
+{
+    $numericalFunctions ;
+    $fieldsFunctions ;
+    $graphFunctions ;
+    $surfaceFunctions ;
+}
+
+OptimisationSwitches
+{
+    fileHandler     collated;
+}
+
+libs (
+    "libmyFvModels.so"
+    "libmyFvConstraints.so"
+    "libmythermophysicalTransportModels.so"
+);
+
+
+// ************************************************************************* //

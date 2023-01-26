@@ -1,0 +1,47 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+  =========                 |
+  \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
+   \\    /   O peration     | Website:  https://openfoam.org
+    \\  /    A nd           | Version:  9
+     \\/     M anipulation  |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    format          ascii;
+    class           dictionary;
+    location        "system";
+    object          fvConstraints;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+limitT
+{
+    type            limitTemperature;
+    active          yes;
+    selectionMode   all;
+    min             328.5;
+    max             946.97;
+}
+
+limitC.Si
+{
+    type            limitSolute;
+    active          yes;
+    selectionMode   all;
+    solute          C.Si;
+    min             0.0;
+    max             1.0;
+}
+
+limitC.Mg
+{
+    type            limitSolute;
+    active          yes;
+    selectionMode   all;
+    solute          C.Mg;
+    min             0.0;
+    max             1.0;
+}
+
+
+// ************************************************************************* //

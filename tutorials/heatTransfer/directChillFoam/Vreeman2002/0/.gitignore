@@ -1,0 +1,4 @@
+# Ignore fields that are initialized by setFields
+melt1_alpha1
+T
+grad\(T\)
