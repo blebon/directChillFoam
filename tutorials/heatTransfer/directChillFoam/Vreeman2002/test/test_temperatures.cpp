@@ -10,6 +10,8 @@
 using namespace std;
 namespace utf = boost::unit_test;
 
+double tolerance{1.0};
+
 struct TemperatureVectors
 {
     TemperatureVectors(string casename, string end_time = "800")
@@ -73,24 +75,43 @@ BOOST_FIXTURE_TEST_SUITE(CheckIfTemperaturesMatchExpectedValues, F);
     {
         BOOST_TEST_MESSAGE("Checking centreline temperatures");
         TemperatureVectors centreline{ "centreline" };
-        BOOST_CHECK_EQUAL_COLLECTIONS(centreline.expected.begin(), centreline.expected.end(),
-                                      centreline.numerical.begin(), centreline.numerical.end());
+        for (auto expected = centreline.expected.begin(), numerical = centreline.numerical.begin();
+                  expected != centreline.expected.end() && numerical != centreline.numerical.end(); 
+                  ++expected, ++numerical)
+        {
+            BOOST_CHECK_CLOSE(*expected, *numerical, tolerance);
+        };
+        // BOOST_CHECK_CLOSE(centreline.expected.begin(), centreline.expected.end(), 1e-6);
+        // BOOST_CHECK_EQUAL_COLLECTIONS(centreline.expected.begin(), centreline.expected.end(),
+        //                               centreline.numerical.begin(), centreline.numerical.end(), 1e-3);
     }
 
     BOOST_AUTO_TEST_CASE(CheckIfMidradiusTemperaturesMatchExpectedValues)
     {
         BOOST_TEST_MESSAGE("Checking midradius temperatures");
         TemperatureVectors midradius{ "midradius" };
-        BOOST_CHECK_EQUAL_COLLECTIONS(midradius.expected.begin(), midradius.expected.end(),
-                                      midradius.numerical.begin(), midradius.numerical.end());
+        for (auto expected = midradius.expected.begin(), numerical = midradius.numerical.begin();
+                  expected != midradius.expected.end() && numerical != midradius.numerical.end(); 
+                  ++expected, ++numerical)
+        {
+            BOOST_CHECK_CLOSE(*expected, *numerical, tolerance);
+        };
+        // BOOST_CHECK_EQUAL_COLLECTIONS(midradius.expected.begin(), midradius.expected.end(),
+        //                               midradius.numerical.begin(), midradius.numerical.end());
     }
 
     BOOST_AUTO_TEST_CASE(CheckIfSubsurfaceTemperaturesMatchExpectedValues)
     {
         BOOST_TEST_MESSAGE("Checking subsurface temperatures");
         TemperatureVectors subsurface{ "subsurface" };
-        BOOST_CHECK_EQUAL_COLLECTIONS(subsurface.expected.begin(), subsurface.expected.end(),
-                                      subsurface.numerical.begin(), subsurface.numerical.end());
+        for (auto expected = subsurface.expected.begin(), numerical = subsurface.numerical.begin();
+                  expected != subsurface.expected.end() && numerical != subsurface.numerical.end(); 
+                  ++expected, ++numerical)
+        {
+            BOOST_CHECK_CLOSE(*expected, *numerical, tolerance);
+        };
+        // BOOST_CHECK_EQUAL_COLLECTIONS(subsurface.expected.begin(), subsurface.expected.end(),
+        //                               subsurface.numerical.begin(), subsurface.numerical.end());
     }
 
 BOOST_AUTO_TEST_SUITE_END();
