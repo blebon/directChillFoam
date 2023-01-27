@@ -10,6 +10,8 @@ This tutorial describes how to pre-process, run and post-process a direct chill 
 
   The DC casting process: the melt in contact with the mould solidifies and the billet is pulled downwards by gravity as the ram is lowered. Water is sprayed at the sides of the billet providing the direct chill.
 
+The execution time of this tutorial case is around 12 minutes when run in serial on a node with a 2.10 GHz processor.
+
 Pre-processing
 ==============
 
@@ -19,7 +21,7 @@ The schematic for the DC casting setup of this case is as follows:
   :width: 80%
   :alt: Schematic of the Subroto *et al.* (2021) case
 
-  Boundary patch labels and dimensions of the casting mould and billet. Boundary patch labels and dimensions of the casting mould and billet. The image is not drawn to scale.
+  Boundary patch labels and dimensions of the casting mould and billet. The image is not drawn to scale.
 
 Change to the case directory.
 
