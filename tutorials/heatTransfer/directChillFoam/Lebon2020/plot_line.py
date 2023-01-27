@@ -52,7 +52,7 @@ def read_numerical_dataframe(
     return _df
 
 
-def plot_line(plot_time, Experimental, Image_Path=".", offset=0.0):
+def plot_line(plot_time, Experimental, Image_Path=".", offset=-0.01):
     """Plots temperature graphs at plot_time.
 
     :param plot_time: Time at which to plot the temperatures.

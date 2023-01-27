@@ -18,6 +18,7 @@ A tutorial case corresponding to an experiment from C.J. Vreeman, J.D. Schloz an
    src/fvConstraints
    src/fvModels
    tutorials/Vreeman2002
+   tutorials/Lebon2020
    tutorials/Subroto2021
    tutorials/modules
     

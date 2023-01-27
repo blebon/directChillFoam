@@ -132,10 +132,7 @@ def plot_sump(image_name="sump.png", cmap="jet"):
     x, y, z, tri, fL = load_slice(vtkFile)
     levels = linspace(0, 1, 11)
     levels = around(levels, decimals=1)
-    lhs_triang = tr.Triangulation(-x, z, triangles=tri)
-    rhs_triang = tr.Triangulation(x, z, triangles=tri)
-    ax.tricontourf(lhs_triang, fL, cmap="gray", levels=levels)
-    cs = ax.tricontourf(rhs_triang, fL, cmap="gray", levels=levels)
+    ax.tricontourf(x, z, fL, cmap="gray", levels=levels)
 
     # T
     vtkFile = f"{casedir}/{time}/T_{suffix}.vtp"
@@ -144,8 +141,7 @@ def plot_sump(image_name="sump.png", cmap="jet"):
     levels = linspace(T_sol, T_liq, 10)
     levels -= 273.13
     levels = around(levels, decimals=1)
-    ax.tricontourf(lhs_triang, scalar, cmap=cmap, levels=levels)
-    cs = ax.tricontourf(rhs_triang, scalar, cmap=cmap, levels=levels)
+    cs = ax.tricontourf(x, z, scalar, cmap=cmap, levels=levels)
     handles, labels = cs.legend_elements(variable_name="T")
     labels[0] = "$T \\leq {0:s}$".format(labels[1].split(" ")[0].replace("$", ""))
     labels[-1] = "$T > {0:s}$".format(labels[-2].split(" ")[-1].replace("$", ""))
@@ -167,13 +163,6 @@ def plot_sump(image_name="sump.png", cmap="jet"):
 
     SKIP = 15
     quiveropts = dict(pivot="middle", scale=0.5, units="xy", angles="xy")
-    ax.quiver(
-        -x[umask][::SKIP],
-        z[umask][::SKIP],
-        -Ux[umask][::SKIP],
-        Uz[umask][::SKIP],
-        **quiveropts,
-    )
     q = ax.quiver(
         x[umask][::SKIP],
         z[umask][::SKIP],
