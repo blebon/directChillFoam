@@ -1,6 +1,6 @@
-======================================================================
-Tutorial: Vreeman *et al.* (2002) - DC casting of a binary Al-Cu alloy
-======================================================================
+====================================================================
+Tutorial: Subroto *et al.* (2021) - DC casting of a ternary Al alloy
+====================================================================
 
 This tutorial describes how to pre-process, run and post-process a direct chill (DC) casting case with directChillFoam.
 
@@ -15,17 +15,17 @@ Pre-processing
 
 The schematic for the DC casting setup of this case is as follows:
 
-.. Figure:: ../images/Vreeman2002_BC.png
+.. Figure:: ../images/Subroto2021_BC.png
   :width: 80%
-  :alt: Schematic of the Vreeman *et al.* (2002) case
+  :alt: Schematic of the Subroto *et al.* (2021) case
 
-  Boundary patch labels and dimensions of the casting mould and billet. The image is not drawn to scale.
+  Boundary patch labels and dimensions of the casting mould and billet. Boundary patch labels and dimensions of the casting mould and billet. The image is not drawn to scale.
 
 Change to the case directory.
 
 .. code-block:: console
 
-  $ cd directChillFoam/tutorials/heatTransfer/directChillFoam/Vreeman2002
+  $ cd directChillFoam/tutorials/heatTransfer/directChillFoam/Subroto2021
 
 Mesh generation
 ---------------
@@ -36,7 +36,7 @@ Move into the system directory.
 
   $ cd system
 
-Generate the blockMeshDict file using the  ``Vreeman2002.system.cylinder.write_blockMeshDict()`` function from the system/cylinder.py script.
+Generate the blockMeshDict file using the helper Python script.
 
 .. code-block:: console
 
@@ -61,17 +61,21 @@ Initialize the fields in the case directory:
 Solute
 ^^^^^^
 
-The solute field is dimensionless: 
+Solute fields are dimensionless: 
 
 .. code-block:: C
 
   dimensions      [0 0 0 0 0 0 0];
 
-The field is initialized with a constant value:
+The fields are initialized with constant values. Use 0.6 for silicon and 0.48 for magnesium.
 
 .. code-block:: C
 
-  internalField   uniform 0.06;
+  internalField   uniform 0.6; // C.Si
+
+.. code-block:: C
+
+  internalField   uniform 0.48; // C.Mg
 
 The inlet boundary condition is a fixed value:
 
@@ -105,9 +109,9 @@ The mould uses the `mould HTC <../src/ThermophysicalTransportModels.html#mould-h
   }
 
 The surface of the billet that is sprayed with water jets uses the `water film HTC <../src/ThermophysicalTransportModels.html#water-film-heat-transfer-coefficient>`_ boundary condition.
-Use the ``Vreeman2002.write_htc.write_HTC_T()`` function to generate the Foam temperature-htc table.
+Use the ``Subroto2021.write_htc.write_HTC_T()`` function to generate the Foam temperature-htc table.
 
-.. autofunction:: Vreeman2002.write_htc.write_HTC_T
+.. autofunction:: Subroto2021.write_htc.write_HTC_T
   :noindex:
 
 .. code-block:: C
@@ -156,7 +160,7 @@ The casting velocity :math:`{U}` is prescribed at the mould and water-cooled sur
           const vectorField& centre(patch().Cf());
           forAll(centre, i)
           {
-              U[i].z() = -0.001*(1-fL[i]);
+              U[i].z() = -0.00233*(1-fL[i]);
           }
           
           // Apply the calculated velocities
@@ -194,12 +198,12 @@ Example usage:
 
 .. code-block:: C 
 
-  g_env [ 0  0  0 0 0 0 0 ] 0.7;
-  rho1  [ 1 -3  0 0 0 0 0 ] 1750;
-  rho2  [ 1 -3  0 0 0 0 0 ] 2490;
-  mu1   [ 1 -1 -1 0 0 0 0 ] 1.28e-3;
-  mu2   [ 1 -1 -1 0 0 0 0 ] 1.28e-3;
-  DAS   [ 0  1  0 0 0 0 0 ] 1.85e-4;
+  g_env           [ 0 0 0 0 0 0 0 ] 0.7;
+  rho1            [ 1 -3 0 0 0 0 0 ] 2378.65;
+  rho2            [ 1 -3 0 0 0 0 0 ] 2602.04;
+  mu1             [ 1 -1 -1 0 0 0 0 ] 0.0010155;
+  mu2             [ 1 -1 -1 0 0 0 0 ] 0.0010155;
+  DAS             [ 0 1 0 0 0 0 0 ] 0.000185;
 
 Thermophysical properties
 ^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -217,13 +221,22 @@ Example usage:
   
   solutes
   (
-      Cu
+      Si
       {
-          D_l   5.66e-09;
-          kp    0.171;
-          C0    0.06;
+          D_l   3e-9;
+          kp    0.102068;
+          C0    0.6;
           Ceut  0.32;
-          beta  -7.3e-3;
+          beta  -3.7e-4;
+      }
+      
+      Mg
+      {
+          D_l   3e-9;
+          kp    0.316119;
+          C0    0.48;
+          Ceut  0.32;
+          beta  1.3e-4;
       }
   );
 
@@ -245,12 +258,12 @@ Example usage:
       {
           selectionMode   all;
           
-          Tliq            913.13;
-          Tsol            820.98;
-          L               392000.0;
+          Tliq            928.236;
+          Tsol            805.503;
+          L               351540.0;
           g_env           0.7;
-          relax           0.2;
-          castingVelocity (0 0 -0.001);
+          relax           0.1;
+          castingVelocity (0 0 -0.00233);
           
           tStar
           {
@@ -262,14 +275,11 @@ Example usage:
           }
           
           thermoMode      thermo;
-          
-          rhoRef          2573.;
-          beta            2.25e-5;
-          
+          rhoRef          2602.044;
+          beta            23e-6;
           phi             phi;
-          
-          Cu              1.0e+05;
-          q               1.0e-06;
+          Cu              1.522e+07;
+          q               1e-03;
       }
   }
 
@@ -296,7 +306,8 @@ Discretization schemes are entered in the system/fvSchemes dictionary file. Upwi
   divSchemes
   {
       ...
-      div(phi,C.Cu)    bounded Gauss upwind;
+      div(phi,C.Si)   bounded Gauss upwind;
+      div(phi,C.Mg)   bounded Gauss upwind;
   }
 
 The number of energy corrector loops is prescribed in the PIMPLE entry of the system/fvSolution dictionary file.
@@ -325,12 +336,12 @@ Contour plots
 -------------
 
 The sump profile can be plotted from the VTK files that are saved in the 
-postProcessing directory using the ``Vreeman2002.plot_sump.plot_sump()`` function.
+postProcessing directory using the ``Subroto2021.plot_sump.plot_sump()`` function.
 
-.. autofunction:: Vreeman2002.plot_sump.plot_sump
+.. autofunction:: Subroto2021.plot_sump.plot_sump
   :noindex:
 
-.. Figure:: ../images/Vreeman2002_Sump.png
+.. Figure:: ../images/Subroto2021_Sump.png
   :width: 80%
   :alt: Predicted sump profile
 
@@ -341,12 +352,12 @@ Validation
 
 The simulation can be verified by comparing the predicted temperatures at the
 billet centre line, mid-radius and surface with experimental measurements. Use
-the ``Vreeman2002.plot_line.plot_line()`` function:
+the ``Subroto2021.plot_line.plot_line()`` function:
 
-.. autofunction:: Vreeman2002.plot_line.plot_line
+.. autofunction:: Subroto2021.plot_line.plot_line
   :noindex:
 
-.. Figure:: ../images/Vreeman2002_800.0.png
+.. Figure:: ../images/Subroto2021_100.0.png
   :width: 80%
   :alt: Temperature line plots
 

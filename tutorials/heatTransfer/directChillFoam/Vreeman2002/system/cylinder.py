@@ -1,6 +1,22 @@
+"""Writes a blockMeshDict file for an axisymmetric case.
+This script writes a blockMeshDict file for an axisymmetric case in the system directory.
+
+Refer to https://doc.cfd.direct/openfoam/user-guide-v6/blockmesh for the official blockMesh utility documentation.
+
+Example:
+    Run python script in case system directory:
+        $ cd system
+        $ python convert_vtk.py
+Todo:
+    * None
+.. _Google Python Style Guide:
+   http://google.github.io/styleguide/pyguide.html
+   
+"""
+
 from __future__ import division, print_function
 
-from numpy import sqrt, pi, cos, sin
+from numpy import pi, cos, sin
 
 __author__ = "Bruno Lebon"
 __copyright__ = "Copyright, 2021, Brunel University London"
@@ -10,8 +26,17 @@ __status__ = "Production"
 
 
 def write_vertices(angle=2.5, diameter=155.0, z_points=(-250.0, -50.0, 0.0, 50.0)):
-    """
-        Vertices
+    """Writes the vertices entry
+
+    :param angle: Angle of the axisymmetric slice.
+    :type angle: float
+    :param diameter: Diameter of the cast billet (mm).
+    :type diameter: float
+    :param z_points: z coordinates of the boundaries of the billet and mould sections.
+    :type z_points: tuple
+    :return: string containing the blockMeshDict vertices entry
+    :rtype: string
+
     """
     block = "vertices\n"
     block += "(\n"
@@ -19,6 +44,7 @@ def write_vertices(angle=2.5, diameter=155.0, z_points=(-250.0, -50.0, 0.0, 50.0
     radius = diameter / 2
     x = radius * cos(pi * angle / 180)
     y = radius * sin(pi * angle / 180)
+    # Write each vertex coordinate and label the vertex number in a comment at the right
     for z in z_points:
         block += f"    ({0:8.4f}  {0:7.4f} {z:6.1f}) // {vertex:2d}\n"
         vertex += 1
@@ -32,26 +58,53 @@ def write_vertices(angle=2.5, diameter=155.0, z_points=(-250.0, -50.0, 0.0, 50.0
     return block
 
 
-def write_blocks(z_points=(-250.0, -50.0, 0.0, 50.0), diameter=80, mesh=1.0):
-    """
-        Blocks
+def write_blocks(
+    diameter=155.0, z_points=(-250.0, -50.0, 0.0, 50.0), rmesh=1.0, zmesh=1.0
+):
+    """Writes the blocks entry
+
+    :param diameter: Diameter of the cast billet (mm).
+    :type diameter: float
+    :param z_points: z coordinates of the boundaries of the billet and mould sections.
+    :type z_points: tuple
+    :param rmesh: Radial mesh adjustment parameter.
+    :type rmesh: float
+    :param zmesh: Vertical mesh adjustment parameter.
+    :type zmesh: float
+    :return: string containing the blockMeshDict blocks entry
+    :rtype: string
+
     """
     block = "blocks\n"
     block += "(\n"
     prism = 0
     N = 3
-    rcells = int(diameter / (2 * mesh))
+    rcells = int(diameter / (2 * rmesh))
     for i in range(len(z_points) - 1):
-        cells = int((z_points[i + 1] - z_points[i]) / mesh)
-        block += f"    hex ({0+N*i:2d} {2+N*i:2d} {1+N*i:2d} {0+N*i:2d} {3+N*i:2d} {5+N*i:2d} {4+N*i:2d} {3+N*i:2d}) domain ({rcells:2d} 1 {cells:3d}) simpleGrading (0.5 1 1) // {prism:2d}\n"
+        z_expansion_ratio = 1.0
+        cells = int((z_points[i + 1] - z_points[i]) / zmesh)
+        if i == 0:
+            # Coarser mesh when billet is solid
+            z_expansion_ratio = 0.7
+            cells //= 5
+        block += f"    hex ({0+N*i:2d} {2+N*i:2d} {1+N*i:2d} {0+N*i:2d} {3+N*i:2d} {5+N*i:2d} {4+N*i:2d} {3+N*i:2d}) domain ({rcells:2d} 1 {cells:3d}) simpleGrading (0.5 1 {z_expansion_ratio:.1f}) // {prism:2d}\n"
         prism += 1
     block += ");\n"
     return block
 
 
-def write_edges(angle=2.5, diameter=80, z_points=(-250.0, -50.0, 0.0, 50.0)):
-    """
-        Edges
+def write_edges(angle=2.5, diameter=155.0, z_points=(-250.0, -50.0, 0.0, 50.0)):
+    """Writes the edges entry
+
+    :param angle: Angle of the axisymmetric slice.
+    :type angle: float
+    :param diameter: Diameter of the cast billet (mm).
+    :type diameter: float
+    :param z_points: z coordinates of the boundaries of the billet and mould sections.
+    :type z_points: tuple
+    :return: string containing the blockMeshDict edges entry
+    :rtype: string
+
     """
     radius = diameter / 2
     x = radius * cos(pi * angle / (2 * 180))
@@ -67,11 +120,17 @@ def write_edges(angle=2.5, diameter=80, z_points=(-250.0, -50.0, 0.0, 50.0)):
 
 
 def write_boundary(z_points=(-250.0, -50.0, 0.0, 50.0)):
-    """
-        Boundary
+    """Writes the boundary entry
+
+    :param z_points: z coordinates of the boundaries of the billet and mould sections.
+    :type z_points: tuple
+    :return: string containing the blockMeshDict boundary entry
+    :rtype: string
+
     """
     block = "boundary\n"
     block += "(\n"
+    # face names used in 0 directory
     faces = ["water-film", "water-film", "air-gap", "mould", "hot-top"]
     N = 3
     for i in range(len(z_points) - 1):
@@ -136,9 +195,24 @@ def write_boundary(z_points=(-250.0, -50.0, 0.0, 50.0)):
     return block
 
 
-def write_blockMeshDict(z_points=(-250.0, -50.0, 0.0, 50.0)):
-    """
-        blockMeshDict
+def write_blockMeshDict(
+    angle=2.5, diameter=155.0, z_points=(-250.0, -50.0, 0.0, 50.0), rmesh=1.0, zmesh=1.0
+):
+    """Assembles the blockMeshDict file contents
+
+    :param angle: Angle of the axisymmetric slice.
+    :type angle: float
+    :param diameter: Diameter of the cast billet (mm).
+    :type diameter: float
+    :param z_points: z coordinates of the boundaries of the billet and mould sections.
+    :type z_points: tuple
+    :return: string containing the blockMeshDict file contents
+    :param rmesh: Radial mesh adjustment parameter.
+    :type rmesh: float
+    :param zmesh: Vertical mesh adjustment parameter.
+    :type zmesh: float
+    :rtype: string
+
     """
     block = """/*--------------------------------*- C++ -*----------------------------------*\\
   =========                 |
@@ -158,13 +232,15 @@ FoamFile
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
 convertToMeters 0.001;\n\n"""
-    block += write_vertices(angle=2.5, diameter=450.0, z_points=Z_POINTS)
+    block += write_vertices(angle=angle, diameter=diameter, z_points=z_points)
     block += "\n"
-    block += write_blocks(z_points=Z_POINTS, mesh=2.0)
+    block += write_blocks(
+        diameter=diameter, z_points=z_points, rmesh=rmesh, zmesh=zmesh
+    )
     block += "\n"
-    block += write_edges(angle=2.5, diameter=450.0, z_points=Z_POINTS)
+    block += write_edges(angle=angle, diameter=diameter, z_points=z_points)
     block += "\n"
-    block += write_boundary(z_points=Z_POINTS)
+    block += write_boundary(z_points=z_points)
     block += "\n\n"
     block += """mergePatchPairs
 (
@@ -176,6 +252,18 @@ convertToMeters 0.001;\n\n"""
 
 
 if __name__ == "__main__":
+    ANGLE = 2.5
+    DIAMETER = 450.0
+    RMESH = 5.5
+    ZMESH = 2.0
     Z_POINTS = (-900.0, -400.0, -70.0, -40.0, -10.0, 0.0)
     with open("blockMeshDict", "w") as f:
-        f.write(write_blockMeshDict(z_points=Z_POINTS))
+        f.write(
+            write_blockMeshDict(
+                angle=ANGLE,
+                diameter=DIAMETER,
+                z_points=Z_POINTS,
+                rmesh=RMESH,
+                zmesh=ZMESH,
+            )
+        )

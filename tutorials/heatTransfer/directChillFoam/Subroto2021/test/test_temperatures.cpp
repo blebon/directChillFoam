@@ -14,7 +14,7 @@ namespace utf = boost::unit_test;
 
 struct TemperatureVectors
 {
-    TemperatureVectors(string casename, string end_time = "800", double tolerance = 3.0)
+    TemperatureVectors(string casename, string end_time = "100", double tolerance = 3.0)
         : casename{casename},
           end_time{end_time},
           tolerance{tolerance}
@@ -102,21 +102,21 @@ BOOST_FIXTURE_TEST_SUITE(CheckIfTemperaturesMatchExpectedValues, F);
 
     BOOST_AUTO_TEST_CASE(CheckIfCentrelineTemperaturesMatchExpectedValues)
     {
-        string casename{"centreline"};
+        string casename{"x0mm"};
         TemperatureVectors temperatures{casename};
         temperatures.boost_check();
     }
 
     BOOST_AUTO_TEST_CASE(CheckIfMidradiusTemperaturesMatchExpectedValues)
     {
-        string casename{"midradius"};
+        string casename{"x325mm"};
         TemperatureVectors temperatures{casename};
         temperatures.boost_check();
     }
 
     BOOST_AUTO_TEST_CASE(CheckIfSubsurfaceTemperaturesMatchExpectedValues)
     {
-        string casename{"subsurface"};
+        string casename{"x62mm"};
         TemperatureVectors temperatures{casename};
         temperatures.boost_check();
     }

@@ -1,3 +1,6 @@
+# Ignore build directories
+build/
+
 # Compiled source
 *.o
 *.so
@@ -47,6 +50,11 @@ thicknessFraction
 *.cgns
 *.med
 
+# Figures in tutorial directory
+tutorials/**/*.jpeg
+tutorials/**/*.jpg
+tutorials/**/*.png
+
 # Folders
 platforms/
 mingw_w64GccDPInt32Opt/
@@ -55,7 +63,6 @@ lnInclude/
 __pycache__/
 
 # run Folders
-0/
 0.[0-9]*/
 1*/
 2*/
@@ -68,3 +75,4 @@ __pycache__/
 9*/
 postProcessing/
 dynamicCode/
+processors*/
