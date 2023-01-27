@@ -21,7 +21,7 @@ jobs:
       - name: Check doxygen is installed and latest version
         run: |
           sudo apt-get update
-          sudo apt-get -y install graphviz libclang1-9 libclang-cpp9
+          sudo apt-get -y install graphviz
           sudo apt-get -y install doxygen
           
       - name: Make conda environment
