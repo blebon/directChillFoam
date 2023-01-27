@@ -1,0 +1,52 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+  =========                 |
+  \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
+   \\    /   O peration     | Website:  https://openfoam.org
+    \\  /    A nd           | Version:  9
+     \\/     M anipulation  |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    format          ascii;
+    class           dictionary;
+    location        "constant";
+    object          fvModels;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+melt1
+{
+    type            mushyZoneSource;
+    active          yes;
+
+    mushyZoneSourceCoeffs
+    {
+        selectionMode   all;
+
+        Tliq            929.250;
+        Tsol            757.375;
+        L               375696.0;
+        g_env           0.7;
+        relax           0.1;
+        castingVelocity (0 0 -0.002583);
+
+        tStar
+        {
+            type            table;
+            format          foam;
+            file            "constant/tStar";
+            outOfBounds     clamp;
+            interpolationScheme linear;
+        }
+
+        thermoMode      thermo;
+        rhoRef          2608.820;
+        beta            23e-6;
+        phi             phi;
+        Cu              1.522e+07;
+        q               1e-03;
+    }
+}
+
+
+// ************************************************************************* //

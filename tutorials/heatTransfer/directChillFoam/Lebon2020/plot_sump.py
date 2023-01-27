@@ -100,11 +100,11 @@ def load_slice(filename):
         return (x, y, z, tri, sc)
 
 
-Ucast = 0.00233  # Casting speed in m/s
-offset = 0  # Set to mould position
+Ucast = 0.002583  # Casting speed in m/s
+offset = -0.010  # Set to mould position
 
-T_sol = 805.503  # Solidus temperature in K
-T_liq = 928.236  # Liquidus temperature in K
+T_sol = 757.375  # Solidus temperature in K
+T_liq = 929.250  # Liquidus temperature in K
 
 
 def plot_sump(image_name="sump.png", cmap="jet"):

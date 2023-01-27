@@ -1,0 +1,145 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+  =========                 |
+  \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
+   \\    /   O peration     | Website:  https://openfoam.org
+    \\  /    A nd           | Version:  9
+     \\/     M anipulation  |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version         2;
+    format          ascii;
+    class           dictionary;
+    location        "system";
+    object          setFieldsDict;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+defaultFieldValues
+(
+    volScalarFieldValue T 953.77
+    volScalarFieldValue melt1_alpha1 1.0
+);
+
+regions
+(
+    cylinderToCell
+    {
+        p1 (0 0 -0.501);
+        p2 (0 0 -0.401);
+        radius 0.0775;
+
+        fieldValues
+        (
+            volScalarFieldValue T 293.0
+            volScalarFieldValue melt1_alpha1 0.0
+        );
+    }
+    
+    cylinderToCell
+    {
+        p1 (0 0 -0.401);
+        p2 (0 0 -0.301);
+        radius 0.0775;
+
+        fieldValues
+        (
+            volScalarFieldValue T 303.0
+            volScalarFieldValue melt1_alpha1 0.0
+        );
+    }
+    
+    cylinderToCell
+    {
+        p1 (0 0 -0.301);
+        p2 (0 0 -0.251);
+        radius 0.0775;
+
+        fieldValues
+        (
+            volScalarFieldValue T 333.0
+            volScalarFieldValue melt1_alpha1 0.0
+        );
+    }
+
+    cylinderToCell
+    {
+        p1 (0 0 -0.251);
+        p2 (0 0 -0.131);
+        radius 0.0775;
+
+        fieldValues
+        (
+            volScalarFieldValue T 500.0
+            volScalarFieldValue melt1_alpha1 0.0
+        );
+    }
+
+    cylinderToCell
+    {
+        p1 (0 0 -0.131);
+        p2 (0 0 -0.121);
+        radius 0.0775;
+
+        fieldValues
+        (
+            volScalarFieldValue T 510.0
+            volScalarFieldValue melt1_alpha1 0.0
+        );
+    }
+
+    cylinderToCell
+    {
+        p1 (0 0 -0.121);
+        p2 (0 0 -0.107);
+        radius 0.0775;
+
+        fieldValues
+        (
+            volScalarFieldValue T 620.0
+            volScalarFieldValue melt1_alpha1 0.0
+        );
+    }
+
+    cylinderToCell
+    {
+        p1 (0 0 -0.107);
+        p2 (0 0 -0.095);
+        radius 0.0775;
+
+        fieldValues
+        (
+            volScalarFieldValue T 773.204
+            volScalarFieldValue melt1_alpha1 0.0
+        );
+    }
+
+    cylinderToCell
+    {
+        p1 (0 0 -0.095);
+        p2 (0 0 -0.061);
+        radius 0.0775;
+
+        fieldValues
+        (
+            volScalarFieldValue T 913.643
+            volScalarFieldValue melt1_alpha1 0.564
+        );
+    }
+
+    cylinderToCell
+    {
+        p1 (0 0 -0.061);
+        p2 (0 0 -0.041);
+        radius 0.0775;
+
+        fieldValues
+        (
+            volScalarFieldValue T 923.77
+            volScalarFieldValue melt1_alpha1 1.0
+        );
+    }
+);
+
+
+// ************************************************************************* //

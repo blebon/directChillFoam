@@ -1,0 +1,93 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+  =========                 |
+  \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
+   \\    /   O peration     | Website:  https://openfoam.org
+    \\  /    A nd           | Version:  9
+     \\/     M anipulation  |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    format          ascii;
+    class           dictionary;
+    location        "constant";
+    object          thermophysicalProperties;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+thermoType
+{
+    type            heRhoThermo;
+    mixture         pureMixture;
+    transport       tabulated;
+    thermo          hIcoTabulated;
+    equationOfState icoTabulated;
+    specie          specie;
+    energy          sensibleEnthalpy;
+}
+
+mixture
+{
+    specie
+    {
+        nMoles          1;
+        molWeight       26.9815;
+    }
+
+    equationOfState
+    {
+        R               3000;
+        rho
+        {
+            // type                table;
+            // format              foam;
+	        // file                "constant/rho";
+            // outOfBounds         clamp;
+            // interpolationScheme linear;
+            values
+            (
+                (  1.0000    2388.540)
+                (  9999.0    2388.540)
+            );
+        }
+    }
+
+    thermodynamics
+    {
+        Hf              0;
+        Sf              0;
+        Cp
+        {
+            values
+            (
+                (  1.0000    1139.070)
+                (  9999.0    1139.070)
+            );
+        }
+    }
+
+    transport
+    {
+        mu
+        {
+            values
+            (
+                (  1.0000    10.5e-4)
+                (  9999.0    10.5e-4)
+            );
+        }
+        
+        kappa
+        {
+            values
+            (
+                (  1.0000    200.0)
+                (  9999.0    200.0)
+            );
+        }
+
+        Pr          0.00578;
+    }
+}
+
+
+// ************************************************************************* //
