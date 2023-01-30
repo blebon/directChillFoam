@@ -1,0 +1,29 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+  =========                 |
+  \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
+   \\    /   O peration     | Website:  https://openfoam.org
+    \\  /    A nd           | Version:  9
+     \\/     M anipulation  |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    format      ascii;
+    class       dictionary;
+    location    "constant";
+    object      soluteProperties;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+solutes
+(
+    Cu
+    {
+        D_l   5.66e-09;
+        kp    0.171;
+        C0    0.06;
+        Ceut  0.32;
+        beta  -7.3e-3;
+    }
+);
+
+// ************************************************************************* //

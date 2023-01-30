@@ -1,0 +1,3 @@
+test_multicomponentAlloy.C
+
+EXE = case/test_multicomponentAlloy
