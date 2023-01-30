@@ -5,7 +5,7 @@ Tutorial: Vreeman *et al.* (2002) - DC casting of a binary Al-Cu alloy
 .. contents:: Contents:
   :backlinks: none
 
-This tutorial describes how to pre-process, run and post-process a direct chill (DC) casting case with directChillFoam.
+This tutorial describes the steps to pre-process, run and post-process an axisymmetryc direct chill (DC) casting case that corresponds to the binary Al-Cu alloy casting experiment described in `Vreeman et al. (2002) <https://doi.org/10.1115/1.1482089>`_ with directChillFoam.
 
 .. figure:: ../images/DC_Schematic.png
   :width: 80%
@@ -20,13 +20,17 @@ Pre-processing
 
 The schematic for the DC casting setup of this case is as follows:
 
+.. _Vreeman2002_BC:
+
 .. Figure:: ../images/Vreeman2002_BC.png
   :width: 80%
   :alt: Schematic of the Vreeman *et al.* (2002) case
 
   Boundary patch labels and dimensions of the casting mould and billet. The image is not drawn to scale.
 
-Change to the case directory.
+The first step is to generate the mesh for the case and setup the boundary conditions.
+
+To run the pre-processing steps, change to the case directory.
 
 .. code-block:: console
 
@@ -35,7 +39,7 @@ Change to the case directory.
 Mesh generation
 ---------------
 
-Move into the system directory.
+The dictionary file that describes the mesh is located in the system directory.
 
 .. code-block:: console
 
@@ -47,7 +51,9 @@ Generate the blockMeshDict file using the ``Vreeman2002.system.cylinder.write_bl
 
   $ python3 cylinder.py
 
-Return to the case directory and generate the mesh.
+The axisymmetryc mesh consists of a slice of a cylinder that matches the billet dimensions. The z_points tuple list the vertices z coordinates as defined in :numref:`vreeman2002_bc`. The patch names are entered in the faces list in the ``Vreeman2002.system.cylinder.write_boundary()`` function.
+
+Return to the case directory and generate the mesh using `blockMesh <https://doc.cfd.direct/openfoam/user-guide-v6/blockmesh>`_.
 
 .. code-block:: console
 
@@ -57,11 +63,14 @@ Return to the case directory and generate the mesh.
 Boundary and initial conditions
 -------------------------------
 
-Initialize the fields in the case directory:
+To speed up the simulation, initialize the fields with rough estimates of temperatures (and corresponding liquid fractions) in the case directory:
 
 .. code-block:: console
 
   $ setFields
+
+.. warning::
+  The liquid fraction values must match the temperatures for the alloy according to the constant/tStar Foam table. Otherwise, the case can diverge.
 
 Solute
 ^^^^^^
@@ -78,7 +87,7 @@ The field is initialized with a constant value:
 
   internalField   uniform 0.06;
 
-The inlet boundary condition is a fixed value:
+The inlet boundary condition is a fixed value (stored in internalField):
 
 .. code-block:: C 
   
@@ -174,6 +183,8 @@ The casting velocity :math:`{U}` is prescribed at the mould and water-cooled sur
       #};
     }
 
+The values are initialized at the casting speed in m s\ :sup:`-1`.
+
 Solid velocity
 ^^^^^^^^^^^^^^
 
@@ -187,29 +198,31 @@ The movingShell coded function from the liquid velocity boundary condition is re
       value           $internalField;
   }
 
+The values are also initialized at the casting speed in m s\ :sup:`-1`.
+
 Physical properties
 -------------------
 
 Transport properties
 ^^^^^^^^^^^^^^^^^^^^
 
-The `transport properties <../solver/directChillFoam.html#nomenclature>`_ are prescribed in the constant/transportProperties dictionary file.
+The `transport properties <../solver/directChillFoam.html#nomenclature>`_ are prescribed in the constant/transportProperties dictionary file.  All values are in SI units. These values are available for the alloy that is being studied either in engineering tables or by calculating them using a CALPHAD software package.
 
 Example usage:
 
 .. code-block:: C 
 
-  g_env [ 0  0  0 0 0 0 0 ] 0.7;
-  rho1  [ 1 -3  0 0 0 0 0 ] 1750;
-  rho2  [ 1 -3  0 0 0 0 0 ] 2490;
-  mu1   [ 1 -1 -1 0 0 0 0 ] 1.28e-3;
-  mu2   [ 1 -1 -1 0 0 0 0 ] 1.28e-3;
-  DAS   [ 0  1  0 0 0 0 0 ] 1.85e-4;
+  g_env [ 0  0  0 0 0 0 0 ] 0.7;     // Coherency fraction
+  rho1  [ 1 -3  0 0 0 0 0 ] 1750;    // Solid density
+  rho2  [ 1 -3  0 0 0 0 0 ] 2490;    // Liquid density
+  mu1   [ 1 -1 -1 0 0 0 0 ] 1.28e-3; // Not required, but implementation requires a non-zero value
+  mu2   [ 1 -1 -1 0 0 0 0 ] 1.28e-3; // Dynamic viscosity (of liquid)
+  DAS   [ 0  1  0 0 0 0 0 ] 1.85e-4; // Dendrite arm spacing
 
 Thermophysical properties
 ^^^^^^^^^^^^^^^^^^^^^^^^^
 
-The thermophysical properties are prescribed in the constant/thermophysicalProperties dictionary file.
+The thermophysical properties are prescribed in the `constant/thermophysicalProperties dictionary file <https://doc.cfd.direct/openfoam/user-guide-v9/thermophysical>`_.
 
 Solute properties
 ^^^^^^^^^^^^^^^^^
@@ -224,13 +237,17 @@ Example usage:
   (
       Cu
       {
-          D_l   5.66e-09;
-          kp    0.171;
-          C0    0.06;
-          Ceut  0.32;
-          beta  -7.3e-3;
+          D_l   5.66e-09; // Liquid mass diffusion coefficient
+          kp    0.171;    // Partition coefficient
+          C0    0.06;     // Initial solute concentration
+          Ceut  0.32;     // Eutectic concentration
+          beta  -7.3e-3;  // Solute expansion coefficient
       }
   );
+
+.. note::
+
+  These values are also obtained from engineering tables or by calculating them using a CALPHAD software package.
 
 Solidification properties
 ^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -250,14 +267,15 @@ Example usage:
       {
           selectionMode   all;
           
-          Tliq            913.13;
-          Tsol            820.98;
-          L               392000.0;
-          g_env           0.7;
-          relax           0.2;
-          castingVelocity (0 0 -0.001);
+          Tliq            913.13;         // Liquidus temperature [K]
+          Tsol            820.98;         // Solidus temperature [K]
+          L               392000.0;       // Latent heat of fusion [J/kg]
+          g_env           0.7;            // Coherency fraction
+          relax           0.2;            // Under-relaxation factor [0-1] - keep this value low if simulation is unstable
+          castingVelocity (0 0 -0.001);   // Casting velocity [m/s]
           
           tStar
+          // liquid fraction-temperature table
           {
               type                table;
               format              foam;
@@ -267,21 +285,24 @@ Example usage:
           }
           
           thermoMode      thermo;
-          
-          rhoRef          2573.;
-          beta            2.25e-5;
-          
-          phi             phi;
-          
-          Cu              1.0e+05;
-          q               1.0e-06;
+          rhoRef          2573.;    // Reference (solid) density [kg/m^3]
+          beta            2.25e-5;  // Thermal expansion coefficient [1/K]
+          phi             phi;      // Name of flux field
+          Cu              1.0e+05;  // Mushy region momentum sink coefficient [1/s]
+          q               1.0e-06;  // Carman-Kozeny model coefficient
       }
   }
+
+.. note::
+
+  These values are also obtained from engineering tables or by calculating them using a CALPHAD software package.
+
+  The tStar table can be obtained using a CALPHAD calculation using an appropriate diffusion model e.g. the lever rule or the Scheil equation. When using a non-linear model, use small (liquid fraction) steps of the order of 0.001 if the energy solver diverges.
 
 Control
 -------
 
-The solidification and other associated libraries must be included in the system/controlDict dictionary file.
+The solidification and other associated libraries must be included in the `system/controlDict dictionary file <https://doc.cfd.direct/openfoam/user-guide-v9/global-settings>`_.
 
 .. code-block:: C 
   
@@ -294,7 +315,7 @@ The solidification and other associated libraries must be included in the system
 Discretization and solver settings
 ----------------------------------
 
-Discretization schemes are entered in the system/fvSchemes dictionary file. Upwinding is recommended for the solute equations.
+Discretization schemes are entered in the `system/fvSchemes dictionary file <https://doc.cfd.direct/openfoam/user-guide-v9/fvschemes>`_. Upwinding is recommended for the solute equations.
 
 .. code-block:: C 
   
@@ -304,7 +325,7 @@ Discretization schemes are entered in the system/fvSchemes dictionary file. Upwi
       div(phi,C.Cu)    bounded Gauss upwind;
   }
 
-The number of energy corrector loops is prescribed in the PIMPLE entry of the system/fvSolution dictionary file.
+The number of energy corrector loops is prescribed in the PIMPLE entry of the `system/fvSolution dictionary file <https://doc.cfd.direct/openfoam/user-guide-v9/fvsolution>`_.
 
 .. code-block:: C 
   
@@ -317,10 +338,11 @@ The number of energy corrector loops is prescribed in the PIMPLE entry of the sy
 Run the application
 ===================
 
-In the case directory, run:
+Once the case has been setup, run `directChillFoam` in the case directory:
 
 .. code-block:: console
 
+  $ cd directChillFoam/tutorials/heatTransfer/directChillFoam/Vreeman2002
   $ directChillFoam
 
 Post-processing
@@ -329,11 +351,13 @@ Post-processing
 Contour plots
 -------------
 
-The sump profile can be plotted from the VTK files that are saved in the 
+The sump profile (:numref:`vreeman2002_sump`) can be plotted from the VTK files that are saved in the 
 postProcessing directory using the ``Vreeman2002.plot_sump.plot_sump()`` function.
 
 .. autofunction:: Vreeman2002.plot_sump.plot_sump
   :noindex:
+
+.. _Vreeman2002_Sump:
 
 .. Figure:: ../images/Vreeman2002_Sump.png
   :width: 80%
@@ -346,10 +370,12 @@ Validation
 
 The simulation can be verified by comparing the predicted temperatures at the
 billet centre line, mid-radius and surface with experimental measurements. Use
-the ``Vreeman2002.plot_line.plot_line()`` function:
+the ``Vreeman2002.plot_line.plot_line()`` function to plot :numref:`vreeman2002_800`:
 
 .. autofunction:: Vreeman2002.plot_line.plot_line
   :noindex:
+
+.. _Vreeman2002_800:
 
 .. Figure:: ../images/Vreeman2002_800.0.png
   :width: 80%

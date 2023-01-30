@@ -5,7 +5,7 @@ Tutorial: Lebon *et al.* (2020) - 3D model of the DC casting of an A6060 billet
 .. contents:: Contents:
   :backlinks: none
 
-This tutorial describes the steps to pre-process, run and post-process a 3D direct chill (DC) casting case that corresponds to `Lebon et al. (2020) <https://doi.org/10.1016/j.apm.2019.08.032>`_ with directChillFoam.
+This tutorial describes the steps to pre-process, run and post-process a 3D direct chill (DC) casting case that corresponds to the A6060 conventional DC casting experiment described in `Lebon et al. (2020) <https://doi.org/10.1016/j.apm.2019.08.032>`_ with directChillFoam.
 
 .. figure:: ../images/DC_Schematic.png
   :width: 80%
@@ -280,12 +280,12 @@ Example usage:
       {
           selectionMode   all;
           
-          Tliq            929.250;         // Liquidus temperature in K
-          Tsol            757.375;         // Solidus temperature in K
-          L               375696.0;        // Latent heat in J/K
+          Tliq            929.250;         // Liquidus temperature [K]
+          Tsol            757.375;         // Solidus temperature [K]
+          L               375696.0;        // Latent heat of fusion [J/kg]
           g_env           0.7;             // Coherency fraction
-          relax           0.1;             // Under-relaxation factor - keep this value low if simulation is unstable
-          castingVelocity (0 0 -0.002583); // Casting velocity 
+          relax           0.1;             // Under-relaxation factor [0-1] - keep this value low if simulation is unstable
+          castingVelocity (0 0 -0.002583); // Casting velocity [m/s]
           
           tStar
           // liquid fraction-temperature table
@@ -298,11 +298,11 @@ Example usage:
           }
           
           thermoMode      thermo;
-          rhoRef          2608.820;
-          beta            23e-6;
-          phi             phi;
-          Cu              1.522e+07;
-          q               1e-03;
+          rhoRef          2608.820;   // Reference (solid) density [kg/m^3]
+          beta            23e-6;      // Thermal expansion coefficient [1/K]
+          phi             phi;        // Name of flux field
+          Cu              1.522e+07;  // Mushy region momentum sink coefficient [1/s]
+          q               1e-03;      // Carman-Kozeny model coefficient
       }
   }
 
@@ -352,7 +352,7 @@ The number of energy corrector loops is prescribed in the PIMPLE entry of the `s
 Run the application
 ===================
 
-Once the case has been setup, run run `directChillFoam` in the case directory:
+Once the case has been setup, run `directChillFoam` in the case directory:
 
 .. code-block:: console
 

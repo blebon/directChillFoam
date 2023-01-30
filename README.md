@@ -47,9 +47,9 @@
   
   1. C.J. Vreeman, J.D. Schloz and M.J.M. Krane, "Direct Chill Casting of Aluminium
   Alloys: Modelling and Experiments on Industrial Scale Ingots", Journal of Heat
-  Transfer **124** (2002) 947-953.
-  2. B. Lebon, H.T. Li, J.B. Patel, H. Assadi and Z.Fan, "Numerical modelling of melt-conditioned direct-chill casting", Applied Mathematical Modelling **77** (2020) 1310-1330.
-  3. T. Subroto, B. Lebon, D. Eskin, I. Skalicky, D. Roberts, I. Tzanakis and et al., "Numerical modelling and experimental validation of the effect of ultrasonic melt treatment in a direct-chill cast AA6008 alloy billet", Journal of Materials Research and Technology **12** (2021) 1582-1596.
+  Transfer **124** (2002) 947-953. <https://doi.org/10.1115/1.1482089>
+  2. B. Lebon, H.T. Li, J.B. Patel, H. Assadi and Z.Fan, "Numerical modelling of melt-conditioned direct-chill casting", Applied Mathematical Modelling **77** (2020) 1310-1330. <https://doi.org/10.1016/j.apm.2019.08.032>
+  3. T. Subroto, B. Lebon, D. Eskin, I. Skalicky, D. Roberts, I. Tzanakis and et al., "Numerical modelling and experimental validation of the effect of ultrasonic melt treatment in a direct-chill cast AA6008 alloy billet", Journal of Materials Research and Technology **12** (2021) 1582-1596. <https://doi.org/10.1016/j.jmrt.2021.03.061>
 
 * [DC Casting solver](applications/solvers/heatTransfer/directChillFoam) - Updated verions of the DC casting solver
 * [Vreeman2002](tutorials/heatTransfer/directChillFoam/Vreeman2002) - Tutorial case corresponding to Vreeman *et al.* (2002).
