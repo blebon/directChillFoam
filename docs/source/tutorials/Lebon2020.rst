@@ -2,7 +2,10 @@
 Tutorial: Lebon *et al.* (2020) - 3D model of the DC casting of an A6060 billet
 ===============================================================================
 
-This tutorial describes how to pre-process, run and post-process a 3D direct chill (DC) casting case with directChillFoam.
+.. contents:: Contents:
+  :backlinks: none
+
+This tutorial describes the steps to pre-process, run and post-process a 3D direct chill (DC) casting case that corresponds to `Lebon et al. (2020) <https://doi.org/10.1016/j.apm.2019.08.032>`_ with directChillFoam.
 
 .. figure:: ../images/DC_Schematic.png
   :width: 80%
@@ -15,7 +18,9 @@ The execution time of this tutorial case is around 5 minutes when run in paralle
 Pre-processing
 ==============
 
-The schematic for the DC casting setup of this case is as follows:
+The schematic for the case setup is as follows:
+
+.. _Lebon2020_BC:
 
 .. Figure:: ../images/Lebon2020_BC.png
   :width: 80%
@@ -23,7 +28,9 @@ The schematic for the DC casting setup of this case is as follows:
 
   Boundary patch labels and dimensions of the casting mould and billet. The image is not drawn to scale.
 
-Change to the case directory.
+The first step is to generate the mesh for the case and setup the boundary conditions.
+
+To run the pre-processing steps, change to the case directory.
 
 .. code-block:: console
 
@@ -32,19 +39,21 @@ Change to the case directory.
 Mesh generation
 ---------------
 
-Move into the system directory.
+The dictionary file that describes the mesh is located in the system directory.
 
 .. code-block:: console
 
   $ cd system
 
-Generate the blockMeshDict file using the helper Python script.
+Generate the blockMeshDict file using the ``Lebon2020.system.cylinder.write_blockMeshDict()`` function from the system/cylinder.py script.
 
 .. code-block:: console
 
   $ python3 cylinder.py
 
-Return to the case directory and generate the mesh.
+The 3D mesh consists of a finer inner section that is definer by a square length of 32 mm but with each side with a slight curvature of radius 40 mm. The outer cylinder corresponds to the billet dimensions. The z_points tuple list the vertices z coordinates as defined in :numref:`lebon2020_bc`. The patch names are entered in the faces list in the ``Lebon2020.system.cylinder.write_boundary()`` function.
+
+Return to the case directory and generate the mesh using `blockMesh <https://doc.cfd.direct/openfoam/user-guide-v6/blockmesh>`_.
 
 .. code-block:: console
 
@@ -54,11 +63,14 @@ Return to the case directory and generate the mesh.
 Boundary and initial conditions
 -------------------------------
 
-Initialize the fields in the case directory:
+To speed up the simulation, initialize the fields with rough estimates of temperatures (and corresponding liquid fractions) in the case directory:
 
 .. code-block:: console
 
   $ setFields
+
+.. warning::
+  The liquid fraction values must match the temperatures for the alloy according to the constant/tStar Foam table. Otherwise, the case can diverge.
 
 Solute
 ^^^^^^
@@ -69,7 +81,7 @@ Solute fields are dimensionless:
 
   dimensions      [0 0 0 0 0 0 0];
 
-The fields are initialized with constant values. Use 0.6 for silicon and 0.48 for magnesium.
+The solute fields are initialized with constant values. Use 0.6 for silicon and 0.48 for magnesium.
 
 .. code-block:: C
 
@@ -79,7 +91,7 @@ The fields are initialized with constant values. Use 0.6 for silicon and 0.48 fo
 
   internalField   uniform 0.475; // C.Mg
 
-The inlet boundary condition is a fixed value:
+The inlet boundary condition is a fixed value (stored in internalField):
 
 .. code-block:: C 
   
@@ -175,6 +187,8 @@ The casting velocity :math:`{U}` is prescribed at the mould and water-cooled sur
       #};
     }
 
+The values are initialized at the casting speed in m s\ :sup:`-1`.
+
 Solid velocity
 ^^^^^^^^^^^^^^
 
@@ -188,29 +202,31 @@ The movingShell coded function from the liquid velocity boundary condition is re
       value           $internalField;
   }
 
+The values are also initialized at the casting speed in m s\ :sup:`-1`.
+
 Physical properties
 -------------------
 
 Transport properties
 ^^^^^^^^^^^^^^^^^^^^
 
-The `transport properties <../solver/directChillFoam.html#nomenclature>`_ are prescribed in the constant/transportProperties dictionary file.
+The `transport properties <../solver/directChillFoam.html#nomenclature>`_ are prescribed in the constant/transportProperties dictionary file. All values are in SI units. These values are available for the alloy that is being studied either in engineering tables or by calculating them using a CALPHAD software package.
 
 Example usage:
 
 .. code-block:: C 
 
-  g_env           [ 0 0 0 0 0 0 0 ] 0.7;
-  rho1            [ 1 -3 0 0 0 0 0 ] 2608.820;
-  rho2            [ 1 -3 0 0 0 0 0 ] 2376.200;
-  mu1             [ 1 -1 -1 0 0 0 0 ] 11.5e-4;
-  mu2             [ 1 -1 -1 0 0 0 0 ] 10.5e-4;
-  DAS             [ 0 1 0 0 0 0 0 ] 1.85e-4;
+  g_env           [ 0 0 0 0 0 0 0 ] 0.7;       // Coherency fraction
+  rho1            [ 1 -3 0 0 0 0 0 ] 2608.820; // Solid density
+  rho2            [ 1 -3 0 0 0 0 0 ] 2376.200; // Liquid density
+  mu1             [ 1 -1 -1 0 0 0 0 ] 11.5e-4; // Not required, but implementation requires a non-zero value
+  mu2             [ 1 -1 -1 0 0 0 0 ] 10.5e-4; // Dynamic viscosity (of liquid)
+  DAS             [ 0 1 0 0 0 0 0 ] 1.85e-4;   // Dendrite arm spacing
 
 Thermophysical properties
 ^^^^^^^^^^^^^^^^^^^^^^^^^
 
-The thermophysical properties are prescribed in the constant/thermophysicalProperties dictionary file.
+The thermophysical properties are prescribed in the `constant/thermophysicalProperties dictionary file <https://doc.cfd.direct/openfoam/user-guide-v9/thermophysical>`_.
 
 Solute properties
 ^^^^^^^^^^^^^^^^^
@@ -225,11 +241,11 @@ Example usage:
   (
       Si
       {
-          D_l   3e-9;
-          kp    0.102068;
-          C0    0.45;
-          Ceut  0.32;
-          beta  -3.7e-4;
+          D_l   3e-9;     // Liquid mass diffusion coefficient
+          kp    0.102068; // Partition coefficient
+          C0    0.45;     // Initial solute concentration
+          Ceut  0.32;     // Eutectic concentration
+          beta  -3.7e-4;  // Solute expansion coefficient
       }
       
       Mg
@@ -241,6 +257,10 @@ Example usage:
           beta  1.3e-4;
       }
   );
+
+.. note::
+
+  These values are also obtained from engineering tables or by calculating them using a CALPHAD software package.
 
 Solidification properties
 ^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -260,14 +280,15 @@ Example usage:
       {
           selectionMode   all;
           
-          Tliq            929.250;
-          Tsol            757.375;
-          L               375696.0;
-          g_env           0.7;
-          relax           0.1;
-          castingVelocity (0 0 -0.002583);
+          Tliq            929.250;         // Liquidus temperature in K
+          Tsol            757.375;         // Solidus temperature in K
+          L               375696.0;        // Latent heat in J/K
+          g_env           0.7;             // Coherency fraction
+          relax           0.1;             // Under-relaxation factor - keep this value low if simulation is unstable
+          castingVelocity (0 0 -0.002583); // Casting velocity 
           
           tStar
+          // liquid fraction-temperature table
           {
               type                table;
               format              foam;
@@ -285,10 +306,16 @@ Example usage:
       }
   }
 
+.. note::
+
+  These values are also obtained from engineering tables or by calculating them using a CALPHAD software package.
+
+  The tStar table can be obtained using a CALPHAD calculation using an appropriate diffusion model e.g. the lever rule or the Scheil equation. When using a non-linear model, use small (liquid fraction) steps of the order of 0.001 if the energy solver diverges.
+
 Control
 -------
 
-The solidification and other associated libraries must be included in the system/controlDict dictionary file.
+The solidification and other associated libraries must be included in the `system/controlDict dictionary file <https://doc.cfd.direct/openfoam/user-guide-v9/global-settings>`_.
 
 .. code-block:: C 
   
@@ -301,7 +328,7 @@ The solidification and other associated libraries must be included in the system
 Discretization and solver settings
 ----------------------------------
 
-Discretization schemes are entered in the system/fvSchemes dictionary file. Upwinding is recommended for the solute equations.
+Discretization schemes are entered in the `system/fvSchemes dictionary file <https://doc.cfd.direct/openfoam/user-guide-v9/fvschemes>`_. Upwinding is recommended for the solute equations.
 
 .. code-block:: C 
   
@@ -312,23 +339,24 @@ Discretization schemes are entered in the system/fvSchemes dictionary file. Upwi
       div(phi,C.Mg)   bounded Gauss upwind;
   }
 
-The number of energy corrector loops is prescribed in the PIMPLE entry of the system/fvSolution dictionary file.
+The number of energy corrector loops is prescribed in the PIMPLE entry of the `system/fvSolution dictionary file <https://doc.cfd.direct/openfoam/user-guide-v9/fvsolution>`_.
 
 .. code-block:: C 
   
   PIMPLE
   {
       ...
-      nEnergyCorrectors 3;
+      nEnergyCorrectors 7;
   }
 
 Run the application
 ===================
 
-In the case directory, run:
+Once the case has been setup, run run `directChillFoam` in the case directory:
 
 .. code-block:: console
 
+  $ cd directChillFoam/tutorials/heatTransfer/directChillFoam/Lebon2020
   $ directChillFoam
 
 Post-processing
@@ -337,11 +365,13 @@ Post-processing
 Contour plots
 -------------
 
-The sump profile can be plotted from the VTK files that are saved in the 
+The sump profile (:numref:`lebon2020_sump`) is plotted from the VTK files that are saved in the 
 postProcessing directory using the ``Lebon2020.plot_sump.plot_sump()`` function.
 
 .. autofunction:: Lebon2020.plot_sump.plot_sump
   :noindex:
+
+.. _Lebon2020_Sump:
 
 .. Figure:: ../images/Lebon2020_Sump.png
   :width: 80%
@@ -352,12 +382,13 @@ postProcessing directory using the ``Lebon2020.plot_sump.plot_sump()`` function.
 Validation
 ----------
 
-The simulation can be verified by comparing the predicted temperatures at the
-billet centre line, mid-radius and surface with experimental measurements. Use
-the ``Lebon2020.plot_line.plot_line()`` function:
+The simulation can be verified by comparing the predicted temperatures in the billet with experimental measurements. Use
+the ``Lebon2020.plot_line.plot_line()`` function to plot :numref:`lebon2020_80`:
 
 .. autofunction:: Lebon2020.plot_line.plot_line
   :noindex:
+
+.. _Lebon2020_80:
 
 .. Figure:: ../images/Lebon2020_80.0.png
   :width: 80%

@@ -16,9 +16,9 @@
    viewBox="0 0 210 297"
    version="1.1"
    id="svg8"
-   sodipodi:docname="Subroto2021_BC.svg"
+   sodipodi:docname="Lebon2020_BC.svg"
    inkscape:version="0.91 r13725"
-   inkscape:export-filename="D:\Cases\DC\Subroto2021_BC.png"
+   inkscape:export-filename="D:\Cases\DC\Lebon2020_BC.png"
    inkscape:export-xdpi="500"
    inkscape:export-ydpi="500">
   <defs
@@ -1227,8 +1227,8 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="1.28"
-     inkscape:cx="384.63562"
-     inkscape:cy="624.75987"
+     inkscape:cx="267.44812"
+     inkscape:cy="687.25987"
      inkscape:document-units="mm"
      inkscape:current-layer="layer1"
      showgrid="true"
@@ -1446,47 +1446,13 @@
            x="510"
            y="142.51968" /></flowRegion><flowPara
          style="font-size:18.66666603px"
-         id="flowPara21835-6">hot-top</flowPara></flowRoot>    <rect
-       style="fill:#000080;stroke:#000000;stroke-width:0.03765751;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       id="rect3725-8"
-       width="0.64484948"
-       height="7.6973219"
-       x="67.504189"
-       y="114.54485" />
-    <rect
-       style="fill:#000080;stroke:#000000;stroke-width:0.03765751;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       id="rect3725-8-6"
-       width="0.64484948"
-       height="7.6973219"
-       x="137.01306"
-       y="114.50089" />
-    <path
+         id="flowPara21835-6">hot-top</flowPara></flowRoot>    <path
        style="fill:none;stroke:#000000;stroke-width:0.42333335;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#marker4631)"
        d="M 71.195161,30.874269 84.905544,39.00339"
        id="path6364-6-1-6-2-5"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cc" />
     <path
-       style="fill:none;stroke:#000000;stroke-width:0.42333335;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#marker4639-1)"
-       d="m 33.547024,104.71263 33.318273,15.7332"
-       id="path6364-6-0-0-1"
-       inkscape:connector-curvature="0"
-       sodipodi:nodetypes="cc" />
-    <flowRoot
-       transform="matrix(0.26458333,0,0,0.26458333,-115.90262,59.676817)"
-       xml:space="preserve"
-       id="flowRoot18117-5-7-1"
-       style="font-style:normal;font-weight:normal;font-size:40px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"><flowRegion
-         id="flowRegion18119-5-0-2"><rect
-           id="rect18121-3-7-3"
-           width="130.00002"
-           height="50.000004"
-           x="510"
-           y="142.51968" /></flowRegion><flowPara
-         style="font-size:18.66666603px"
-         id="flowPara19567-8">air-gap</flowPara><flowPara
-         style="font-size:18.66666603px"
-         id="flowPara21845-7" /></flowRoot>    <path
        style="fill:none;stroke:#000000;stroke-width:0.42333335;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#marker4704)"
        d="m 67.843772,175.97271 13.710386,-8.12912"
        id="path6364-6-1-6-2-5-2"
@@ -1526,11 +1492,6 @@
        style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.14111111;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        d="m 139.82127,122.33752 c 28.22222,0 28.22222,0 28.22222,0"
        id="path4743-5"
-       inkscape:connector-curvature="0" />
-    <path
-       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.14111111;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       d="m 139.51259,114.53232 c 28.22222,0 28.22222,0 28.22222,0"
-       id="path4743-7"
        inkscape:connector-curvature="0" />
     <path
        style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.14111111;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
@@ -1596,18 +1557,6 @@
          x="169.73019"
          y="124.00658"
          style="font-size:4.93888903px">z = -57 mm</tspan></text>
-    <text
-       xml:space="preserve"
-       style="font-style:normal;font-weight:normal;font-size:11.28888893px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       x="169.46562"
-       y="116.37776"
-       id="text4878-7"
-       sodipodi:linespacing="125%"><tspan
-         sodipodi:role="line"
-         id="tspan4880-9"
-         x="169.46562"
-         y="116.37776"
-         style="font-size:4.93888903px">z = -50 mm</tspan></text>
     <text
        xml:space="preserve"
        style="font-style:normal;font-weight:normal;font-size:11.28888893px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"

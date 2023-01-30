@@ -1,10 +1,14 @@
+============
 Solute model
 ============
+
+.. contents:: Contents:
+  :backlinks: none
 
 The implementation of the solute model as an OpenFOAM class. The liquid concentration field is updated by the correct() function using either the Scheil model or an interpolation table.
 
 Installation
-------------
+============
 
 Pre-requisite:  
 
@@ -17,7 +21,7 @@ In the directChillFoam/applications/solver/heatTransfer/directChillFoam/multicom
   $ wmake libso
 
 Nomenclature
-------------
+============
 
 .. table:: Variables used by the solute model class.
   :widths: auto
@@ -37,7 +41,7 @@ Nomenclature
   +-----------------+--------------------------------------------------+
 
 C++ Classes
------------
+===========
 
 .. doxygenclass:: Foam::soluteModel
   :members:

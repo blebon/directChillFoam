@@ -2,6 +2,9 @@
 Tutorial: Vreeman *et al.* (2002) - DC casting of a binary Al-Cu alloy
 ======================================================================
 
+.. contents:: Contents:
+  :backlinks: none
+
 This tutorial describes how to pre-process, run and post-process a direct chill (DC) casting case with directChillFoam.
 
 .. figure:: ../images/DC_Schematic.png
@@ -38,7 +41,7 @@ Move into the system directory.
 
   $ cd system
 
-Generate the blockMeshDict file using the  ``Vreeman2002.system.cylinder.write_blockMeshDict()`` function from the system/cylinder.py script.
+Generate the blockMeshDict file using the ``Vreeman2002.system.cylinder.write_blockMeshDict()`` function from the system/cylinder.py script.
 
 .. code-block:: console
 

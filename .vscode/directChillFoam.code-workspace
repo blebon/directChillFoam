@@ -13,6 +13,11 @@
 		],
 		// File associations
 		"files.associations": {
+			// Documentation
+			"*.awk": "shellscript",
+			"ThermophysicalTransportModels.rst": "restructuredtext",
+			"*.rst": "restructuredtext",
+			"*.sed": "shellscript",
 			// OpenFOAM
 			"files": "shellscript",
 			"options": "shellscript",
@@ -46,10 +51,6 @@
             "log.*": "log",
             "*.pvd": "xml",
 			"*.pvsm": "xml",
-			// Documentation
-			"*.awk": "shellscript",
-			"*.rst": "restructuredtext",
-			"*.sed": "shellscript",
 			"Doxyfile": "shellscript",
 			// Scripts
 			"*.py": "python",

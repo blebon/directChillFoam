@@ -101,34 +101,34 @@ def plot_line(plot_time, Experimental, Image_Path=".", offset=-0.01):
         -Experimental["x0mm"][x0mm_mask] + offset,
         Experimental["T"][x0mm_mask] - 273.15,
         ".",
-        label="x = 0 mm",
+        label="r = 0 mm",
     )
     x28mm_mask = isfinite(Experimental["x28mm"])
     plt.plot(
         -Experimental["x28mm"][x28mm_mask] + offset,
         Experimental["T"][x28mm_mask] - 273.15,
         ".",
-        label="x = 28 mm",
+        label="r = 28 mm",
     )
     x44mm_mask = isfinite(Experimental["x44mm"])
     plt.plot(
         -Experimental["x44mm"][x44mm_mask] + offset,
         Experimental["T"][x44mm_mask] - 273.15,
         ".",
-        label="x = 44 mm",
+        label="r = 44 mm",
     )
     x75mm_mask = isfinite(Experimental["x75mm"])
     plt.plot(
         -Experimental["x75mm"][x75mm_mask] + offset,
         Experimental["T"][x75mm_mask] - 273.15,
         ".",
-        label="x = 75 mm",
+        label="r = 75 mm",
     )
 
-    plt.plot(Numerical["z"], Numerical["T0mm"], label="x = 0 mm numerical")
-    plt.plot(Numerical["z"], Numerical["T28mm"], label="x = 28 mm numerical")
-    plt.plot(Numerical["z"], Numerical["T44mm"], label="x = 44 mm numerical")
-    plt.plot(Numerical["z"], Numerical["T75mm"], label="x = 75 mm numerical")
+    plt.plot(Numerical["z"], Numerical["T0mm"], label="r = 0 mm numerical")
+    plt.plot(Numerical["z"], Numerical["T28mm"], label="r = 28 mm numerical")
+    plt.plot(Numerical["z"], Numerical["T44mm"], label="r = 44 mm numerical")
+    plt.plot(Numerical["z"], Numerical["T75mm"], label="r = 75 mm numerical")
 
     plt.title(f"Time = {_plot_time_float:4.1f} s")
     plt.xlabel("z (m)")

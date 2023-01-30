@@ -1,5 +1,5 @@
-"""Writes a blockMeshDict file for an axisymmetric case.
-This script writes a blockMeshDict file for an axisymmetric case in the system directory.
+"""Writes a blockMeshDict file for a three-dimensional case.
+This script writes a blockMeshDict file for a three-dimensional case in the system directory.
 
 Refer to https://doc.cfd.direct/openfoam/user-guide-v6/blockmesh for the official blockMesh utility documentation.
 
@@ -9,6 +9,7 @@ Example:
         $ python convert_vtk.py
 Todo:
     * None
+    
 .. _Google Python Style Guide:
    http://google.github.io/styleguide/pyguide.html
    

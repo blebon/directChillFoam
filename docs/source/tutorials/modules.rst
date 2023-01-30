@@ -2,6 +2,9 @@
 Python scripts documentation
 ============================
 
+.. contents:: Contents:
+  :backlinks: none
+
 Vreeman *et al.* (2002)
 =======================
 

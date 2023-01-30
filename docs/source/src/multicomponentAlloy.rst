@@ -1,10 +1,14 @@
+======================
 Solute equation solver
 ======================
+
+.. contents:: Contents:
+  :backlinks: none
 
 The multicomponent alloy class for solving the solute transport equation.
 
 Installation
-------------
+============
 
 Pre-requisites:  
 
@@ -18,7 +22,7 @@ In the directChillFoam/applications/solver/heatTransfer/directChillFoam/multicom
   $ wmake libso
 
 Usage
------
+=====
 
 Create the alloy in the CreateFields.H file:
 
@@ -33,7 +37,7 @@ Solve the solute transport equations in the energy corrector loop:
   alloy.solve(Us, fvModels, fvConstraints);
 
 C++ Classes
------------
+===========
 
 .. doxygenclass:: Foam::multicomponentAlloy
   :members:
