@@ -13,6 +13,6 @@ wmake ..
 runApplication blockMesh
 
 # Run
-runApplication ./test_limitSolute
+runApplication ./test_limitSolute --log_level=all
 
 #------------------------------------------------------------------------------
