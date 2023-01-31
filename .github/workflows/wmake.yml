@@ -122,5 +122,8 @@ jobs:
       continue-on-error: true
       run: |
         source /opt/openfoam9/etc/bashrc || true
+        mkdir -p $FOAM_RUN
+        ln -s "$(realpath ../applications)" $WM_PROJECT_USER_DIR
+        ln -s "$(realpath ../src)" $WM_PROJECT_USER_DIR
         pytest
         ./Alltest
