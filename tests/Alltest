@@ -42,11 +42,11 @@ wmake ThermophysicalTransportModels/mouldHTC
 wmake ThermophysicalTransportModels/waterFilmHTC
 
 # Run all tests
-(cd fvConstraints/case; ./test_limitSolute --log_level=all)
-(cd fvModels/case; ./test_mushyZoneSource --log_level=all)
-(cd multicomponentAlloy/case; ./test_multicomponentAlloy --log_level=all)
-(cd soluteModel/case; ./test_soluteModel --log_level=all)
-(cd ThermophysicalTransportModels/mouldHTC/case; ./test_mouldHTC --log_level=all)
-(cd ThermophysicalTransportModels/waterFilmHTC/case; ./test_waterFilmHTC --log_level=all)
+(cd fvConstraints/case; ./Allrun; cat log.test_limitSolute)
+(cd fvModels/case; ./Allrun; cat log.test_mushyZoneSource)
+(cd multicomponentAlloy/case; ./Allrun; cat log.test_multicomponentAlloy)
+(cd soluteModel/case; ./Allrun; cat log.test_soluteModel)
+(cd ThermophysicalTransportModels/mouldHTC/case; ./Allrun; cat log.test_mouldHTC)
+(cd ThermophysicalTransportModels/waterFilmHTC/case; ./Allrun; cat log.test_waterFilmHTC)
 
 #------------------------------------------------------------------------------
