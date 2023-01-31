@@ -1,0 +1,3 @@
+test_mouldHTC.C
+
+EXE = case/test_mouldHTC

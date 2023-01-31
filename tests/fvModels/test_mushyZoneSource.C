@@ -42,9 +42,9 @@ struct F
     char **argv;
 };
 
-BOOST_FIXTURE_TEST_SUITE(CheckmushyZoneSourceFvModel, F);
+BOOST_FIXTURE_TEST_SUITE(CheckMushyZoneSourceFvModel, F);
 
-    BOOST_AUTO_TEST_CASE(CheckIfmushyZoneSourceFvModelHasBeenRead)
+    BOOST_AUTO_TEST_CASE(CheckIfMushyZoneSourceFvModelHasBeenRead)
     {       
         #include "setRootCaseLists.H"
         #include "createTime.H"

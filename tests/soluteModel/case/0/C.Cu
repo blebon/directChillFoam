@@ -20,7 +20,7 @@ internalField   uniform 0.06;
 
 boundaryField
 {
-    "(water-film|mould|air-gap|graphite|ceramic|hot-top)"
+    "(water-film|mould|air-gap|ceramic|hot-top)"
     {
         type            zeroGradient;
     }

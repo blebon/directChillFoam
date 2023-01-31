@@ -22,7 +22,7 @@ internalField   uniform $UCast;
 
 boundaryField
 {
-    "(hot-top|ceramic|graphite|mould|air-gap|water-film|free-surface|ram)"
+    "(hot-top|ceramic|mould|air-gap|water-film|free-surface|ram)"
     {
         type            zeroGradient;
     }

@@ -1,0 +1,55 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+  =========                 |
+  \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
+   \\    /   O peration     | Website:  https://openfoam.org
+    \\  /    A nd           | Version:  9
+     \\/     M anipulation  |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    format      ascii;
+    class       volScalarField;
+    location    "0";
+    object      T;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+tInitial    943.48;
+waterTemp   358.0;
+
+dimensions      [0 0 0 1 0 0 0];
+
+internalField   uniform $tInitial;
+
+boundaryField
+{
+    "(hot-top|ceramic|mould|air-gap|free-surface|ram)"
+    {
+        type            zeroGradient;
+    }
+
+    water-film
+    {
+        type            waterFilmHTC;
+        mode            coefficient;
+        htc
+        {
+            type                table;
+            format              foam;
+            file                "constant/HTC_Tw";
+            outOfBounds         clamp;
+            interpolationScheme linear;
+        }
+        Ta              constant $waterTemp;
+        kappaMethod     fluidThermo;
+        relaxation      0.3;
+        value           uniform $waterTemp;
+    }
+
+    symmetry_planes
+    {
+        type            symmetry;
+    }
+}
+
+// ************************************************************************* //
