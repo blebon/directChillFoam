@@ -10,51 +10,44 @@ FoamFile
     format      ascii;
     class       dictionary;
     location    "system";
-    object      controlDict;
+    object      fvSchemes;
 }
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
-DebugSwitches
+ddtSchemes
 {
-    soluteModel     1;
+    default         Euler;
 }
 
-application     test_soluteModel;
+gradSchemes
+{
+    default         Gauss linear;
+}
 
-startFrom       latestTime;
+divSchemes
+{
+    default         Gauss upwind;   
+    div(phi,C.Cu)   bounded Gauss upwind;
+}
 
-startTime       0;
+laplacianSchemes
+{
+    default         Gauss linear uncorrected;
+}
 
-stopAt          endTime;
+interpolationSchemes
+{
+    default         linear;
+}
 
-endTime         1.0;
+snGradSchemes
+{
+    default         uncorrected;
+}
 
-deltaT          0.01;
-
-writeControl    adjustableRunTime;
-
-writeInterval   10;
-
-purgeWrite      5;
-
-writeFormat     binary;
-
-writePrecision  12;
-
-writeCompression uncompressed;
-
-timeFormat      general;
-
-timePrecision   12;
-
-runTimeModifiable yes;
-
-adjustTimeStep  yes;
-
-maxCo           1.0;
-maxAlphaCo      0.5;
-
-libs (
-);
+wallDist
+{
+    method meshWave;
+}
 
 // ************************************************************************* //

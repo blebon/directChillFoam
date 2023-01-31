@@ -54,9 +54,12 @@ BOOST_FIXTURE_TEST_SUITE(CheckLimitSoluteFvConstraint, F);
         BOOST_TEST_MESSAGE("-- Checking if a limitSolute dictionary entry has been read");
         BOOST_WARN_EQUAL(fvConstraints.PtrListDictionary<fvConstraint>::size(), 1);
 
-        BOOST_TEST_MESSAGE("-- Checking if C.Cu limitSolute dictionary has been read");
-        BOOST_REQUIRE_EQUAL(fvConstraints.constrainsField("C.Cu"), 1);
-        BOOST_REQUIRE_EQUAL(fvConstraints.constrainsField("C.Si"), 0);
+        // Get the limitSolute entry
+        PtrListDictionary<fvConstraint>& constraintsList(fvConstraints);
+        auto limitCCu = constraintsList[0];
+
+        BOOST_TEST_MESSAGE("-- Checking if limitC.Cu fvConstraint dictionary has been read");
+        BOOST_REQUIRE_EQUAL(limitCCu.name(), "limitC.Cu");
     }
 
 BOOST_AUTO_TEST_SUITE_END();

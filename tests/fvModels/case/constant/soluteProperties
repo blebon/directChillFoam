@@ -9,52 +9,21 @@ FoamFile
 {
     format      ascii;
     class       dictionary;
-    location    "system";
-    object      controlDict;
+    location    "constant";
+    object      soluteProperties;
 }
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
-DebugSwitches
-{
-    soluteModel     1;
-}
-
-application     test_soluteModel;
-
-startFrom       latestTime;
-
-startTime       0;
-
-stopAt          endTime;
-
-endTime         1.0;
-
-deltaT          0.01;
-
-writeControl    adjustableRunTime;
-
-writeInterval   10;
-
-purgeWrite      5;
-
-writeFormat     binary;
-
-writePrecision  12;
-
-writeCompression uncompressed;
-
-timeFormat      general;
-
-timePrecision   12;
-
-runTimeModifiable yes;
-
-adjustTimeStep  yes;
-
-maxCo           1.0;
-maxAlphaCo      0.5;
-
-libs (
+solutes
+(
+    Cu
+    {
+        D_l   5.66e-09;
+        kp    0.171;
+        C0    0.06;
+        Ceut  0.32;
+        beta  -7.3e-3;
+    }
 );
 
 // ************************************************************************* //

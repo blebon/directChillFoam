@@ -28,7 +28,7 @@ struct F
         : argc(utf::framework::master_test_suite().argc),
           argv(utf::framework::master_test_suite().argv)
     {
-        BOOST_TEST_MESSAGE("\nStarting limitSolute tests\n");
+        BOOST_TEST_MESSAGE("\nStarting soluteModel tests\n");
     }
 
     ~F()

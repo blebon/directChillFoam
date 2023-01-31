@@ -16,10 +16,10 @@ FoamFile
 
 DebugSwitches
 {
-    soluteModel     1;
+    mushyZoneSource     1;
 }
 
-application     test_soluteModel;
+application     test_mushyZoneSource;
 
 startFrom       latestTime;
 
@@ -55,6 +55,7 @@ maxCo           1.0;
 maxAlphaCo      0.5;
 
 libs (
+    "libmyFvModels.so"
 );
 
 // ************************************************************************* //

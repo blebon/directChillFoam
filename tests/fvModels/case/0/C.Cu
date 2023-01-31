@@ -8,53 +8,39 @@
 FoamFile
 {
     format      ascii;
-    class       dictionary;
-    location    "system";
-    object      controlDict;
+    class       volScalarField;
+    location    "0";
+    object      C.Cu;
 }
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
-DebugSwitches
+dimensions      [0 0 0 0 0 0 0];
+
+internalField   uniform 0.06;
+
+boundaryField
 {
-    soluteModel     1;
+    "(water-film|mould|air-gap|graphite|ceramic|hot-top)"
+    {
+        type            zeroGradient;
+    }
+
+    free-surface
+    {
+        type            fixedValue;
+        value           $internalField;
+    }
+
+    ram
+    {
+        type            zeroGradient;
+    }
+
+    symmetry_planes
+    {
+        type            symmetry;
+    }
 }
 
-application     test_soluteModel;
-
-startFrom       latestTime;
-
-startTime       0;
-
-stopAt          endTime;
-
-endTime         1.0;
-
-deltaT          0.01;
-
-writeControl    adjustableRunTime;
-
-writeInterval   10;
-
-purgeWrite      5;
-
-writeFormat     binary;
-
-writePrecision  12;
-
-writeCompression uncompressed;
-
-timeFormat      general;
-
-timePrecision   12;
-
-runTimeModifiable yes;
-
-adjustTimeStep  yes;
-
-maxCo           1.0;
-maxAlphaCo      0.5;
-
-libs (
-);
 
 // ************************************************************************* //
