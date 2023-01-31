@@ -1,0 +1,50 @@
+#!/bin/bash
+#------------------------------------------------------------------------------
+# =========                 |
+# \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
+#  \\    /   O peration     | Website:  https://openfoam.org
+#   \\  /    A nd           | Copyright (C) 2011-2020 OpenFOAM Foundation
+#    \\/     M anipulation  |
+#------------------------------------------------------------------------------
+# License
+#     This file is part of OpenFOAM.
+#
+#     OpenFOAM is free software: you can redistribute it and/or modify it
+#     under the terms of the GNU General Public License as published by
+#     the Free Software Foundation, either version 3 of the License, or
+#     (at your option) any later version.
+#
+#     OpenFOAM is distributed in the hope that it will be useful, but WITHOUT
+#     ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+#     FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
+#     for more details.
+#
+#     You should have received a copy of the GNU General Public License
+#     along with OpenFOAM.  If not, see <http://www.gnu.org/licenses/>.
+#
+# Script
+#     Allrun
+#
+# Description
+#
+#------------------------------------------------------------------------------
+# Source tutorial run functions
+source $WM_PROJECT_DIR/bin/tools/RunFunctions
+
+# Make all executables
+wmake fvConstraints
+wmake fvModels
+wmake multicomponentAlloy
+wmake soluteModel
+wmake ThermophysicalTransportModels/mouldHTC
+wmake ThermophysicalTransportModels/waterFilmHTC
+
+# Run all tests
+(cd fvConstraints/case; ./test_limitSolute --log_level=all)
+(cd fvModels/case; ./test_mushyZoneSource --log_level=all)
+(cd multicomponentAlloy/case; ./test_multicomponentAlloy --log_level=all)
+(cd soluteModel/case; ./test_soluteModel --log_level=all)
+(cd ThermophysicalTransportModels/mouldHTC/case; ./test_mouldHTC --log_level=all)
+(cd ThermophysicalTransportModels/waterFilmHTC/case; ./test_waterFilmHTC --log_level=all)
+
+#------------------------------------------------------------------------------
