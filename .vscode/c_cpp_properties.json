@@ -1,12 +1,27 @@
 {
     "configurations": [
         {
-            "name": "Linux",
+            "name": "Centos",
+            "includePath": [
+                "/usr/include/boost169/boost/**",
+                "${workspaceFolder}/**",
+                "/opt/wvec/OpenFOAM/OpenFOAM-9/src/**",
+                "//opt/wvec/OpenFOAM/OpenFOAM-9/applications/**"
+            ],
+            "defines": [],
+            "compilerPath": "/opt/wvec/OpenFOAM/ThirdParty-9/platforms/linux64/gcc-9.4.0/bin/g++",
+            "cStandard": "c11",
+            "cppStandard": "c++14",
+            "intelliSenseMode": "linux-gcc-x64",
+            "configurationProvider": "ms-vscode.makefile-tools"
+        },
+        {
+            "name": "Ubuntu",
             "includePath": [
                 "/usr/include/boost/**",
                 "${workspaceFolder}/**",
                 "/opt/openfoam9/src/**",
-                "/opt/openfoam9/applications/**",
+                "/opt/openfoam9/applications/**"
             ],
             "defines": [],
             "compilerPath": "/usr/bin/g++",

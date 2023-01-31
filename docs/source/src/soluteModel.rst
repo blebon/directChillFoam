@@ -45,3 +45,14 @@ C++ Classes
 
 .. doxygenclass:: Foam::soluteModel
   :members:
+
+Testing
+=======
+
+The unit tests for the soluteModel libraries require the Boost libraries (>= 1.69.0). The tests are run in the tests/soluteModel/case folder:
+
+.. code-block:: console
+  
+  $ wmake .. # Build the test executable
+  $ blockMesh # Create the mesh for the test case
+  $ ./test_soluteModel --log_level=all # Run the tests

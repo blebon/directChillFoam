@@ -1,6 +1,5 @@
 EXE_INC = \
     -I. \
-    -I/usr/include/boost169/boost \
     -I$(WM_PROJECT_USER_DIR)/applications/solvers/heatTransfer/directChillFoam/multicomponentAlloy/lnInclude \
     -I$(FOAM_APP)/solvers/compressible/rhoPimpleFoam \
     -I$(LIB_SRC)/transportModels/lnInclude \
@@ -14,7 +13,6 @@ EXE_INC = \
 
 EXE_LIBS = \
     -L$(FOAM_USER_LIBBIN) \
-    -L/usr/lib64 \
     -lmulticomponentAlloy \
     -lfluidThermophysicalModels \
     -lspecie \

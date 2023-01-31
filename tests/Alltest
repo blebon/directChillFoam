@@ -23,9 +23,11 @@
 #     along with OpenFOAM.  If not, see <http://www.gnu.org/licenses/>.
 #
 # Script
-#     Allrun
+#     Alltest
 #
 # Description
+#     Run all the unit tests in the directory.
+#     Requires Boost libraries (>= 1.69.0.).
 #
 #------------------------------------------------------------------------------
 # Source tutorial run functions

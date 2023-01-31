@@ -25,3 +25,14 @@ C++ Classes
 
 .. doxygenclass:: Foam::fv::mushyZoneSource
   :members:
+
+Testing
+=======
+
+The unit tests for the fvModels libraries require the Boost libraries (>= 1.69.0). The tests are run in the tests/fvModels/case folder:
+
+.. code-block:: console
+  
+  $ wmake .. # Build the test executable
+  $ blockMesh # Create the mesh for the test case
+  $ ./test_mushyZoneSource --log_level=all # Run the tests

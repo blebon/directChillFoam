@@ -43,7 +43,7 @@
   species transport in binary solid-liquid phase change systems - 1. Model
   formulation", IJHMT **30** (1987) 2161-2170.
 
-  as well as test cases from:
+  as well as tutorial cases from:
   
   1. C.J. Vreeman, J.D. Schloz and M.J.M. Krane, "Direct Chill Casting of Aluminium
   Alloys: Modelling and Experiments on Industrial Scale Ingots", Journal of Heat

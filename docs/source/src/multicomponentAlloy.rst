@@ -41,3 +41,14 @@ C++ Classes
 
 .. doxygenclass:: Foam::multicomponentAlloy
   :members:
+
+Testing
+=======
+
+The unit tests for the multicomponentAlloy libraries require the Boost libraries (>= 1.69.0). The tests are run in the tests/multicomponentAlloy/case folder:
+
+.. code-block:: console
+  
+  $ wmake .. # Build the test executable
+  $ blockMesh # Create the mesh for the test case
+  $ ./test_multicomponentAlloy --log_level=all # Run the tests
