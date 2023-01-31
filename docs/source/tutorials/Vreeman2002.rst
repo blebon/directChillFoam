@@ -45,7 +45,7 @@ The dictionary file that describes the mesh is located in the system directory.
 
   $ cd system
 
-Generate the blockMeshDict file using the ``Vreeman2002.system.cylinder.write_blockMeshDict()`` function from the system/cylinder.py script.
+Generate the blockMeshDict file using the ``Vreeman2002.system.cylinder.write_blockMeshDict()`` function from the `system/cylinder.py script <modules.html#module-Vreeman2002.system.cylinder>`_.
 
 .. code-block:: console
 
