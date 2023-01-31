@@ -106,6 +106,12 @@ Foam::soluteModel::soluteModel
         dimless,
         soluteDict_
     ),
+    Ceut_
+    (
+        "Ceut",
+        dimless,
+        soluteDict_
+    ),
     beta_
     (
         "beta",

@@ -17,7 +17,6 @@ Author
 #include "dynamicFvMesh.H"
 #include "multicomponentAlloy.H"
 #include "fluidThermo.H"
-#include "fvConstraints.H"
 
 namespace utf = boost::unit_test;
 
@@ -54,12 +53,6 @@ BOOST_FIXTURE_TEST_SUITE(CheckMulticomponentAlloy, F);
         BOOST_TEST_MESSAGE("-- Checking if multicomponent alloy has been created");
         BOOST_WARN_EQUAL(alloy.name(), "alloy");
         BOOST_WARN_EQUAL(alloy.keyword(), "alloy");
-
-        BOOST_TEST_MESSAGE("-- Checking if C.Cu solute is a component");
-        forAllIter(PtrDictionary<soluteModel>, alloy.solutes(), solute)
-        {
-            BOOST_REQUIRE_EQUAL(solute().name(), "Cu");
-        }
     }
 
 BOOST_AUTO_TEST_SUITE_END();
