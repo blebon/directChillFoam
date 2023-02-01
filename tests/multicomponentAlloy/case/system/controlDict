@@ -17,6 +17,7 @@ FoamFile
 DebugSwitches
 {
     multicomponentAlloy     1;
+    level                   0;
 }
 
 application     test_multicomponentAlloy;

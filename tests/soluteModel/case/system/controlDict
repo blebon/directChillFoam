@@ -17,6 +17,7 @@ FoamFile
 DebugSwitches
 {
     soluteModel     1;
+    level           0;
 }
 
 application     test_soluteModel;

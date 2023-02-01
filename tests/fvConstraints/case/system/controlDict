@@ -16,7 +16,8 @@ FoamFile
 
 DebugSwitches
 {
-    limitSolute     1;
+    limitSolute           1;
+    level                 0;
 }
 
 application     test_limitSolute;

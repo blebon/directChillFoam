@@ -10,7 +10,7 @@ application=`getApplication`
 wmake ..
 
 # Mesh
-runApplication blockMesh
+blockMesh
 
 # Run
 runApplication ./test_soluteModel --log_level=all

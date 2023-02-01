@@ -17,6 +17,11 @@ Definition in file directChillFoam.C
 Installation
 ============
 
+wmake
+-----
+
+`wmake <https://doc.cfd.direct/openfoam/user-guide-v9/compiling-applications>`_ is OpenFOAM's own compilation script.
+
 Pre-requisites:  
 
 * A working installation of `OpenFOAM 9 <https://openfoam.org/release/9/>`_.
@@ -33,6 +38,22 @@ In the directChillFoam/applications/solver/heatTransfer/directChillFoam director
 .. code-block:: console
   
   $ wmake
+
+CMake
+-----
+
+Pre-requisites:  
+
+* A working installation of `OpenFOAM 9 <https://openfoam.org/release/9/>`_.
+* `CMake <https://cmake.org/>`_ (>= 3.17.0)
+
+In the repository root directory (containting the main CMakeLists.txt), run:
+
+.. code-block:: console
+  
+  $ cmake -S . -B build # Build everything in a separate directory
+  $ cd build            # Enter build directory
+  $ make VERBOSE=1      # Compile and link all libraries and directChillFoam, and copy files to OpenFOAM path
 
 Running the application
 =======================
