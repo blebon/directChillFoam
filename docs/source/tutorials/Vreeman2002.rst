@@ -53,7 +53,7 @@ Generate the blockMeshDict file using the ``Vreeman2002.system.cylinder.write_bl
 
 The axisymmetryc mesh consists of a slice of a cylinder that matches the billet dimensions. The z_points tuple list the vertices z coordinates as defined in :numref:`vreeman2002_bc`. The patch names are entered in the faces list in the ``Vreeman2002.system.cylinder.write_boundary()`` function.
 
-Return to the case directory and generate the mesh using `blockMesh <https://doc.cfd.direct/openfoam/user-guide-v6/blockmesh>`_.
+Return to the case directory and generate the mesh using `blockMesh <https://doc.cfd.direct/openfoam/user-guide-v9/blockmesh>`_.
 
 .. code-block:: console
 
