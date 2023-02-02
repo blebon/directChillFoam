@@ -103,7 +103,7 @@ macro(build_OF_library)
 endmacro(build_OF_library)
 
 macro(test_OF_library)
-    message(STATUS "Testing lib${OF_LIB_NAME}")
+    message(STATUS "Testing lib${OF_LIB_NAME} in ${OF_TEST_DIR}/case")
     add_executable(${OF_TEST_NAME} ${OF_TEST_DIR}/${OF_TEST_NAME}.C)
     add_test(${OF_TEST_NAME} 
              COMMAND ${OF_TEST_NAME}
@@ -131,7 +131,6 @@ macro(test_OF_library)
 endmacro(test_OF_library)
 
 set(OF_LIB_NAME multicomponentAlloy)
-message(STATUS "Compiling, linking and testing lib${OF_LIB_NAME}")
 set(OF_LIB_SOURCES "")
 list(APPEND OF_LIB_SOURCES ${MULTICOMPONENTALLOY_DIR}/soluteModel/soluteModel.C ${MULTICOMPONENTALLOY_DIR}/multicomponentAlloy.C)
 set(OF_INCLUDE_PATHS "")
@@ -154,7 +153,6 @@ list(APPEND OF_TEST_LINK_LIBRARIES
 test_OF_library()
 
 set(OF_LIB_NAME myFvConstraints)
-message(STATUS "Compiling, linking and testing lib${OF_LIB_NAME}")
 set(OF_LIB_SOURCES src/fvConstraints/limitSolute/limitSolute.C)
 set(OF_INCLUDE_PATHS "")
 foreach(loop_include
@@ -187,7 +185,6 @@ list(APPEND OF_TEST_LINK_LIBRARIES
 test_OF_library()
 
 set(OF_LIB_NAME myFvModels)
-message(STATUS "Compiling, linking and testing lib${OF_LIB_NAME}")
 set(OF_LIB_SOURCES src/fvModels/derived/mushyZoneSource/mushyZoneSource.C)
 set(OF_INCLUDE_PATHS "")
 foreach(loop_include
@@ -220,7 +217,6 @@ list(APPEND OF_TEST_LINK_LIBRARIES
 test_OF_library()
 
 set(OF_LIB_NAME mythermophysicalTransportModels)
-message(STATUS "Compiling, linking and testing lib${OF_LIB_NAME}")
 set(OF_LIB_SOURCES "")
 list(APPEND OF_LIB_SOURCES
     src/ThermophysicalTransportModels/derivedFvPatchFields/mouldHTC/mouldHTCFvPatchScalarField.C
