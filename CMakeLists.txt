@@ -28,22 +28,27 @@ find_library(M_LIB
 )
 
 message(STATUS "Finding Boost library")
-if(UNIX)
-  message("-- Determining id of the Linux distributor")
-  execute_process(COMMAND lsb_release --short --id OUTPUT_VARIABLE LINUX_DISTRO OUTPUT_STRIP_TRAILING_WHITESPACE)
-  # execute_process(COMMAND lsb_release --short --release OUTPUT_VARIABLE DISTRO_VERSION OUTPUT_STRIP_TRAILING_WHITESPACE)
-  if (LINUX_DISTRO MATCHES "CentOS")
-    message("-- Using boost 1.69 on CentOS")
-    set(Boost_NO_SYSTEM_PATHS TRUE)
-    set(BOOST_ROOT "/usr/include/boost169")
-    set(BOOST_INCLUDE_DIR "/usr/include/boost169/boost")
-    set(BOOST_LIBRARYDIR "/usr/lib64/boost169")
-  endif(LINUX_DISTRO MATCHES "CentOS")
-endif(UNIX)
 find_package(Boost 1.69.0 
-    REQUIRED
     COMPONENTS unit_test_framework
 )
+if (NOT ${Boost_FOUND})
+    if(UNIX)
+        message(STATUS "Determining id of the Linux distributor")
+        execute_process(COMMAND lsb_release --short --id OUTPUT_VARIABLE LINUX_DISTRO OUTPUT_STRIP_TRAILING_WHITESPACE)
+        # execute_process(COMMAND lsb_release --short --release OUTPUT_VARIABLE DISTRO_VERSION OUTPUT_STRIP_TRAILING_WHITESPACE)
+        if (LINUX_DISTRO MATCHES "CentOS")
+            message(STATUS "Using boost 1.69 on CentOS")
+            set(Boost_NO_SYSTEM_PATHS TRUE)
+            set(BOOST_ROOT "/usr/include/boost169")
+            set(BOOST_INCLUDE_DIR "/usr/include/boost169/boost")
+            set(BOOST_LIBRARYDIR "/usr/lib64/boost169")
+        endif(LINUX_DISTRO MATCHES "CentOS")
+    endif(UNIX)
+    find_package(Boost 1.69.0
+        REQUIRED
+        COMPONENTS unit_test_framework
+    )
+endif(NOT ${Boost_FOUND})
 
 enable_testing()
 
