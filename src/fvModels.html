@@ -1,0 +1,385 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Solidification sources &#8212; directChillFoam OF9.0.2 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/alabaster.css" />
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Tutorials" href="../tutorials/index.html" />
+    <link rel="prev" title="Constraints" href="fvConstraints.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="solidification-sources">
+<h1>Solidification sources<a class="headerlink" href="#solidification-sources" title="Permalink to this heading">¶</a></h1>
+<div class="contents topic" id="contents">
+<p class="topic-title">Contents:</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#solidification-sources" id="id1">Solidification sources</a></p>
+<ul>
+<li><p><a class="reference internal" href="#installation" id="id2">Installation</a></p></li>
+<li><p><a class="reference internal" href="#c-classes" id="id3">C++ Classes</a></p></li>
+<li><p><a class="reference internal" href="#testing" id="id4">Testing</a></p></li>
+</ul>
+</li>
+</ul>
+</div>
+<p>This source is designed to model the effect of solidification and melting processes. The isotherm phase change occurs at the melting temperature, <span class="math notranslate nohighlight">\({T_{sol} = T_{liq}}\)</span>. The not isotherm phase change occurs between solidus and liquidus temperature, <span class="math notranslate nohighlight">\({T_{sol} &lt; T_{liq}}\)</span> respectively. The presence of the solid phase in the flow field is incorporated into the model as a momentum porosity contribution; the energy associated with the phase change is added as an enthalpy contribution. The model generates the field &lt;name&gt;:alpha1 which can be visualised to show the melt distribution as a fraction [0-1].</p>
+<section id="installation">
+<h2>Installation<a class="headerlink" href="#installation" title="Permalink to this heading">¶</a></h2>
+<p>Pre-requisites:</p>
+<ul class="simple">
+<li><p>A working installation of <a class="reference external" href="https://openfoam.org/release/9/">OpenFOAM 9</a>.</p></li>
+</ul>
+<p>In the directChillFoam/src/fvModels directory, run:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>wmake<span class="w"> </span>libso
+</pre></div>
+</div>
+</section>
+<section id="c-classes">
+<h2>C++ Classes<a class="headerlink" href="#c-classes" title="Permalink to this heading">¶</a></h2>
+<dl class="cpp class">
+<dt class="sig sig-object cpp" id="_CPPv4N4Foam2fv15mushyZoneSourceE">
+<span id="_CPPv3N4Foam2fv15mushyZoneSourceE"></span><span id="_CPPv2N4Foam2fv15mushyZoneSourceE"></span><span id="Foam::fv::mushyZoneSource"></span><span class="target" id="classFoam_1_1fv_1_1mushyZoneSource"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">mushyZoneSource</span></span></span><span class="w"> </span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="k"><span class="pre">public</span></span><span class="w"> </span><span class="n"><span class="pre">fvModel</span></span><a class="headerlink" href="#_CPPv4N4Foam2fv15mushyZoneSourceE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>This source is designed to model the effect of solidification and melting processes, e.g. windshield defrosting. </p>
+<p><span class="target" id="_1Description"></span></p>
+<p>The isotherm phase change occurs at the melting temperature, <code class="docutils literal notranslate"><span class="pre">Tsol</span></code> (= <code class="docutils literal notranslate"><span class="pre">Tliq</span></code>). The not isotherm phase change occurs between solidus and liquidus temperature, <code class="docutils literal notranslate"><span class="pre">Tsol</span></code> &lt; <code class="docutils literal notranslate"><span class="pre">Tliq</span></code> respectively.</p>
+<p>The presence of the solid phase in the flow field is incorporated into the model as a momentum porosity contribution; the energy associated with the phase change is added as an enthalpy contribution.</p>
+<p>The model generates the field <code class="docutils literal notranslate"><span class="pre">&lt;name&gt;</span></code>:alpha1 which can be visualised to to show the melt distribution as a fraction [0-1].</p>
+<p><dl class="simple">
+<dt><strong>Usage</strong></dt><dd><p>Example usage: <p><div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">mushyZoneSource1</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="n">type</span><span class="w">            </span><span class="n">mushyZoneSource</span><span class="p">;</span>
+
+<span class="w">    </span><span class="n">selectionMode</span><span class="w">   </span><span class="n">cellZone</span><span class="p">;</span>
+<span class="w">    </span><span class="n">cellZone</span><span class="w">        </span><span class="n">iceZone</span><span class="p">;</span>
+
+<span class="w">    </span><span class="n">Tsol</span><span class="w">            </span><span class="mi">273</span><span class="p">;</span>
+<span class="w">    </span><span class="n">L</span><span class="w">               </span><span class="mi">334000</span><span class="p">;</span>
+<span class="w">    </span><span class="n">thermoMode</span><span class="w">      </span><span class="n">thermo</span><span class="p">;</span>
+<span class="w">    </span><span class="n">beta</span><span class="w">            </span><span class="mf">50e-6</span><span class="p">;</span>
+<span class="w">    </span><span class="n">rhoRef</span><span class="w">          </span><span class="mi">800</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</p>
+where: <table class="colwidths-auto docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p><strong> Property </strong> </p></th>
+<th class="head"><p><strong> Description </strong> </p></th>
+<th class="head"><p><strong> Required </strong> </p></th>
+<th class="head"><p><strong> Default value</strong></p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">Tsol</span></code></p></td>
+<td><p>Solidus temperature [K]  </p></td>
+<td><p>yes  </p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">Tliq</span></code></p></td>
+<td><p>Liquidus temperature [K]  </p></td>
+<td><p>no  </p></td>
+<td><p>Tsol  </p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">L</span></code></p></td>
+<td><p>Latent heat of fusion [J/kg]  </p></td>
+<td><p>yes  </p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">g_env</span></code></p></td>
+<td><p>Packing fraction  </p></td>
+<td><p>no  </p></td>
+<td><p>0.7  </p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">relax</span></code></p></td>
+<td><p>Relaxation coefficient [0-1]  </p></td>
+<td><p>no  </p></td>
+<td><p>0.9  </p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">castingVelocity</span></code></p></td>
+<td><p>Casting velocity [m/s]  </p></td>
+<td><p>yes  </p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">tStar</span></code></p></td>
+<td><p>Reverse liquid fraction table  </p></td>
+<td><p>yes  </p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">thermoMode</span></code></p></td>
+<td><p>Thermo mode [thermo </p></td>
+<td><p>lookup]  </p></td>
+<td><p>yes  </p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">rhoRef</span></code></p></td>
+<td><p>Reference (solid) density [kg/m^3]  </p></td>
+<td><p>yes  </p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">rho</span></code></p></td>
+<td><p>Name of density field  </p></td>
+<td><p>no  </p></td>
+<td><p>rho  </p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">T</span></code></p></td>
+<td><p>Name of temperature field  </p></td>
+<td><p>no  </p></td>
+<td><p>T  </p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">Cp</span></code></p></td>
+<td><p>Name of specific heat field  </p></td>
+<td><p>no  </p></td>
+<td><p>Cp  </p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">U</span></code></p></td>
+<td><p>Name of velocity field  </p></td>
+<td><p>no  </p></td>
+<td><p>U  </p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">phi</span></code></p></td>
+<td><p>Name of flux field  </p></td>
+<td><p>no  </p></td>
+<td><p>phi  </p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">Cu</span></code></p></td>
+<td><p>Model coefficient [1/s]  </p></td>
+<td><p>no  </p></td>
+<td><p>100000  </p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">q</span></code></p></td>
+<td><p>Model coefficient  </p></td>
+<td><p>no  </p></td>
+<td><p>0.001  </p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">beta</span></code></p></td>
+<td><p>Thermal expansion coefficient [1/K]  </p></td>
+<td><p>yes  </p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">g</span></code></p></td>
+<td><p>Accelerartion due to gravity  </p></td>
+<td><p>no  </p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+</p>
+</dd>
+<dt><strong>References</strong></dt><dd><p><ul class="simple">
+<li><p>Voller, V. R., &amp; Prakash, C. (1987). A fixed grid numerical modelling methodology for convection-diffusion mushy region phase-change problems. <em>International Journal of Heat and Mass Transfer</em>, <strong>30</strong>(8), 1709-1719. <a class="reference external" href="https://doi.org/10.1016/0017-9310(87)90317-6">doi:10.1016/0017-9310(87)90317-6</a></p></li>
+<li><p>Swaminathan, C. R., &amp; Voller, V. R. (1992). A general enthalpy method for modeling solidification processes. <em>Metallurgical transactions B</em>, <strong>23</strong>(5), 651-664. <a class="reference external" href="https://doi.org/10.1007/BF02649725">doi:10.1007/BF02649725</a></p></li>
+<li><p>G.S. Bruno Lebon, Georges Salloum-Abou-Jaoude, Dmitry Eskin, Iakovos Tzanakis, Koulis Pericleous, Philippe Jarry (2019). Numerical modelling of acoustic streaming during the ultrasonic melt treatment of direct-chill (DC) casting. <em>Ultrasonics Sonochemistry</em>, <strong>54</strong>, 171-182. <a class="reference external" href="https://doi.org/10.1016/j.ultsonch.2019.02.002">doi:10.1016/j.ultsonch.2019.02.002</a></p></li>
+</ul>
+</p>
+</dd>
+<dt><strong>Source files</strong></dt><dd><p><ul class="simple">
+<li><p><a class="reference external" href="/home/runner/work/directChillFoam/directChillFoam/src/fvModels/derived/mushyZoneSource/mushyZoneSource.H">mushyZoneSource.H</a> </p></li>
+<li><p><a class="reference external" href="/home/runner/work/directChillFoam/directChillFoam/src/fvModels/derived/mushyZoneSource/mushyZoneSource.C">mushyZoneSource.C</a> </p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp">
+<span class="target" id="classFoam_1_1fv_1_1mushyZoneSource_1a8ea921bb59f67bd5cd58d99d89d70ef0"></span><span class="sig-name descname"><span class="pre">TypeName</span> <span class="pre">(&quot;mushyZoneSource&quot;)</span></span></dt>
+<dd><p>Runtime type information. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4Foam2fv15mushyZoneSource15mushyZoneSourceERK4wordRK4wordRK10dictionaryRK6fvMesh">
+<span id="_CPPv3N4Foam2fv15mushyZoneSource15mushyZoneSourceERK4wordRK4wordRK10dictionaryRK6fvMesh"></span><span id="_CPPv2N4Foam2fv15mushyZoneSource15mushyZoneSourceERK4wordRK4wordRK10dictionaryRK6fvMesh"></span><span id="Foam::fv::mushyZoneSource::mushyZoneSource__wordCR.wordCR.dictionaryCR.fvMeshCR"></span><span class="target" id="classFoam_1_1fv_1_1mushyZoneSource_1a24b3850969033def83b8f6496fcb63e6"></span><span class="sig-name descname"><span class="n"><span class="pre">mushyZoneSource</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">word</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">name</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">word</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">modelType</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">dictionary</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">dict</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">fvMesh</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">mesh</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4Foam2fv15mushyZoneSource15mushyZoneSourceERK4wordRK4wordRK10dictionaryRK6fvMesh" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Construct from explicit source name and mesh. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4Foam2fv15mushyZoneSource15mushyZoneSourceERK15mushyZoneSource">
+<span id="_CPPv3N4Foam2fv15mushyZoneSource15mushyZoneSourceERK15mushyZoneSource"></span><span id="_CPPv2N4Foam2fv15mushyZoneSource15mushyZoneSourceERK15mushyZoneSource"></span><span id="Foam::fv::mushyZoneSource::mushyZoneSource__mushyZoneSourceCR"></span><span class="target" id="classFoam_1_1fv_1_1mushyZoneSource_1ac6db2599780d41ca35ded757ec4976b2"></span><span class="sig-name descname"><span class="n"><span class="pre">mushyZoneSource</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N4Foam2fv15mushyZoneSource15mushyZoneSourceERK15mushyZoneSource" title="Foam::fv::mushyZoneSource::mushyZoneSource"><span class="n"><span class="pre">mushyZoneSource</span></span></a><span class="p"><span class="pre">&amp;</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="k"><span class="pre">delete</span></span><a class="headerlink" href="#_CPPv4N4Foam2fv15mushyZoneSource15mushyZoneSourceERK15mushyZoneSource" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Disallow default bitwise copy construction. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK4Foam2fv15mushyZoneSource12addSupFieldsEv">
+<span id="_CPPv3NK4Foam2fv15mushyZoneSource12addSupFieldsEv"></span><span id="_CPPv2NK4Foam2fv15mushyZoneSource12addSupFieldsEv"></span><span id="Foam::fv::mushyZoneSource::addSupFieldsC"></span><span class="target" id="classFoam_1_1fv_1_1mushyZoneSource_1a4152c64f87916a6c70e06c86f343a8bd"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="n"><span class="pre">wordList</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">addSupFields</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK4Foam2fv15mushyZoneSource12addSupFieldsEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Return the list of fields for which the fvModel adds source term to the transport equation. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK4Foam2fv15mushyZoneSource6addSupER8fvMatrixI6scalarERK4word">
+<span id="_CPPv3NK4Foam2fv15mushyZoneSource6addSupER8fvMatrixI6scalarERK4word"></span><span id="_CPPv2NK4Foam2fv15mushyZoneSource6addSupER8fvMatrixI6scalarERK4word"></span><span id="Foam::fv::mushyZoneSource::addSup__fvMatrix:scalar:R.wordCRC"></span><span class="target" id="classFoam_1_1fv_1_1mushyZoneSource_1ae734947790268ada2b11a48cd454238c"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">addSup</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">fvMatrix</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">scalar</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">eqn</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">word</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">fieldName</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK4Foam2fv15mushyZoneSource6addSupER8fvMatrixI6scalarERK4word" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Add explicit contribution to enthalpy equation. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK4Foam2fv15mushyZoneSource6addSupER8fvMatrixI6vectorERK4word">
+<span id="_CPPv3NK4Foam2fv15mushyZoneSource6addSupER8fvMatrixI6vectorERK4word"></span><span id="_CPPv2NK4Foam2fv15mushyZoneSource6addSupER8fvMatrixI6vectorERK4word"></span><span id="Foam::fv::mushyZoneSource::addSup__fvMatrix:vector:R.wordCRC"></span><span class="target" id="classFoam_1_1fv_1_1mushyZoneSource_1aaef7737415cc6fd2bdac99e3bf26ecdb"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">addSup</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">fvMatrix</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">eqn</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">word</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">fieldName</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK4Foam2fv15mushyZoneSource6addSupER8fvMatrixI6vectorERK4word" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Add implicit contribution to momentum equation. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK4Foam2fv15mushyZoneSource6addSupERK14volScalarFieldR8fvMatrixI6scalarERK4word">
+<span id="_CPPv3NK4Foam2fv15mushyZoneSource6addSupERK14volScalarFieldR8fvMatrixI6scalarERK4word"></span><span id="_CPPv2NK4Foam2fv15mushyZoneSource6addSupERK14volScalarFieldR8fvMatrixI6scalarERK4word"></span><span id="Foam::fv::mushyZoneSource::addSup__volScalarFieldCR.fvMatrix:scalar:R.wordCRC"></span><span class="target" id="classFoam_1_1fv_1_1mushyZoneSource_1ac813f95fd800ca04812ad090b2534a76"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">addSup</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">volScalarField</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">rho</span></span>, <span class="n"><span class="pre">fvMatrix</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">scalar</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">eqn</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">word</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">fieldName</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK4Foam2fv15mushyZoneSource6addSupERK14volScalarFieldR8fvMatrixI6scalarERK4word" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Add explicit contribution to compressible enthalpy equation. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK4Foam2fv15mushyZoneSource6addSupERK14volScalarFieldR8fvMatrixI6vectorERK4word">
+<span id="_CPPv3NK4Foam2fv15mushyZoneSource6addSupERK14volScalarFieldR8fvMatrixI6vectorERK4word"></span><span id="_CPPv2NK4Foam2fv15mushyZoneSource6addSupERK14volScalarFieldR8fvMatrixI6vectorERK4word"></span><span id="Foam::fv::mushyZoneSource::addSup__volScalarFieldCR.fvMatrix:vector:R.wordCRC"></span><span class="target" id="classFoam_1_1fv_1_1mushyZoneSource_1a49ce176309d7040115a414872809a821"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">addSup</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">volScalarField</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">rho</span></span>, <span class="n"><span class="pre">fvMatrix</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">eqn</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">word</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">fieldName</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK4Foam2fv15mushyZoneSource6addSupERK14volScalarFieldR8fvMatrixI6vectorERK4word" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Add implicit contribution to compressible momentum equation. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4Foam2fv15mushyZoneSource10updateMeshERK11mapPolyMesh">
+<span id="_CPPv3N4Foam2fv15mushyZoneSource10updateMeshERK11mapPolyMesh"></span><span id="_CPPv2N4Foam2fv15mushyZoneSource10updateMeshERK11mapPolyMesh"></span><span id="Foam::fv::mushyZoneSource::updateMesh__mapPolyMeshCR"></span><span class="target" id="classFoam_1_1fv_1_1mushyZoneSource_1a0b2c7f9bd5e6df0fe091e5b4f12a9938"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">updateMesh</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">mapPolyMesh</span></span><span class="p"><span class="pre">&amp;</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4Foam2fv15mushyZoneSource10updateMeshERK11mapPolyMesh" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Update for mesh changes. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4Foam2fv15mushyZoneSource4readERK10dictionary">
+<span id="_CPPv3N4Foam2fv15mushyZoneSource4readERK10dictionary"></span><span id="_CPPv2N4Foam2fv15mushyZoneSource4readERK10dictionary"></span><span id="Foam::fv::mushyZoneSource::read__dictionaryCR"></span><span class="target" id="classFoam_1_1fv_1_1mushyZoneSource_1aa229701673c7697220239f2b026f80ba"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">read</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">dictionary</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">dict</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4Foam2fv15mushyZoneSource4readERK10dictionary" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Read source dictionary. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4Foam2fv15mushyZoneSourceaSERK15mushyZoneSource">
+<span id="_CPPv3N4Foam2fv15mushyZoneSourceaSERK15mushyZoneSource"></span><span id="_CPPv2N4Foam2fv15mushyZoneSourceaSERK15mushyZoneSource"></span><span id="Foam::fv::mushyZoneSource::assign-operator__mushyZoneSourceCR"></span><span class="target" id="classFoam_1_1fv_1_1mushyZoneSource_1a6adbad98426191a4431134710106f9d7"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">=</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N4Foam2fv15mushyZoneSourceE" title="Foam::fv::mushyZoneSource"><span class="n"><span class="pre">mushyZoneSource</span></span></a><span class="p"><span class="pre">&amp;</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="k"><span class="pre">delete</span></span><a class="headerlink" href="#_CPPv4N4Foam2fv15mushyZoneSourceaSERK15mushyZoneSource" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Disallow default bitwise assignment. </p>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+</section>
+<section id="testing">
+<h2>Testing<a class="headerlink" href="#testing" title="Permalink to this heading">¶</a></h2>
+<p>The unit tests for the fvModels libraries require the Boost libraries (&gt;= 1.69.0). The tests are run in the tests/fvModels/case folder:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>wmake<span class="w"> </span>..<span class="w"> </span><span class="c1"># Build the test executable</span>
+<span class="gp">$ </span>blockMesh<span class="w"> </span><span class="c1"># Create the mesh for the test case</span>
+<span class="gp">$ </span>./test_mushyZoneSource<span class="w"> </span>--log_level<span class="o">=</span>all<span class="w"> </span><span class="c1"># Run the tests</span>
+</pre></div>
+</div>
+</section>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">directChillFoam</a></h1>
+
+
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../solver/directChillFoam.html">Direct-chill (DC) casting solver</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Libraries</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="soluteModel.html">Solute model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="multicomponentAlloy.html">Solute equation solver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ThermophysicalTransportModels.html">Boundary conditions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fvConstraints.html">Constraints</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Solidification sources</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#installation">Installation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#c-classes">C++ Classes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#testing">Testing</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/index.html">Tutorials</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="index.html">Libraries</a><ul>
+      <li>Previous: <a href="fvConstraints.html" title="previous chapter">Constraints</a></li>
+      <li>Next: <a href="../tutorials/index.html" title="next chapter">Tutorials</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2023, Bruno Lebon.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 5.3.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.13</a>
+      
+      |
+      <a href="../_sources/src/fvModels.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+    <a href="https://github.com/blebon/directChillFoam" class="github">
+        <img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub"  class="github"/>
+    </a>
+    
+
+    
+  </body>
+</html>

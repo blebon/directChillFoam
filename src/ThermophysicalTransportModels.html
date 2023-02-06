@@ -1,0 +1,656 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Boundary conditions &#8212; directChillFoam OF9.0.2 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/alabaster.css" />
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Constraints" href="fvConstraints.html" />
+    <link rel="prev" title="Solute equation solver" href="multicomponentAlloy.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="boundary-conditions">
+<h1>Boundary conditions<a class="headerlink" href="#boundary-conditions" title="Permalink to this heading">¶</a></h1>
+<div class="contents topic" id="contents">
+<p class="topic-title">Contents:</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#boundary-conditions" id="id1">Boundary conditions</a></p>
+<ul>
+<li><p><a class="reference internal" href="#installation" id="id2">Installation</a></p></li>
+<li><p><a class="reference internal" href="#mould-heat-transfer-coefficient" id="id3">Mould heat transfer coefficient</a></p></li>
+<li><p><a class="reference internal" href="#water-film-heat-transfer-coefficient" id="id4">Water film heat transfer coefficient</a></p></li>
+<li><p><a class="reference internal" href="#testing" id="id5">Testing</a></p></li>
+</ul>
+</li>
+</ul>
+</div>
+<p>Robin boundary conditions apply a heat flux condition to temperature on an external wall.</p>
+<p>Two boundary conditions are available in this library: the <a class="reference external" href="#mould-heat-transfer-coefficient">mould HTC</a> and the <a class="reference external" href="#water-film-heat-transfer-coefficient">water film HTC</a>.</p>
+<section id="installation">
+<h2>Installation<a class="headerlink" href="#installation" title="Permalink to this heading">¶</a></h2>
+<p>Pre-requisites:</p>
+<ul class="simple">
+<li><p>A working installation of <a class="reference external" href="https://openfoam.org/release/9/">OpenFOAM 9</a>.</p></li>
+</ul>
+<p>In the directChillFoam/src/ThermophysicalTransportModels directory, run:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>wmake<span class="w"> </span>libso
+</pre></div>
+</div>
+</section>
+<section id="mould-heat-transfer-coefficient">
+<h2>Mould heat transfer coefficient<a class="headerlink" href="#mould-heat-transfer-coefficient" title="Permalink to this heading">¶</a></h2>
+<dl class="cpp class">
+<dt class="sig sig-object cpp" id="_CPPv4N4Foam26mouldHTCFvPatchScalarFieldE">
+<span id="_CPPv3N4Foam26mouldHTCFvPatchScalarFieldE"></span><span id="_CPPv2N4Foam26mouldHTCFvPatchScalarFieldE"></span><span id="Foam::mouldHTCFvPatchScalarField"></span><span class="target" id="classFoam_1_1mouldHTCFvPatchScalarField"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">mouldHTCFvPatchScalarField</span></span></span><span class="w"> </span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="k"><span class="pre">public</span></span><span class="w"> </span><span class="n"><span class="pre">mixedFvPatchScalarField</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="k"><span class="pre">public</span></span><span class="w"> </span><span class="n"><span class="pre">temperatureCoupledBase</span></span><a class="headerlink" href="#_CPPv4N4Foam26mouldHTCFvPatchScalarFieldE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>This boundary condition applies a heat flux condition to temperature on an external wall in one of three modes: </p>
+<p><span class="target" id="_1Description"></span><ul class="simple">
+<li><p>fixed power: supply <span class="math notranslate nohighlight">\( Q \)</span> </p></li>
+<li><p>fixed heat flux: supply <span class="math notranslate nohighlight">\( q \)</span> </p></li>
+<li><p>fixed heat transfer coefficient: supply <span class="math notranslate nohighlight">\( h \)</span> and <span class="math notranslate nohighlight">\( Ta \)</span> </p></li>
+</ul>
+</p>
+<p>where: <table class="colwidths-auto docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><span class="math notranslate nohighlight">\( Q \)</span> </p></td>
+<td><p>= </p></td>
+<td><p>Power [W]  </p></td>
+</tr>
+<tr class="row-even"><td><p><span class="math notranslate nohighlight">\( q \)</span> </p></td>
+<td><p>= </p></td>
+<td><p>Heat flux [W/m^2]  </p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="math notranslate nohighlight">\( h \)</span> </p></td>
+<td><p>= </p></td>
+<td><p>Heat transfer coefficient [W/m^2/K]  </p></td>
+</tr>
+<tr class="row-even"><td><p><span class="math notranslate nohighlight">\( Ta \)</span> </p></td>
+<td><p>= </p></td>
+<td><p>Ambient temperature [K]  </p></td>
+</tr>
+</tbody>
+</table>
+
+For heat transfer coefficient mode, optional thin thermal layer resistances can be specified through <code class="docutils literal notranslate"><span class="pre">thicknessLayers</span></code> and <code class="docutils literal notranslate"><span class="pre">kappaLayers</span></code> entries.</p>
+<p>The thermal conductivity <code class="docutils literal notranslate"><span class="pre">kappa</span></code> can either be retrieved from various possible sources, as detailed in the class <code class="docutils literal notranslate"><span class="pre">temperatureCoupledBase</span></code>.</p>
+<p>The ambient temperature <span class="math notranslate nohighlight">\( Ta \)</span> is specified as a <code class="docutils literal notranslate"><span class="pre">Foam::Function1</span></code> of time but uniform in space.</p>
+<p><div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p>Foam::temperatureCoupledBase Foam::mixedFvPatchScalarField <a class="reference internal" href="#classFoam_1_1waterFilmHTCFvPatchScalarField"><span class="std std-ref">Foam::waterFilmHTCFvPatchScalarField</span></a></p>
+</div>
+<dl class="simple">
+<dt><strong>Usage</strong></dt><dd><p><table class="colwidths-auto docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p><strong> Property </strong> </p></th>
+<th class="head"><p><strong> Description </strong> </p></th>
+<th class="head"><p><strong> Required </strong> </p></th>
+<th class="head"><p><strong> Default value</strong></p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">mode</span></code></p></td>
+<td><p>’power’, ‘flux’ or ‘coefficient’  </p></td>
+<td><p>yes  </p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">Q</span></code></p></td>
+<td><p>Power [W]  </p></td>
+<td><p>for mode ‘power’  </p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">q</span></code></p></td>
+<td><p>Heat flux [W/m^2]  </p></td>
+<td><p>for mode ‘flux’  </p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">h1</span></code></p></td>
+<td><p>mould heat transfer coefficient [W/m^2/K]  </p></td>
+<td><p>yes*  </p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">h2</span></code></p></td>
+<td><p>air gap heat transfer coefficient [W/m^2/K]  </p></td>
+<td><p>yes*  </p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">Ta</span></code></p></td>
+<td><p>Ambient temperature [K]  </p></td>
+<td><p>for mode ‘coefficient’  </p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">thicknessLayers</span></code></p></td>
+<td><p>Layer thicknesses [m]  </p></td>
+<td><p>no  </p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">kappaLayers</span></code></p></td>
+<td><p>Layer thermal conductivities [W/m/K]  </p></td>
+<td><p>no  </p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">relaxation</span></code></p></td>
+<td><p>Relaxation for the wall temperature  </p></td>
+<td><p>no  </p></td>
+<td><p>1  </p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">emissivity</span></code></p></td>
+<td><p>Surface emissivity for radiative flux to ambient  </p></td>
+<td><p>no  </p></td>
+<td><p>0  </p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">qr</span></code></p></td>
+<td><p>Name of the radiative field  </p></td>
+<td><p>no  </p></td>
+<td><p>none  </p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">qrRelaxation</span></code></p></td>
+<td><p>Relaxation factor for radiative field  </p></td>
+<td><p>no  </p></td>
+<td><p>1  </p></td>
+</tr>
+</tbody>
+</table>
+
+Example of the boundary condition specification: <p><div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="n">patchName</span><span class="o">&gt;</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="n">type</span><span class="w">            </span><span class="n">mouldHTC</span><span class="p">;</span>
+
+<span class="w">    </span><span class="n">mode</span><span class="w">            </span><span class="n">coefficient</span><span class="p">;</span>
+
+<span class="w">    </span><span class="n">Ta</span><span class="w">              </span><span class="n">constant</span><span class="w"> </span><span class="mf">300.0</span><span class="p">;</span>
+<span class="w">    </span><span class="n">h1</span><span class="w">              </span><span class="n">uniform</span><span class="w"> </span><span class="mf">100.0</span><span class="p">;</span>
+<span class="w">    </span><span class="n">h2</span><span class="w">              </span><span class="n">uniform</span><span class="w"> </span><span class="mf">10.0</span><span class="p">;</span>
+<span class="w">    </span><span class="n">thicknessLayers</span><span class="w"> </span><span class="p">(</span><span class="mf">0.1</span><span class="w"> </span><span class="mf">0.2</span><span class="w"> </span><span class="mf">0.3</span><span class="w"> </span><span class="mf">0.4</span><span class="p">);</span>
+<span class="w">    </span><span class="n">kappaLayers</span><span class="w">     </span><span class="p">(</span><span class="mi">1</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="mi">3</span><span class="w"> </span><span class="mi">4</span><span class="p">);</span>
+
+<span class="w">    </span><span class="n">value</span><span class="w">           </span><span class="n">$internalField</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</p>
+</p>
+</dd>
+<dt><strong>Source files</strong></dt><dd><p><ul class="simple">
+<li><p><a class="reference external" href="/home/runner/work/directChillFoam/directChillFoam/src/ThermophysicalTransportModels/derivedFvPatchFields/mouldHTC/mouldHTCFvPatchScalarField.H">mouldHTCFvPatchScalarField.H</a> </p></li>
+<li><p><a class="reference external" href="/home/runner/work/directChillFoam/directChillFoam/src/ThermophysicalTransportModels/derivedFvPatchFields/mouldHTC/mouldHTCFvPatchScalarField.C">mouldHTCFvPatchScalarField.C</a> </p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-types">Public Types</p>
+<dl class="cpp enum">
+<dt class="sig sig-object cpp" id="_CPPv4N4Foam26mouldHTCFvPatchScalarField13operationModeE">
+<span id="_CPPv3N4Foam26mouldHTCFvPatchScalarField13operationModeE"></span><span id="_CPPv2N4Foam26mouldHTCFvPatchScalarField13operationModeE"></span><span class="target" id="classFoam_1_1mouldHTCFvPatchScalarField_1a58cce35ec7baf61afe4190c8e6d652e4"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">operationMode</span></span></span><a class="headerlink" href="#_CPPv4N4Foam26mouldHTCFvPatchScalarField13operationModeE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Operation mode enumeration. </p>
+<p><em>Values:</em></p>
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N4Foam26mouldHTCFvPatchScalarField13operationMode10fixedPowerE">
+<span id="_CPPv3N4Foam26mouldHTCFvPatchScalarField13operationMode10fixedPowerE"></span><span id="_CPPv2N4Foam26mouldHTCFvPatchScalarField13operationMode10fixedPowerE"></span><span class="target" id="classFoam_1_1mouldHTCFvPatchScalarField_1a58cce35ec7baf61afe4190c8e6d652e4ada73853b294f21711df1d32006ef798d"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">fixedPower</span></span></span><a class="headerlink" href="#_CPPv4N4Foam26mouldHTCFvPatchScalarField13operationMode10fixedPowerE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N4Foam26mouldHTCFvPatchScalarField13operationMode13fixedHeatFluxE">
+<span id="_CPPv3N4Foam26mouldHTCFvPatchScalarField13operationMode13fixedHeatFluxE"></span><span id="_CPPv2N4Foam26mouldHTCFvPatchScalarField13operationMode13fixedHeatFluxE"></span><span class="target" id="classFoam_1_1mouldHTCFvPatchScalarField_1a58cce35ec7baf61afe4190c8e6d652e4acc63f340f42e847611b8a494c3c2a387"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">fixedHeatFlux</span></span></span><a class="headerlink" href="#_CPPv4N4Foam26mouldHTCFvPatchScalarField13operationMode13fixedHeatFluxE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N4Foam26mouldHTCFvPatchScalarField13operationMode25variableHeatTransferCoeffE">
+<span id="_CPPv3N4Foam26mouldHTCFvPatchScalarField13operationMode25variableHeatTransferCoeffE"></span><span id="_CPPv2N4Foam26mouldHTCFvPatchScalarField13operationMode25variableHeatTransferCoeffE"></span><span class="target" id="classFoam_1_1mouldHTCFvPatchScalarField_1a58cce35ec7baf61afe4190c8e6d652e4ad899ba6dae194cdfd313e8945594822a"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">variableHeatTransferCoeff</span></span></span><a class="headerlink" href="#_CPPv4N4Foam26mouldHTCFvPatchScalarField13operationMode25variableHeatTransferCoeffE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp">
+<span class="target" id="classFoam_1_1mouldHTCFvPatchScalarField_1a5b543548c8dd8c987d9dd2e9373cc980"></span><span class="sig-name descname"><span class="pre">TypeName</span> <span class="pre">(&quot;mouldHTC&quot;)</span></span></dt>
+<dd><p>Runtime type information. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4Foam26mouldHTCFvPatchScalarField26mouldHTCFvPatchScalarFieldERK7fvPatchRK16DimensionedFieldI6scalar7volMeshE">
+<span id="_CPPv3N4Foam26mouldHTCFvPatchScalarField26mouldHTCFvPatchScalarFieldERK7fvPatchRK16DimensionedFieldI6scalar7volMeshE"></span><span id="_CPPv2N4Foam26mouldHTCFvPatchScalarField26mouldHTCFvPatchScalarFieldERK7fvPatchRK16DimensionedFieldI6scalar7volMeshE"></span><span id="Foam::mouldHTCFvPatchScalarField::mouldHTCFvPatchScalarField__fvPatchCR.DimensionedField:scalar.volMesh:CR"></span><span class="target" id="classFoam_1_1mouldHTCFvPatchScalarField_1a4fb18f5c5c5e44b724b4d469e3dcb5a8"></span><span class="sig-name descname"><span class="n"><span class="pre">mouldHTCFvPatchScalarField</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">fvPatch</span></span><span class="p"><span class="pre">&amp;</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">DimensionedField</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">scalar</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">volMesh</span></span><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">&amp;</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4Foam26mouldHTCFvPatchScalarField26mouldHTCFvPatchScalarFieldERK7fvPatchRK16DimensionedFieldI6scalar7volMeshE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Construct from patch and internal field. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4Foam26mouldHTCFvPatchScalarField26mouldHTCFvPatchScalarFieldERK7fvPatchRK16DimensionedFieldI6scalar7volMeshERK10dictionary">
+<span id="_CPPv3N4Foam26mouldHTCFvPatchScalarField26mouldHTCFvPatchScalarFieldERK7fvPatchRK16DimensionedFieldI6scalar7volMeshERK10dictionary"></span><span id="_CPPv2N4Foam26mouldHTCFvPatchScalarField26mouldHTCFvPatchScalarFieldERK7fvPatchRK16DimensionedFieldI6scalar7volMeshERK10dictionary"></span><span id="Foam::mouldHTCFvPatchScalarField::mouldHTCFvPatchScalarField__fvPatchCR.DimensionedField:scalar.volMesh:CR.dictionaryCR"></span><span class="target" id="classFoam_1_1mouldHTCFvPatchScalarField_1ab4231523116296754261f26bc7bf9252"></span><span class="sig-name descname"><span class="n"><span class="pre">mouldHTCFvPatchScalarField</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">fvPatch</span></span><span class="p"><span class="pre">&amp;</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">DimensionedField</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">scalar</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">volMesh</span></span><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">&amp;</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">dictionary</span></span><span class="p"><span class="pre">&amp;</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4Foam26mouldHTCFvPatchScalarField26mouldHTCFvPatchScalarFieldERK7fvPatchRK16DimensionedFieldI6scalar7volMeshERK10dictionary" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Construct from patch, internal field and dictionary. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4Foam26mouldHTCFvPatchScalarField26mouldHTCFvPatchScalarFieldERK26mouldHTCFvPatchScalarFieldRK7fvPatchRK16DimensionedFieldI6scalar7volMeshERK18fvPatchFieldMapper">
+<span id="_CPPv3N4Foam26mouldHTCFvPatchScalarField26mouldHTCFvPatchScalarFieldERK26mouldHTCFvPatchScalarFieldRK7fvPatchRK16DimensionedFieldI6scalar7volMeshERK18fvPatchFieldMapper"></span><span id="_CPPv2N4Foam26mouldHTCFvPatchScalarField26mouldHTCFvPatchScalarFieldERK26mouldHTCFvPatchScalarFieldRK7fvPatchRK16DimensionedFieldI6scalar7volMeshERK18fvPatchFieldMapper"></span><span id="Foam::mouldHTCFvPatchScalarField::mouldHTCFvPatchScalarField__mouldHTCFvPatchScalarFieldCR.fvPatchCR.DimensionedField:scalar.volMesh:CR.fvPatchFieldMapperCR"></span><span class="target" id="classFoam_1_1mouldHTCFvPatchScalarField_1a379e1df64ef5a1c9ac8e95659b8870be"></span><span class="sig-name descname"><span class="n"><span class="pre">mouldHTCFvPatchScalarField</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N4Foam26mouldHTCFvPatchScalarField26mouldHTCFvPatchScalarFieldERK26mouldHTCFvPatchScalarFieldRK7fvPatchRK16DimensionedFieldI6scalar7volMeshERK18fvPatchFieldMapper" title="Foam::mouldHTCFvPatchScalarField::mouldHTCFvPatchScalarField"><span class="n"><span class="pre">mouldHTCFvPatchScalarField</span></span></a><span class="p"><span class="pre">&amp;</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">fvPatch</span></span><span class="p"><span class="pre">&amp;</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">DimensionedField</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">scalar</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">volMesh</span></span><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">&amp;</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">fvPatchFieldMapper</span></span><span class="p"><span class="pre">&amp;</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4Foam26mouldHTCFvPatchScalarField26mouldHTCFvPatchScalarFieldERK26mouldHTCFvPatchScalarFieldRK7fvPatchRK16DimensionedFieldI6scalar7volMeshERK18fvPatchFieldMapper" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Construct by mapping given. </p>
+<p><a class="reference internal" href="#classFoam_1_1mouldHTCFvPatchScalarField"><span class="std std-ref">mouldHTCFvPatchScalarField</span></a> onto a new patch </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4Foam26mouldHTCFvPatchScalarField26mouldHTCFvPatchScalarFieldERK26mouldHTCFvPatchScalarField">
+<span id="_CPPv3N4Foam26mouldHTCFvPatchScalarField26mouldHTCFvPatchScalarFieldERK26mouldHTCFvPatchScalarField"></span><span id="_CPPv2N4Foam26mouldHTCFvPatchScalarField26mouldHTCFvPatchScalarFieldERK26mouldHTCFvPatchScalarField"></span><span id="Foam::mouldHTCFvPatchScalarField::mouldHTCFvPatchScalarField__mouldHTCFvPatchScalarFieldCR"></span><span class="target" id="classFoam_1_1mouldHTCFvPatchScalarField_1a2c64f5d9602309be7a067a54823f2e57"></span><span class="sig-name descname"><span class="n"><span class="pre">mouldHTCFvPatchScalarField</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N4Foam26mouldHTCFvPatchScalarField26mouldHTCFvPatchScalarFieldERK26mouldHTCFvPatchScalarField" title="Foam::mouldHTCFvPatchScalarField::mouldHTCFvPatchScalarField"><span class="n"><span class="pre">mouldHTCFvPatchScalarField</span></span></a><span class="p"><span class="pre">&amp;</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="k"><span class="pre">delete</span></span><a class="headerlink" href="#_CPPv4N4Foam26mouldHTCFvPatchScalarField26mouldHTCFvPatchScalarFieldERK26mouldHTCFvPatchScalarField" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Disallow copy without setting internal field reference. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4Foam26mouldHTCFvPatchScalarField26mouldHTCFvPatchScalarFieldERK26mouldHTCFvPatchScalarFieldRK16DimensionedFieldI6scalar7volMeshE">
+<span id="_CPPv3N4Foam26mouldHTCFvPatchScalarField26mouldHTCFvPatchScalarFieldERK26mouldHTCFvPatchScalarFieldRK16DimensionedFieldI6scalar7volMeshE"></span><span id="_CPPv2N4Foam26mouldHTCFvPatchScalarField26mouldHTCFvPatchScalarFieldERK26mouldHTCFvPatchScalarFieldRK16DimensionedFieldI6scalar7volMeshE"></span><span id="Foam::mouldHTCFvPatchScalarField::mouldHTCFvPatchScalarField__mouldHTCFvPatchScalarFieldCR.DimensionedField:scalar.volMesh:CR"></span><span class="target" id="classFoam_1_1mouldHTCFvPatchScalarField_1a283ef42794979fcbf81f44e7580abddd"></span><span class="sig-name descname"><span class="n"><span class="pre">mouldHTCFvPatchScalarField</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N4Foam26mouldHTCFvPatchScalarField26mouldHTCFvPatchScalarFieldERK26mouldHTCFvPatchScalarFieldRK16DimensionedFieldI6scalar7volMeshE" title="Foam::mouldHTCFvPatchScalarField::mouldHTCFvPatchScalarField"><span class="n"><span class="pre">mouldHTCFvPatchScalarField</span></span></a><span class="p"><span class="pre">&amp;</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">DimensionedField</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">scalar</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">volMesh</span></span><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">&amp;</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4Foam26mouldHTCFvPatchScalarField26mouldHTCFvPatchScalarFieldERK26mouldHTCFvPatchScalarFieldRK16DimensionedFieldI6scalar7volMeshE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Copy constructor setting internal field reference. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK4Foam26mouldHTCFvPatchScalarField5cloneERK16DimensionedFieldI6scalar7volMeshE">
+<span id="_CPPv3NK4Foam26mouldHTCFvPatchScalarField5cloneERK16DimensionedFieldI6scalar7volMeshE"></span><span id="_CPPv2NK4Foam26mouldHTCFvPatchScalarField5cloneERK16DimensionedFieldI6scalar7volMeshE"></span><span id="Foam::mouldHTCFvPatchScalarField::clone__DimensionedField:scalar.volMesh:CRC"></span><span class="target" id="classFoam_1_1mouldHTCFvPatchScalarField_1a508670fc31c9cbc755609605a21f3ecd"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="n"><span class="pre">tmp</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">fvPatchScalarField</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">clone</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">DimensionedField</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">scalar</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">volMesh</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">iF</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK4Foam26mouldHTCFvPatchScalarField5cloneERK16DimensionedFieldI6scalar7volMeshE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Construct and return a clone setting internal field reference. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK4Foam26mouldHTCFvPatchScalarField10fixesValueEv">
+<span id="_CPPv3NK4Foam26mouldHTCFvPatchScalarField10fixesValueEv"></span><span id="_CPPv2NK4Foam26mouldHTCFvPatchScalarField10fixesValueEv"></span><span id="Foam::mouldHTCFvPatchScalarField::fixesValueC"></span><span class="target" id="classFoam_1_1mouldHTCFvPatchScalarField_1a62bb2b91014fdc047647fb5a14cb8190"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">fixesValue</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK4Foam26mouldHTCFvPatchScalarField10fixesValueEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Allow manipulation of the boundary values. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4Foam26mouldHTCFvPatchScalarField7autoMapERK18fvPatchFieldMapper">
+<span id="_CPPv3N4Foam26mouldHTCFvPatchScalarField7autoMapERK18fvPatchFieldMapper"></span><span id="_CPPv2N4Foam26mouldHTCFvPatchScalarField7autoMapERK18fvPatchFieldMapper"></span><span id="Foam::mouldHTCFvPatchScalarField::autoMap__fvPatchFieldMapperCR"></span><span class="target" id="classFoam_1_1mouldHTCFvPatchScalarField_1a49d1abdfc085a69b07f8d15b7026260d"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">autoMap</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">fvPatchFieldMapper</span></span><span class="p"><span class="pre">&amp;</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4Foam26mouldHTCFvPatchScalarField7autoMapERK18fvPatchFieldMapper" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Map (and resize as needed) from self given a mapping object. </p>
+<p>Used to update fields following mesh topology change </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4Foam26mouldHTCFvPatchScalarField4rmapERK18fvPatchScalarFieldRK9labelList">
+<span id="_CPPv3N4Foam26mouldHTCFvPatchScalarField4rmapERK18fvPatchScalarFieldRK9labelList"></span><span id="_CPPv2N4Foam26mouldHTCFvPatchScalarField4rmapERK18fvPatchScalarFieldRK9labelList"></span><span id="Foam::mouldHTCFvPatchScalarField::rmap__fvPatchScalarFieldCR.labelListCR"></span><span class="target" id="classFoam_1_1mouldHTCFvPatchScalarField_1aff8fe8a74f42819cc1d8056760b3305a"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">rmap</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">fvPatchScalarField</span></span><span class="p"><span class="pre">&amp;</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">labelList</span></span><span class="p"><span class="pre">&amp;</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4Foam26mouldHTCFvPatchScalarField4rmapERK18fvPatchScalarFieldRK9labelList" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Reverse map the given fvPatchField onto this fvPatchField. </p>
+<p>Used to reconstruct fields </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4Foam26mouldHTCFvPatchScalarField12updateCoeffsEv">
+<span id="_CPPv3N4Foam26mouldHTCFvPatchScalarField12updateCoeffsEv"></span><span id="_CPPv2N4Foam26mouldHTCFvPatchScalarField12updateCoeffsEv"></span><span id="Foam::mouldHTCFvPatchScalarField::updateCoeffs"></span><span class="target" id="classFoam_1_1mouldHTCFvPatchScalarField_1a3a5fb24853a2d40e937f8dfae73a77a3"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">updateCoeffs</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4Foam26mouldHTCFvPatchScalarField12updateCoeffsEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Update the coefficients associated with the patch field. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK4Foam26mouldHTCFvPatchScalarField5writeER7Ostream">
+<span id="_CPPv3NK4Foam26mouldHTCFvPatchScalarField5writeER7Ostream"></span><span id="_CPPv2NK4Foam26mouldHTCFvPatchScalarField5writeER7Ostream"></span><span id="Foam::mouldHTCFvPatchScalarField::write__OstreamRC"></span><span class="target" id="classFoam_1_1mouldHTCFvPatchScalarField_1a32680284fb0d7b4443653ee44d8c5d63"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">write</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">Ostream</span></span><span class="p"><span class="pre">&amp;</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK4Foam26mouldHTCFvPatchScalarField5writeER7Ostream" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Write. </p>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+</section>
+<section id="water-film-heat-transfer-coefficient">
+<h2>Water film heat transfer coefficient<a class="headerlink" href="#water-film-heat-transfer-coefficient" title="Permalink to this heading">¶</a></h2>
+<dl class="cpp class">
+<dt class="sig sig-object cpp" id="_CPPv4N4Foam30waterFilmHTCFvPatchScalarFieldE">
+<span id="_CPPv3N4Foam30waterFilmHTCFvPatchScalarFieldE"></span><span id="_CPPv2N4Foam30waterFilmHTCFvPatchScalarFieldE"></span><span id="Foam::waterFilmHTCFvPatchScalarField"></span><span class="target" id="classFoam_1_1waterFilmHTCFvPatchScalarField"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">waterFilmHTCFvPatchScalarField</span></span></span><span class="w"> </span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="k"><span class="pre">public</span></span><span class="w"> </span><span class="n"><span class="pre">mixedFvPatchScalarField</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="k"><span class="pre">public</span></span><span class="w"> </span><span class="n"><span class="pre">temperatureCoupledBase</span></span><a class="headerlink" href="#_CPPv4N4Foam30waterFilmHTCFvPatchScalarFieldE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>This boundary condition applies a heat flux condition to temperature on an external wall in one of three modes: </p>
+<p><span class="target" id="_1Description"></span><ul class="simple">
+<li><p>fixed power: supply <span class="math notranslate nohighlight">\( Q \)</span> </p></li>
+<li><p>fixed heat flux: supply <span class="math notranslate nohighlight">\( q \)</span> </p></li>
+<li><p>fixed heat transfer coefficient: supply <span class="math notranslate nohighlight">\( h \)</span> and <span class="math notranslate nohighlight">\( Ta \)</span> </p></li>
+</ul>
+</p>
+<p>where: <table class="colwidths-auto docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><span class="math notranslate nohighlight">\( Q \)</span> </p></td>
+<td><p>= </p></td>
+<td><p>Power [W]  </p></td>
+</tr>
+<tr class="row-even"><td><p><span class="math notranslate nohighlight">\( q \)</span> </p></td>
+<td><p>= </p></td>
+<td><p>Heat flux [W/m^2]  </p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="math notranslate nohighlight">\( h \)</span> </p></td>
+<td><p>= </p></td>
+<td><p>Heat transfer coefficient [W/m^2/K]  </p></td>
+</tr>
+<tr class="row-even"><td><p><span class="math notranslate nohighlight">\( Ta \)</span> </p></td>
+<td><p>= </p></td>
+<td><p>Ambient temperature [K]  </p></td>
+</tr>
+</tbody>
+</table>
+
+For heat transfer coefficient mode, optional thin thermal layer resistances can be specified through <code class="docutils literal notranslate"><span class="pre">thicknessLayers</span></code> and <code class="docutils literal notranslate"><span class="pre">kappaLayers</span></code> entries.</p>
+<p>The thermal conductivity <code class="docutils literal notranslate"><span class="pre">kappa</span></code> can either be retrieved from various possible sources, as detailed in the class <code class="docutils literal notranslate"><span class="pre">temperatureCoupledBase</span></code>.</p>
+<p>The ambient temperature <span class="math notranslate nohighlight">\( Ta \)</span> is specified as a <code class="docutils literal notranslate"><span class="pre">Foam::Function1</span></code> of time but uniform in space.</p>
+<p><div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p>Foam::temperatureCoupledBase Foam::mixedFvPatchScalarField <a class="reference internal" href="#classFoam_1_1mouldHTCFvPatchScalarField"><span class="std std-ref">Foam::mouldHTCFvPatchScalarField</span></a></p>
+</div>
+<dl class="simple">
+<dt><strong>Usage</strong></dt><dd><p><table class="colwidths-auto docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p><strong> Property </strong> </p></th>
+<th class="head"><p><strong> Description </strong> </p></th>
+<th class="head"><p><strong> Required </strong> </p></th>
+<th class="head"><p><strong> Default value</strong></p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">mode</span></code></p></td>
+<td><p>’power’, ‘flux’ or ‘coefficient’  </p></td>
+<td><p>yes  </p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">Q</span></code></p></td>
+<td><p>Power [W]  </p></td>
+<td><p>for mode ‘power’  </p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">q</span></code></p></td>
+<td><p>Heat flux [W/m^2]  </p></td>
+<td><p>for mode ‘flux’  </p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">htc</span></code></p></td>
+<td><p>Heat transfer coefficient [W/m^2/K]  </p></td>
+<td><p>for mode ‘coefficent’  </p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">Ta</span></code></p></td>
+<td><p>Ambient temperature [K]  </p></td>
+<td><p>for mode ‘coefficient’  </p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">thicknessLayers</span></code></p></td>
+<td><p>Layer thicknesses [m]  </p></td>
+<td><p>no  </p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">kappaLayers</span></code></p></td>
+<td><p>Layer thermal conductivities [W/m/K]  </p></td>
+<td><p>no  </p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">relaxation</span></code></p></td>
+<td><p>Relaxation for the wall temperature  </p></td>
+<td><p>no  </p></td>
+<td><p>1  </p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">emissivity</span></code></p></td>
+<td><p>Surface emissivity for radiative flux to ambient  </p></td>
+<td><p>no  </p></td>
+<td><p>0  </p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">qr</span></code></p></td>
+<td><p>Name of the radiative field  </p></td>
+<td><p>no  </p></td>
+<td><p>none  </p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">qrRelaxation</span></code></p></td>
+<td><p>Relaxation factor for radiative field  </p></td>
+<td><p>no  </p></td>
+<td><p>1  </p></td>
+</tr>
+</tbody>
+</table>
+
+Example of the boundary condition specification: <p><div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="n">patchName</span><span class="o">&gt;</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="n">type</span><span class="w">            </span><span class="n">waterFilmHTC</span><span class="p">;</span>
+
+<span class="w">    </span><span class="n">mode</span><span class="w">            </span><span class="n">coefficient</span><span class="p">;</span>
+
+<span class="w">    </span><span class="n">Ta</span><span class="w">              </span><span class="n">constant</span><span class="w"> </span><span class="mf">300.0</span><span class="p">;</span>
+<span class="w">    </span><span class="n">htc</span><span class="w">             </span><span class="n">constant</span><span class="w"> </span><span class="mf">10000.0</span><span class="p">;</span>
+<span class="w">    </span><span class="n">thicknessLayers</span><span class="w"> </span><span class="p">(</span><span class="mf">0.1</span><span class="w"> </span><span class="mf">0.2</span><span class="w"> </span><span class="mf">0.3</span><span class="w"> </span><span class="mf">0.4</span><span class="p">);</span>
+<span class="w">    </span><span class="n">kappaLayers</span><span class="w">     </span><span class="p">(</span><span class="mi">1</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="mi">3</span><span class="w"> </span><span class="mi">4</span><span class="p">);</span>
+
+<span class="w">    </span><span class="n">value</span><span class="w">           </span><span class="n">$internalField</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</p>
+</p>
+</dd>
+<dt><strong>Source files</strong></dt><dd><p><ul class="simple">
+<li><p><a class="reference external" href="/home/runner/work/directChillFoam/directChillFoam/src/ThermophysicalTransportModels/derivedFvPatchFields/waterFilmHTC/waterFilmHTCFvPatchScalarField.H">waterFilmHTCFvPatchScalarField.H</a> </p></li>
+<li><p><a class="reference external" href="/home/runner/work/directChillFoam/directChillFoam/src/ThermophysicalTransportModels/derivedFvPatchFields/waterFilmHTC/waterFilmHTCFvPatchScalarField.C">waterFilmHTCFvPatchScalarField.C</a> </p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-types">Public Types</p>
+<dl class="cpp enum">
+<dt class="sig sig-object cpp" id="_CPPv4N4Foam30waterFilmHTCFvPatchScalarField13operationModeE">
+<span id="_CPPv3N4Foam30waterFilmHTCFvPatchScalarField13operationModeE"></span><span id="_CPPv2N4Foam30waterFilmHTCFvPatchScalarField13operationModeE"></span><span class="target" id="classFoam_1_1waterFilmHTCFvPatchScalarField_1a1b61e737d5c482ad28ef556e632aaf30"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">operationMode</span></span></span><a class="headerlink" href="#_CPPv4N4Foam30waterFilmHTCFvPatchScalarField13operationModeE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Operation mode enumeration. </p>
+<p><em>Values:</em></p>
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N4Foam30waterFilmHTCFvPatchScalarField13operationMode10fixedPowerE">
+<span id="_CPPv3N4Foam30waterFilmHTCFvPatchScalarField13operationMode10fixedPowerE"></span><span id="_CPPv2N4Foam30waterFilmHTCFvPatchScalarField13operationMode10fixedPowerE"></span><span class="target" id="classFoam_1_1waterFilmHTCFvPatchScalarField_1a1b61e737d5c482ad28ef556e632aaf30a85ac7a7d23a95e473bd718ec282db651"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">fixedPower</span></span></span><a class="headerlink" href="#_CPPv4N4Foam30waterFilmHTCFvPatchScalarField13operationMode10fixedPowerE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N4Foam30waterFilmHTCFvPatchScalarField13operationMode13fixedHeatFluxE">
+<span id="_CPPv3N4Foam30waterFilmHTCFvPatchScalarField13operationMode13fixedHeatFluxE"></span><span id="_CPPv2N4Foam30waterFilmHTCFvPatchScalarField13operationMode13fixedHeatFluxE"></span><span class="target" id="classFoam_1_1waterFilmHTCFvPatchScalarField_1a1b61e737d5c482ad28ef556e632aaf30aca6bf6b7ecde61c8f987b4655fe70587"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">fixedHeatFlux</span></span></span><a class="headerlink" href="#_CPPv4N4Foam30waterFilmHTCFvPatchScalarField13operationMode13fixedHeatFluxE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N4Foam30waterFilmHTCFvPatchScalarField13operationMode25variableHeatTransferCoeffE">
+<span id="_CPPv3N4Foam30waterFilmHTCFvPatchScalarField13operationMode25variableHeatTransferCoeffE"></span><span id="_CPPv2N4Foam30waterFilmHTCFvPatchScalarField13operationMode25variableHeatTransferCoeffE"></span><span class="target" id="classFoam_1_1waterFilmHTCFvPatchScalarField_1a1b61e737d5c482ad28ef556e632aaf30a13229799eee80d6f6c7a6fb98b911864"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">variableHeatTransferCoeff</span></span></span><a class="headerlink" href="#_CPPv4N4Foam30waterFilmHTCFvPatchScalarField13operationMode25variableHeatTransferCoeffE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp">
+<span class="target" id="classFoam_1_1waterFilmHTCFvPatchScalarField_1a53ffd042010ad3267615f341f5c32f65"></span><span class="sig-name descname"><span class="pre">TypeName</span> <span class="pre">(&quot;waterFilmHTC&quot;)</span></span></dt>
+<dd><p>Runtime type information. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4Foam30waterFilmHTCFvPatchScalarField30waterFilmHTCFvPatchScalarFieldERK7fvPatchRK16DimensionedFieldI6scalar7volMeshE">
+<span id="_CPPv3N4Foam30waterFilmHTCFvPatchScalarField30waterFilmHTCFvPatchScalarFieldERK7fvPatchRK16DimensionedFieldI6scalar7volMeshE"></span><span id="_CPPv2N4Foam30waterFilmHTCFvPatchScalarField30waterFilmHTCFvPatchScalarFieldERK7fvPatchRK16DimensionedFieldI6scalar7volMeshE"></span><span id="Foam::waterFilmHTCFvPatchScalarField::waterFilmHTCFvPatchScalarField__fvPatchCR.DimensionedField:scalar.volMesh:CR"></span><span class="target" id="classFoam_1_1waterFilmHTCFvPatchScalarField_1a85182ce774cd492d3ef1d7eb8549d257"></span><span class="sig-name descname"><span class="n"><span class="pre">waterFilmHTCFvPatchScalarField</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">fvPatch</span></span><span class="p"><span class="pre">&amp;</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">DimensionedField</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">scalar</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">volMesh</span></span><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">&amp;</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4Foam30waterFilmHTCFvPatchScalarField30waterFilmHTCFvPatchScalarFieldERK7fvPatchRK16DimensionedFieldI6scalar7volMeshE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Construct from patch and internal field. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4Foam30waterFilmHTCFvPatchScalarField30waterFilmHTCFvPatchScalarFieldERK7fvPatchRK16DimensionedFieldI6scalar7volMeshERK10dictionary">
+<span id="_CPPv3N4Foam30waterFilmHTCFvPatchScalarField30waterFilmHTCFvPatchScalarFieldERK7fvPatchRK16DimensionedFieldI6scalar7volMeshERK10dictionary"></span><span id="_CPPv2N4Foam30waterFilmHTCFvPatchScalarField30waterFilmHTCFvPatchScalarFieldERK7fvPatchRK16DimensionedFieldI6scalar7volMeshERK10dictionary"></span><span id="Foam::waterFilmHTCFvPatchScalarField::waterFilmHTCFvPatchScalarField__fvPatchCR.DimensionedField:scalar.volMesh:CR.dictionaryCR"></span><span class="target" id="classFoam_1_1waterFilmHTCFvPatchScalarField_1ac1e8eeaa169c0f9a7a668baf71b59382"></span><span class="sig-name descname"><span class="n"><span class="pre">waterFilmHTCFvPatchScalarField</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">fvPatch</span></span><span class="p"><span class="pre">&amp;</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">DimensionedField</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">scalar</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">volMesh</span></span><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">&amp;</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">dictionary</span></span><span class="p"><span class="pre">&amp;</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4Foam30waterFilmHTCFvPatchScalarField30waterFilmHTCFvPatchScalarFieldERK7fvPatchRK16DimensionedFieldI6scalar7volMeshERK10dictionary" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Construct from patch, internal field and dictionary. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4Foam30waterFilmHTCFvPatchScalarField30waterFilmHTCFvPatchScalarFieldERK30waterFilmHTCFvPatchScalarFieldRK7fvPatchRK16DimensionedFieldI6scalar7volMeshERK18fvPatchFieldMapper">
+<span id="_CPPv3N4Foam30waterFilmHTCFvPatchScalarField30waterFilmHTCFvPatchScalarFieldERK30waterFilmHTCFvPatchScalarFieldRK7fvPatchRK16DimensionedFieldI6scalar7volMeshERK18fvPatchFieldMapper"></span><span id="_CPPv2N4Foam30waterFilmHTCFvPatchScalarField30waterFilmHTCFvPatchScalarFieldERK30waterFilmHTCFvPatchScalarFieldRK7fvPatchRK16DimensionedFieldI6scalar7volMeshERK18fvPatchFieldMapper"></span><span id="Foam::waterFilmHTCFvPatchScalarField::waterFilmHTCFvPatchScalarField__waterFilmHTCFvPatchScalarFieldCR.fvPatchCR.DimensionedField:scalar.volMesh:CR.fvPatchFieldMapperCR"></span><span class="target" id="classFoam_1_1waterFilmHTCFvPatchScalarField_1a2a278beba8002ffe1d3fd8fdf1551da8"></span><span class="sig-name descname"><span class="n"><span class="pre">waterFilmHTCFvPatchScalarField</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N4Foam30waterFilmHTCFvPatchScalarField30waterFilmHTCFvPatchScalarFieldERK30waterFilmHTCFvPatchScalarFieldRK7fvPatchRK16DimensionedFieldI6scalar7volMeshERK18fvPatchFieldMapper" title="Foam::waterFilmHTCFvPatchScalarField::waterFilmHTCFvPatchScalarField"><span class="n"><span class="pre">waterFilmHTCFvPatchScalarField</span></span></a><span class="p"><span class="pre">&amp;</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">fvPatch</span></span><span class="p"><span class="pre">&amp;</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">DimensionedField</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">scalar</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">volMesh</span></span><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">&amp;</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">fvPatchFieldMapper</span></span><span class="p"><span class="pre">&amp;</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4Foam30waterFilmHTCFvPatchScalarField30waterFilmHTCFvPatchScalarFieldERK30waterFilmHTCFvPatchScalarFieldRK7fvPatchRK16DimensionedFieldI6scalar7volMeshERK18fvPatchFieldMapper" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Construct by mapping given. </p>
+<p><a class="reference internal" href="#classFoam_1_1waterFilmHTCFvPatchScalarField"><span class="std std-ref">waterFilmHTCFvPatchScalarField</span></a> onto a new patch </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4Foam30waterFilmHTCFvPatchScalarField30waterFilmHTCFvPatchScalarFieldERK30waterFilmHTCFvPatchScalarField">
+<span id="_CPPv3N4Foam30waterFilmHTCFvPatchScalarField30waterFilmHTCFvPatchScalarFieldERK30waterFilmHTCFvPatchScalarField"></span><span id="_CPPv2N4Foam30waterFilmHTCFvPatchScalarField30waterFilmHTCFvPatchScalarFieldERK30waterFilmHTCFvPatchScalarField"></span><span id="Foam::waterFilmHTCFvPatchScalarField::waterFilmHTCFvPatchScalarField__waterFilmHTCFvPatchScalarFieldCR"></span><span class="target" id="classFoam_1_1waterFilmHTCFvPatchScalarField_1a51b17556174e05bb3da91ff4a77e5393"></span><span class="sig-name descname"><span class="n"><span class="pre">waterFilmHTCFvPatchScalarField</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N4Foam30waterFilmHTCFvPatchScalarField30waterFilmHTCFvPatchScalarFieldERK30waterFilmHTCFvPatchScalarField" title="Foam::waterFilmHTCFvPatchScalarField::waterFilmHTCFvPatchScalarField"><span class="n"><span class="pre">waterFilmHTCFvPatchScalarField</span></span></a><span class="p"><span class="pre">&amp;</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="k"><span class="pre">delete</span></span><a class="headerlink" href="#_CPPv4N4Foam30waterFilmHTCFvPatchScalarField30waterFilmHTCFvPatchScalarFieldERK30waterFilmHTCFvPatchScalarField" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Disallow copy without setting internal field reference. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4Foam30waterFilmHTCFvPatchScalarField30waterFilmHTCFvPatchScalarFieldERK30waterFilmHTCFvPatchScalarFieldRK16DimensionedFieldI6scalar7volMeshE">
+<span id="_CPPv3N4Foam30waterFilmHTCFvPatchScalarField30waterFilmHTCFvPatchScalarFieldERK30waterFilmHTCFvPatchScalarFieldRK16DimensionedFieldI6scalar7volMeshE"></span><span id="_CPPv2N4Foam30waterFilmHTCFvPatchScalarField30waterFilmHTCFvPatchScalarFieldERK30waterFilmHTCFvPatchScalarFieldRK16DimensionedFieldI6scalar7volMeshE"></span><span id="Foam::waterFilmHTCFvPatchScalarField::waterFilmHTCFvPatchScalarField__waterFilmHTCFvPatchScalarFieldCR.DimensionedField:scalar.volMesh:CR"></span><span class="target" id="classFoam_1_1waterFilmHTCFvPatchScalarField_1ac1cfffe98e99bdbaf66d365850566d15"></span><span class="sig-name descname"><span class="n"><span class="pre">waterFilmHTCFvPatchScalarField</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N4Foam30waterFilmHTCFvPatchScalarField30waterFilmHTCFvPatchScalarFieldERK30waterFilmHTCFvPatchScalarFieldRK16DimensionedFieldI6scalar7volMeshE" title="Foam::waterFilmHTCFvPatchScalarField::waterFilmHTCFvPatchScalarField"><span class="n"><span class="pre">waterFilmHTCFvPatchScalarField</span></span></a><span class="p"><span class="pre">&amp;</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">DimensionedField</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">scalar</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">volMesh</span></span><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">&amp;</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4Foam30waterFilmHTCFvPatchScalarField30waterFilmHTCFvPatchScalarFieldERK30waterFilmHTCFvPatchScalarFieldRK16DimensionedFieldI6scalar7volMeshE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Copy constructor setting internal field reference. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK4Foam30waterFilmHTCFvPatchScalarField5cloneERK16DimensionedFieldI6scalar7volMeshE">
+<span id="_CPPv3NK4Foam30waterFilmHTCFvPatchScalarField5cloneERK16DimensionedFieldI6scalar7volMeshE"></span><span id="_CPPv2NK4Foam30waterFilmHTCFvPatchScalarField5cloneERK16DimensionedFieldI6scalar7volMeshE"></span><span id="Foam::waterFilmHTCFvPatchScalarField::clone__DimensionedField:scalar.volMesh:CRC"></span><span class="target" id="classFoam_1_1waterFilmHTCFvPatchScalarField_1adedf214c2217c6ee90aae94de559ee42"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="n"><span class="pre">tmp</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">fvPatchScalarField</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">clone</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">DimensionedField</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">scalar</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">volMesh</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">iF</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK4Foam30waterFilmHTCFvPatchScalarField5cloneERK16DimensionedFieldI6scalar7volMeshE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Construct and return a clone setting internal field reference. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK4Foam30waterFilmHTCFvPatchScalarField10fixesValueEv">
+<span id="_CPPv3NK4Foam30waterFilmHTCFvPatchScalarField10fixesValueEv"></span><span id="_CPPv2NK4Foam30waterFilmHTCFvPatchScalarField10fixesValueEv"></span><span id="Foam::waterFilmHTCFvPatchScalarField::fixesValueC"></span><span class="target" id="classFoam_1_1waterFilmHTCFvPatchScalarField_1a60a6528749678cb4769bbd4cb2de828d"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">fixesValue</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK4Foam30waterFilmHTCFvPatchScalarField10fixesValueEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Allow manipulation of the boundary values. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4Foam30waterFilmHTCFvPatchScalarField7autoMapERK18fvPatchFieldMapper">
+<span id="_CPPv3N4Foam30waterFilmHTCFvPatchScalarField7autoMapERK18fvPatchFieldMapper"></span><span id="_CPPv2N4Foam30waterFilmHTCFvPatchScalarField7autoMapERK18fvPatchFieldMapper"></span><span id="Foam::waterFilmHTCFvPatchScalarField::autoMap__fvPatchFieldMapperCR"></span><span class="target" id="classFoam_1_1waterFilmHTCFvPatchScalarField_1a2a79a6af99c70b56af71e7b3a12c3b01"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">autoMap</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">fvPatchFieldMapper</span></span><span class="p"><span class="pre">&amp;</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4Foam30waterFilmHTCFvPatchScalarField7autoMapERK18fvPatchFieldMapper" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Map (and resize as needed) from self given a mapping object. </p>
+<p>Used to update fields following mesh topology change </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4Foam30waterFilmHTCFvPatchScalarField4rmapERK18fvPatchScalarFieldRK9labelList">
+<span id="_CPPv3N4Foam30waterFilmHTCFvPatchScalarField4rmapERK18fvPatchScalarFieldRK9labelList"></span><span id="_CPPv2N4Foam30waterFilmHTCFvPatchScalarField4rmapERK18fvPatchScalarFieldRK9labelList"></span><span id="Foam::waterFilmHTCFvPatchScalarField::rmap__fvPatchScalarFieldCR.labelListCR"></span><span class="target" id="classFoam_1_1waterFilmHTCFvPatchScalarField_1a7c7585e7b4f91d2fe557e59ae6ad4a36"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">rmap</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">fvPatchScalarField</span></span><span class="p"><span class="pre">&amp;</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">labelList</span></span><span class="p"><span class="pre">&amp;</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4Foam30waterFilmHTCFvPatchScalarField4rmapERK18fvPatchScalarFieldRK9labelList" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Reverse map the given fvPatchField onto this fvPatchField. </p>
+<p>Used to reconstruct fields </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4Foam30waterFilmHTCFvPatchScalarField12updateCoeffsEv">
+<span id="_CPPv3N4Foam30waterFilmHTCFvPatchScalarField12updateCoeffsEv"></span><span id="_CPPv2N4Foam30waterFilmHTCFvPatchScalarField12updateCoeffsEv"></span><span id="Foam::waterFilmHTCFvPatchScalarField::updateCoeffs"></span><span class="target" id="classFoam_1_1waterFilmHTCFvPatchScalarField_1af0335c9929fdab88b4433d09d72c6911"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">updateCoeffs</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4Foam30waterFilmHTCFvPatchScalarField12updateCoeffsEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Update the coefficients associated with the patch field. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK4Foam30waterFilmHTCFvPatchScalarField5writeER7Ostream">
+<span id="_CPPv3NK4Foam30waterFilmHTCFvPatchScalarField5writeER7Ostream"></span><span id="_CPPv2NK4Foam30waterFilmHTCFvPatchScalarField5writeER7Ostream"></span><span id="Foam::waterFilmHTCFvPatchScalarField::write__OstreamRC"></span><span class="target" id="classFoam_1_1waterFilmHTCFvPatchScalarField_1ac0461a49d60de8048c0398c2c20d7751"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">write</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">Ostream</span></span><span class="p"><span class="pre">&amp;</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK4Foam30waterFilmHTCFvPatchScalarField5writeER7Ostream" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Write. </p>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+</section>
+<section id="testing">
+<h2>Testing<a class="headerlink" href="#testing" title="Permalink to this heading">¶</a></h2>
+<p>The unit tests for the ThermophysicalTransportModels libraries require the Boost libraries (&gt;= 1.69.0). The tests are run in the tests/ThermophysicalTransportModels/&lt;boundaryType&gt;/case folder:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>wmake<span class="w"> </span>..<span class="w"> </span><span class="c1"># Build the test executable</span>
+<span class="gp">$ </span>blockMesh<span class="w"> </span><span class="c1"># Create the mesh for the test case</span>
+<span class="gp">$ </span>./test_mouldHTC<span class="w"> </span>--log_level<span class="o">=</span>all<span class="w"> </span><span class="c1"># Run the tests. Use ./test_waterFilmHTC for the waterFilmHTC boundary condition.</span>
+</pre></div>
+</div>
+</section>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">directChillFoam</a></h1>
+
+
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../solver/directChillFoam.html">Direct-chill (DC) casting solver</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Libraries</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="soluteModel.html">Solute model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="multicomponentAlloy.html">Solute equation solver</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Boundary conditions</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#installation">Installation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#mould-heat-transfer-coefficient">Mould heat transfer coefficient</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#water-film-heat-transfer-coefficient">Water film heat transfer coefficient</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#testing">Testing</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="fvConstraints.html">Constraints</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fvModels.html">Solidification sources</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/index.html">Tutorials</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="index.html">Libraries</a><ul>
+      <li>Previous: <a href="multicomponentAlloy.html" title="previous chapter">Solute equation solver</a></li>
+      <li>Next: <a href="fvConstraints.html" title="next chapter">Constraints</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2023, Bruno Lebon.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 5.3.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.13</a>
+      
+      |
+      <a href="../_sources/src/ThermophysicalTransportModels.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+    <a href="https://github.com/blebon/directChillFoam" class="github">
+        <img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub"  class="github"/>
+    </a>
+    
+
+    
+  </body>
+</html>

@@ -1,0 +1,569 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Tutorial: Lebon et al. (2020) - 3D model of the DC casting of an A6060 billet &#8212; directChillFoam OF9.0.2 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/alabaster.css" />
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Tutorial: Subroto et al. (2021) - DC casting of a ternary Al alloy" href="Subroto2021.html" />
+    <link rel="prev" title="Tutorial: Vreeman et al. (2002) - DC casting of a binary Al-Cu alloy" href="Vreeman2002.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="tutorial-lebon-et-al-2020-3d-model-of-the-dc-casting-of-an-a6060-billet">
+<h1>Tutorial: Lebon <em>et al.</em> (2020) - 3D model of the DC casting of an A6060 billet<a class="headerlink" href="#tutorial-lebon-et-al-2020-3d-model-of-the-dc-casting-of-an-a6060-billet" title="Permalink to this heading">¶</a></h1>
+<div class="contents topic" id="contents">
+<p class="topic-title">Contents:</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#tutorial-lebon-et-al-2020-3d-model-of-the-dc-casting-of-an-a6060-billet" id="id7">Tutorial: Lebon <em>et al.</em> (2020) - 3D model of the DC casting of an A6060 billet</a></p>
+<ul>
+<li><p><a class="reference internal" href="#pre-processing" id="id8">Pre-processing</a></p>
+<ul>
+<li><p><a class="reference internal" href="#mesh-generation" id="id9">Mesh generation</a></p></li>
+<li><p><a class="reference internal" href="#boundary-and-initial-conditions" id="id10">Boundary and initial conditions</a></p>
+<ul>
+<li><p><a class="reference internal" href="#solute" id="id11">Solute</a></p></li>
+<li><p><a class="reference internal" href="#temperature" id="id12">Temperature</a></p></li>
+<li><p><a class="reference internal" href="#velocity" id="id13">Velocity</a></p></li>
+<li><p><a class="reference internal" href="#solid-velocity" id="id14">Solid velocity</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#physical-properties" id="id15">Physical properties</a></p>
+<ul>
+<li><p><a class="reference internal" href="#transport-properties" id="id16">Transport properties</a></p></li>
+<li><p><a class="reference internal" href="#thermophysical-properties" id="id17">Thermophysical properties</a></p></li>
+<li><p><a class="reference internal" href="#solute-properties" id="id18">Solute properties</a></p></li>
+<li><p><a class="reference internal" href="#solidification-properties" id="id19">Solidification properties</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#control" id="id20">Control</a></p></li>
+<li><p><a class="reference internal" href="#discretization-and-solver-settings" id="id21">Discretization and solver settings</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#run-the-application" id="id22">Run the application</a></p></li>
+<li><p><a class="reference internal" href="#post-processing" id="id23">Post-processing</a></p>
+<ul>
+<li><p><a class="reference internal" href="#contour-plots" id="id24">Contour plots</a></p></li>
+<li><p><a class="reference internal" href="#validation" id="id25">Validation</a></p></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+<p>This tutorial describes the steps to pre-process, run and post-process a 3D direct chill (DC) casting case that corresponds to the A6060 conventional DC casting experiment described in <a class="reference external" href="https://doi.org/10.1016/j.apm.2019.08.032">Lebon et al. (2020)</a> with directChillFoam.</p>
+<figure class="align-default" id="id3">
+<a class="reference internal image-reference" href="../_images/DC_Schematic.png"><img alt="DC casting schematic" src="../_images/DC_Schematic.png" style="width: 80%;" /></a>
+<figcaption>
+<p><span class="caption-number">Fig. 5 </span><span class="caption-text">The DC casting process: the melt in contact with the mould solidifies and the billet is pulled downwards by gravity as the ram is lowered. Water is sprayed at the sides of the billet providing the direct chill.</span><a class="headerlink" href="#id3" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+<p>The execution time of this tutorial case is around 5 minutes when run in parallel with 80 cores on two nodes with 2.50 GHz processors.</p>
+<section id="pre-processing">
+<h2>Pre-processing<a class="headerlink" href="#pre-processing" title="Permalink to this heading">¶</a></h2>
+<p>The schematic for the case setup is as follows:</p>
+<figure class="align-default" id="id4">
+<span id="lebon2020-bc"></span><a class="reference internal image-reference" href="../_images/Lebon2020_BC.png"><img alt="Schematic of the Lebon *et al.* (2020) case" src="../_images/Lebon2020_BC.png" style="width: 80%;" /></a>
+<figcaption>
+<p><span class="caption-number">Fig. 6 </span><span class="caption-text">Boundary patch labels and dimensions of the casting mould and billet. The image is not drawn to scale.</span><a class="headerlink" href="#id4" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+<p>The first step is to generate the mesh for the case and setup the boundary conditions.</p>
+<p>To run the pre-processing steps, change to the case directory.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span><span class="nb">cd</span><span class="w"> </span>directChillFoam/tutorials/heatTransfer/directChillFoam/Lebon2020
+</pre></div>
+</div>
+<section id="mesh-generation">
+<h3>Mesh generation<a class="headerlink" href="#mesh-generation" title="Permalink to this heading">¶</a></h3>
+<p>The dictionary file that describes the mesh is located in the system directory.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span><span class="nb">cd</span><span class="w"> </span>system
+</pre></div>
+</div>
+<p>Generate the blockMeshDict file using the <code class="docutils literal notranslate"><span class="pre">Lebon2020.system.cylinder.write_blockMeshDict()</span></code> function from the <a class="reference external" href="modules.html#id6">system/cylinder.py script</a>.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>python3<span class="w"> </span>cylinder.py
+</pre></div>
+</div>
+<p>The 3D mesh consists of a finer inner section that is definer by a square length of 32 mm but with each side with a slight curvature of radius 40 mm. The outer cylinder corresponds to the billet dimensions. The z_points tuple list the vertices z coordinates as defined in <a class="reference internal" href="#lebon2020-bc"><span class="std std-numref">Fig. 6</span></a>. The patch names are entered in the faces list in the <code class="docutils literal notranslate"><span class="pre">Lebon2020.system.cylinder.write_boundary()</span></code> function.</p>
+<p>Return to the case directory and generate the mesh using <a class="reference external" href="https://doc.cfd.direct/openfoam/user-guide-v9/blockmesh">blockMesh</a>.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span><span class="nb">cd</span><span class="w"> </span>..
+<span class="gp">$ </span>blockMesh
+</pre></div>
+</div>
+</section>
+<section id="boundary-and-initial-conditions">
+<h3>Boundary and initial conditions<a class="headerlink" href="#boundary-and-initial-conditions" title="Permalink to this heading">¶</a></h3>
+<p>To speed up the simulation, initialize the fields with rough estimates of temperatures (and corresponding liquid fractions) in the case directory:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>setFields
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>The liquid fraction values must match the temperatures for the alloy according to the constant/tStar Foam table. Otherwise, the case can diverge.</p>
+</div>
+<section id="solute">
+<h4>Solute<a class="headerlink" href="#solute" title="Permalink to this heading">¶</a></h4>
+<p>Solute fields are dimensionless:</p>
+<div class="highlight-C notranslate"><div class="highlight"><pre><span></span><span class="n">dimensions</span><span class="w">      </span><span class="p">[</span><span class="mi">0</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="mi">0</span><span class="p">];</span>
+</pre></div>
+</div>
+<p>The solute fields are initialized with constant values. Use 0.6 for silicon and 0.48 for magnesium.</p>
+<div class="highlight-C notranslate"><div class="highlight"><pre><span></span><span class="n">internalField</span><span class="w">   </span><span class="n">uniform</span><span class="w"> </span><span class="mf">0.45</span><span class="p">;</span><span class="w"> </span><span class="c1">// C.Si</span>
+</pre></div>
+</div>
+<div class="highlight-C notranslate"><div class="highlight"><pre><span></span><span class="n">internalField</span><span class="w">   </span><span class="n">uniform</span><span class="w"> </span><span class="mf">0.475</span><span class="p">;</span><span class="w"> </span><span class="c1">// C.Mg</span>
+</pre></div>
+</div>
+<p>The inlet boundary condition is a fixed value (stored in internalField):</p>
+<div class="highlight-C notranslate"><div class="highlight"><pre><span></span><span class="n">free</span><span class="o">-</span><span class="n">surface</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="n">type</span><span class="w">            </span><span class="n">fixedValue</span><span class="p">;</span>
+<span class="w">    </span><span class="n">value</span><span class="w">           </span><span class="n">$internalField</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>All other boundaries are treated with a zero gradient condition.</p>
+</section>
+<section id="temperature">
+<h4>Temperature<a class="headerlink" href="#temperature" title="Permalink to this heading">¶</a></h4>
+<p>The mould uses the <a class="reference external" href="../src/ThermophysicalTransportModels.html#mould-heat-transfer-coefficient">mould HTC</a> boundary condition:</p>
+<div class="highlight-C notranslate"><div class="highlight"><pre><span></span><span class="s">&quot;(mould|air-gap)&quot;</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="n">type</span><span class="w">            </span><span class="n">mouldHTC</span><span class="p">;</span>
+<span class="w">    </span><span class="n">mode</span><span class="w">            </span><span class="n">coefficient</span><span class="p">;</span>
+<span class="w">    </span><span class="n">h1</span><span class="w">              </span><span class="n">uniform</span><span class="w"> </span><span class="mf">1250.0</span><span class="p">;</span>
+<span class="w">    </span><span class="n">h2</span><span class="w">              </span><span class="n">uniform</span><span class="w"> </span><span class="mf">40.0</span><span class="p">;</span>
+<span class="w">    </span><span class="n">Ta</span><span class="w">              </span><span class="n">constant</span><span class="w"> </span><span class="n">$waterTemp</span><span class="p">;</span>
+<span class="w">    </span><span class="n">kappaMethod</span><span class="w">     </span><span class="n">fluidThermo</span><span class="p">;</span>
+<span class="w">    </span><span class="n">relaxation</span><span class="w">      </span><span class="mf">1.0</span><span class="p">;</span>
+<span class="w">    </span><span class="n">value</span><span class="w">           </span><span class="n">uniform</span><span class="w"> </span><span class="n">$waterTemp</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>The surface of the billet that is sprayed with water jets uses the <a class="reference external" href="../src/ThermophysicalTransportModels.html#water-film-heat-transfer-coefficient">water film HTC</a> boundary condition.
+Use the <code class="docutils literal notranslate"><span class="pre">Lebon2020.write_htc.write_HTC_T()</span></code> function to generate the Foam temperature-htc table.</p>
+<dl class="py function">
+<dt class="sig sig-object py">
+<span class="sig-prename descclassname"><span class="pre">Lebon2020.write_htc.</span></span><span class="sig-name descname"><span class="pre">write_HTC_T</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">htc_file='constant/HTC_T'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">func=&lt;function</span> <span class="pre">rohsenhow&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">T_water=372.8</span></span></em><span class="sig-paren">)</span></dt>
+<dd><p>Writes the temperature-HTC foam file using the prescribed formula.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>htc_file</strong> (<em>str</em>) – Relative path of HTC foam file.</p></li>
+<li><p><strong>func</strong> (<em>function</em>) – HTC function (Rohsenhow or Weckmann-Niessen).</p></li>
+<li><p><strong>T_water</strong> (<em>float</em>) – Temperature of water jet [K].</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>0 if successful.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<div class="highlight-C notranslate"><div class="highlight"><pre><span></span><span class="n">water</span><span class="o">-</span><span class="n">film</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="n">type</span><span class="w">            </span><span class="n">waterFilmHTC</span><span class="p">;</span>
+<span class="w">    </span><span class="n">mode</span><span class="w">            </span><span class="n">coefficient</span><span class="p">;</span>
+<span class="w">    </span><span class="n">htc</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="n">type</span><span class="w">                </span><span class="n">table</span><span class="p">;</span>
+<span class="w">        </span><span class="n">format</span><span class="w">              </span><span class="n">foam</span><span class="p">;</span>
+<span class="w">        </span><span class="n">file</span><span class="w">                </span><span class="s">&quot;constant/HTC_Tw&quot;</span><span class="p">;</span>
+<span class="w">        </span><span class="n">outOfBounds</span><span class="w">         </span><span class="n">clamp</span><span class="p">;</span>
+<span class="w">        </span><span class="n">interpolationScheme</span><span class="w"> </span><span class="n">linear</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="n">Ta</span><span class="w">              </span><span class="n">constant</span><span class="w"> </span><span class="n">$waterTemp</span><span class="p">;</span>
+<span class="w">    </span><span class="n">kappaMethod</span><span class="w">     </span><span class="n">fluidThermo</span><span class="p">;</span>
+<span class="w">    </span><span class="n">relaxation</span><span class="w">      </span><span class="mf">0.3</span><span class="p">;</span>
+<span class="w">    </span><span class="n">value</span><span class="w">           </span><span class="n">uniform</span><span class="w"> </span><span class="n">$waterTemp</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="velocity">
+<h4>Velocity<a class="headerlink" href="#velocity" title="Permalink to this heading">¶</a></h4>
+<p>The casting velocity <span class="math notranslate nohighlight">\({U}\)</span> is prescribed at the mould and water-cooled surface using a coded function:</p>
+<div class="highlight-C notranslate"><div class="highlight"><pre><span></span><span class="s">&quot;(graphite|mould|air-gap|water-film)&quot;</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="n">type</span><span class="w">            </span><span class="n">codedFixedValue</span><span class="p">;</span>
+<span class="w">    </span><span class="n">value</span><span class="w">           </span><span class="n">$internalField</span><span class="p">;</span>
+<span class="w">    </span><span class="n">redirectType</span><span class="w">    </span><span class="n">movingShell</span><span class="p">;</span>
+<span class="w">    </span><span class="n">name</span><span class="w">            </span><span class="n">movingShell</span><span class="p">;</span>
+
+<span class="w">    </span><span class="n">code</span>
+<span class="w">    </span><span class="cp">#{</span>
+<span class="w">        </span><span class="c1">// Initialize velocity with zeroes</span>
+<span class="w">        </span><span class="n">vectorField</span><span class="w"> </span><span class="n">U</span><span class="p">(</span><span class="n">patch</span><span class="p">().</span><span class="n">size</span><span class="p">(),</span><span class="w"> </span><span class="n">vector</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">));</span>
+
+<span class="w">        </span><span class="c1">// Find liquid fraction</span>
+<span class="w">        </span><span class="k">const</span><span class="w"> </span><span class="n">scalarField</span><span class="o">&amp;</span><span class="w"> </span><span class="n">fL</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">this</span><span class="o">-&gt;</span><span class="n">patch</span><span class="p">().</span><span class="n">lookupPatchField</span><span class="o">&lt;</span><span class="n">volScalarField</span><span class="p">,</span><span class="w"> </span><span class="n">scalar</span><span class="o">&gt;</span><span class="p">(</span><span class="s">&quot;melt1_alpha1&quot;</span><span class="p">);</span>
+
+<span class="w">        </span><span class="c1">// Go through all face centres</span>
+<span class="w">        </span><span class="k">const</span><span class="w"> </span><span class="n">vectorField</span><span class="o">&amp;</span><span class="w"> </span><span class="nf">centre</span><span class="p">(</span><span class="n">patch</span><span class="p">().</span><span class="n">Cf</span><span class="p">());</span>
+<span class="w">        </span><span class="n">forAll</span><span class="p">(</span><span class="n">centre</span><span class="p">,</span><span class="w"> </span><span class="n">i</span><span class="p">)</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="n">U</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">z</span><span class="p">()</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">-0.002583</span><span class="o">*</span><span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">fL</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+<span class="w">        </span><span class="p">}</span>
+
+<span class="w">        </span><span class="c1">// Apply the calculated velocities</span>
+<span class="w">         </span><span class="n">operator</span><span class="o">==</span><span class="p">(</span><span class="n">U</span><span class="p">);</span>
+<span class="w">    </span><span class="cp">#};</span>
+
+<span class="w">    </span><span class="n">codeInclude</span>
+<span class="w">    </span><span class="cp">#{</span>
+<span class="w">        </span><span class="c1">// #include &quot;fvCFD.H&quot;;</span>
+<span class="w">    </span><span class="cp">#};</span>
+<span class="w">  </span><span class="p">}</span>
+</pre></div>
+</div>
+<p>The values are initialized at the casting speed in m s<sup>-1</sup>.</p>
+</section>
+<section id="solid-velocity">
+<h4>Solid velocity<a class="headerlink" href="#solid-velocity" title="Permalink to this heading">¶</a></h4>
+<p>The movingShell coded function from the liquid velocity boundary condition is reused for the solid velocity <span class="math notranslate nohighlight">\({U_s}\)</span> boundary prescription:</p>
+<div class="highlight-C notranslate"><div class="highlight"><pre><span></span><span class="s">&quot;(graphite|mould|air-gap|water-film)&quot;</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="n">type</span><span class="w">            </span><span class="n">movingShell</span><span class="p">;</span>
+<span class="w">    </span><span class="n">value</span><span class="w">           </span><span class="n">$internalField</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>The values are also initialized at the casting speed in m s<sup>-1</sup>.</p>
+</section>
+</section>
+<section id="physical-properties">
+<h3>Physical properties<a class="headerlink" href="#physical-properties" title="Permalink to this heading">¶</a></h3>
+<section id="transport-properties">
+<h4>Transport properties<a class="headerlink" href="#transport-properties" title="Permalink to this heading">¶</a></h4>
+<p>The <a class="reference external" href="../solver/directChillFoam.html#nomenclature">transport properties</a> are prescribed in the constant/transportProperties dictionary file. All values are in SI units. These values are available for the alloy that is being studied either in engineering tables or by calculating them using a CALPHAD software package.</p>
+<p>Example usage:</p>
+<div class="highlight-C notranslate"><div class="highlight"><pre><span></span><span class="n">g_env</span><span class="w">           </span><span class="p">[</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="p">]</span><span class="w"> </span><span class="mf">0.7</span><span class="p">;</span><span class="w">       </span><span class="c1">// Coherency fraction</span>
+<span class="n">rho1</span><span class="w">            </span><span class="p">[</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="mi">-3</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="p">]</span><span class="w"> </span><span class="mf">2608.820</span><span class="p">;</span><span class="w"> </span><span class="c1">// Solid density</span>
+<span class="n">rho2</span><span class="w">            </span><span class="p">[</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="mi">-3</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="p">]</span><span class="w"> </span><span class="mf">2376.200</span><span class="p">;</span><span class="w"> </span><span class="c1">// Liquid density</span>
+<span class="n">mu1</span><span class="w">             </span><span class="p">[</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="mi">-1</span><span class="w"> </span><span class="mi">-1</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="p">]</span><span class="w"> </span><span class="mf">11.5e-4</span><span class="p">;</span><span class="w"> </span><span class="c1">// Not required, but implementation requires a non-zero value</span>
+<span class="n">mu2</span><span class="w">             </span><span class="p">[</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="mi">-1</span><span class="w"> </span><span class="mi">-1</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="p">]</span><span class="w"> </span><span class="mf">10.5e-4</span><span class="p">;</span><span class="w"> </span><span class="c1">// Dynamic viscosity (of liquid)</span>
+<span class="n">DAS</span><span class="w">             </span><span class="p">[</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="p">]</span><span class="w"> </span><span class="mf">1.85e-4</span><span class="p">;</span><span class="w">   </span><span class="c1">// Dendrite arm spacing</span>
+</pre></div>
+</div>
+</section>
+<section id="thermophysical-properties">
+<h4>Thermophysical properties<a class="headerlink" href="#thermophysical-properties" title="Permalink to this heading">¶</a></h4>
+<p>The thermophysical properties are prescribed in the <a class="reference external" href="https://doc.cfd.direct/openfoam/user-guide-v9/thermophysical">constant/thermophysicalProperties dictionary file</a>.</p>
+</section>
+<section id="solute-properties">
+<h4>Solute properties<a class="headerlink" href="#solute-properties" title="Permalink to this heading">¶</a></h4>
+<p>The <a class="reference external" href="../src/soluteModel.html#nomenclature">solute properties</a> are prescribed in the constant/soluteProperties dictionary file.</p>
+<p>Example usage:</p>
+<div class="highlight-C notranslate"><div class="highlight"><pre><span></span><span class="n">solutes</span>
+<span class="p">(</span>
+<span class="w">    </span><span class="n">Si</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="n">D_l</span><span class="w">   </span><span class="mf">3e-9</span><span class="p">;</span><span class="w">     </span><span class="c1">// Liquid mass diffusion coefficient</span>
+<span class="w">        </span><span class="n">kp</span><span class="w">    </span><span class="mf">0.102068</span><span class="p">;</span><span class="w"> </span><span class="c1">// Partition coefficient</span>
+<span class="w">        </span><span class="n">C0</span><span class="w">    </span><span class="mf">0.45</span><span class="p">;</span><span class="w">     </span><span class="c1">// Initial solute concentration</span>
+<span class="w">        </span><span class="n">Ceut</span><span class="w">  </span><span class="mf">0.32</span><span class="p">;</span><span class="w">     </span><span class="c1">// Eutectic concentration</span>
+<span class="w">        </span><span class="n">beta</span><span class="w">  </span><span class="mf">-3.7e-4</span><span class="p">;</span><span class="w">  </span><span class="c1">// Solute expansion coefficient</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="n">Mg</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="n">D_l</span><span class="w">   </span><span class="mf">3e-9</span><span class="p">;</span>
+<span class="w">        </span><span class="n">kp</span><span class="w">    </span><span class="mf">0.316119</span><span class="p">;</span>
+<span class="w">        </span><span class="n">C0</span><span class="w">    </span><span class="mf">0.475</span><span class="p">;</span>
+<span class="w">        </span><span class="n">Ceut</span><span class="w">  </span><span class="mf">0.32</span><span class="p">;</span>
+<span class="w">        </span><span class="n">beta</span><span class="w">  </span><span class="mf">1.3e-4</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">);</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>These values are also obtained from engineering tables or by calculating them using a CALPHAD software package.</p>
+</div>
+</section>
+<section id="solidification-properties">
+<h4>Solidification properties<a class="headerlink" href="#solidification-properties" title="Permalink to this heading">¶</a></h4>
+<p>The solidification properties are prescribed in the constant/fvModels dictionary file.</p>
+<p>Example usage:</p>
+<div class="highlight-C notranslate"><div class="highlight"><pre><span></span><span class="n">melt1</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="n">type</span><span class="w">            </span><span class="n">mushyZoneSource</span><span class="p">;</span>
+<span class="w">    </span><span class="n">active</span><span class="w">          </span><span class="n">yes</span><span class="p">;</span>
+
+<span class="w">    </span><span class="n">mushyZoneSourceCoeffs</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="n">selectionMode</span><span class="w">   </span><span class="n">all</span><span class="p">;</span>
+
+<span class="w">        </span><span class="n">Tliq</span><span class="w">            </span><span class="mf">929.250</span><span class="p">;</span><span class="w">         </span><span class="c1">// Liquidus temperature [K]</span>
+<span class="w">        </span><span class="n">Tsol</span><span class="w">            </span><span class="mf">757.375</span><span class="p">;</span><span class="w">         </span><span class="c1">// Solidus temperature [K]</span>
+<span class="w">        </span><span class="n">L</span><span class="w">               </span><span class="mf">375696.0</span><span class="p">;</span><span class="w">        </span><span class="c1">// Latent heat of fusion [J/kg]</span>
+<span class="w">        </span><span class="n">g_env</span><span class="w">           </span><span class="mf">0.7</span><span class="p">;</span><span class="w">             </span><span class="c1">// Coherency fraction</span>
+<span class="w">        </span><span class="n">relax</span><span class="w">           </span><span class="mf">0.1</span><span class="p">;</span><span class="w">             </span><span class="c1">// Under-relaxation factor [0-1] - keep this value low if simulation is unstable</span>
+<span class="w">        </span><span class="n">castingVelocity</span><span class="w"> </span><span class="p">(</span><span class="mi">0</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="mf">-0.002583</span><span class="p">);</span><span class="w"> </span><span class="c1">// Casting velocity [m/s]</span>
+
+<span class="w">        </span><span class="n">tStar</span>
+<span class="w">        </span><span class="c1">// liquid fraction-temperature table</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="n">type</span><span class="w">                </span><span class="n">table</span><span class="p">;</span>
+<span class="w">            </span><span class="n">format</span><span class="w">              </span><span class="n">foam</span><span class="p">;</span>
+<span class="w">            </span><span class="n">file</span><span class="w">                </span><span class="s">&quot;constant/tStar&quot;</span><span class="p">;</span>
+<span class="w">            </span><span class="n">outOfBounds</span><span class="w">         </span><span class="n">clamp</span><span class="p">;</span>
+<span class="w">            </span><span class="n">interpolationScheme</span><span class="w"> </span><span class="n">linear</span><span class="p">;</span>
+<span class="w">        </span><span class="p">}</span>
+
+<span class="w">        </span><span class="n">thermoMode</span><span class="w">      </span><span class="n">thermo</span><span class="p">;</span>
+<span class="w">        </span><span class="n">rhoRef</span><span class="w">          </span><span class="mf">2608.820</span><span class="p">;</span><span class="w">   </span><span class="c1">// Reference (solid) density [kg/m^3]</span>
+<span class="w">        </span><span class="n">beta</span><span class="w">            </span><span class="mf">23e-6</span><span class="p">;</span><span class="w">      </span><span class="c1">// Thermal expansion coefficient [1/K]</span>
+<span class="w">        </span><span class="n">phi</span><span class="w">             </span><span class="n">phi</span><span class="p">;</span><span class="w">        </span><span class="c1">// Name of flux field</span>
+<span class="w">        </span><span class="n">Cu</span><span class="w">              </span><span class="mf">1.522e+07</span><span class="p">;</span><span class="w">  </span><span class="c1">// Mushy region momentum sink coefficient [1/s]</span>
+<span class="w">        </span><span class="n">q</span><span class="w">               </span><span class="mf">1e-03</span><span class="p">;</span><span class="w">      </span><span class="c1">// Carman-Kozeny model coefficient</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>These values are also obtained from engineering tables or by calculating them using a CALPHAD software package.</p>
+<p>The tStar table can be obtained using a CALPHAD calculation using an appropriate diffusion model e.g. the lever rule or the Scheil equation. When using a non-linear model, use small (liquid fraction) steps of the order of 0.001 if the energy solver diverges.</p>
+</div>
+</section>
+</section>
+<section id="control">
+<h3>Control<a class="headerlink" href="#control" title="Permalink to this heading">¶</a></h3>
+<p>The solidification and other associated libraries must be included in the <a class="reference external" href="https://doc.cfd.direct/openfoam/user-guide-v9/global-settings">system/controlDict dictionary file</a>.</p>
+<div class="highlight-C notranslate"><div class="highlight"><pre><span></span><span class="n">libs</span><span class="w"> </span><span class="p">(</span>
+<span class="w">    </span><span class="s">&quot;libmyFvModels.so&quot;</span>
+<span class="w">    </span><span class="s">&quot;libmyFvConstraints.so&quot;</span>
+<span class="w">    </span><span class="s">&quot;libmythermophysicalTransportModels.so&quot;</span>
+<span class="p">);</span>
+</pre></div>
+</div>
+</section>
+<section id="discretization-and-solver-settings">
+<h3>Discretization and solver settings<a class="headerlink" href="#discretization-and-solver-settings" title="Permalink to this heading">¶</a></h3>
+<p>Discretization schemes are entered in the <a class="reference external" href="https://doc.cfd.direct/openfoam/user-guide-v9/fvschemes">system/fvSchemes dictionary file</a>. Upwinding is recommended for the solute equations.</p>
+<div class="highlight-C notranslate"><div class="highlight"><pre><span></span><span class="n">divSchemes</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="p">...</span>
+<span class="w">    </span><span class="n">div</span><span class="p">(</span><span class="n">phi</span><span class="p">,</span><span class="n">C</span><span class="p">.</span><span class="n">Si</span><span class="p">)</span><span class="w">   </span><span class="n">bounded</span><span class="w"> </span><span class="n">Gauss</span><span class="w"> </span><span class="n">upwind</span><span class="p">;</span>
+<span class="w">    </span><span class="n">div</span><span class="p">(</span><span class="n">phi</span><span class="p">,</span><span class="n">C</span><span class="p">.</span><span class="n">Mg</span><span class="p">)</span><span class="w">   </span><span class="n">bounded</span><span class="w"> </span><span class="n">Gauss</span><span class="w"> </span><span class="n">upwind</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>The number of energy corrector loops is prescribed in the PIMPLE entry of the <a class="reference external" href="https://doc.cfd.direct/openfoam/user-guide-v9/fvsolution">system/fvSolution dictionary file</a>.</p>
+<div class="highlight-C notranslate"><div class="highlight"><pre><span></span><span class="n">PIMPLE</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="p">...</span>
+<span class="w">    </span><span class="n">nEnergyCorrectors</span><span class="w"> </span><span class="mi">7</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="run-the-application">
+<h2>Run the application<a class="headerlink" href="#run-the-application" title="Permalink to this heading">¶</a></h2>
+<p>Once the case has been setup, run <cite>directChillFoam</cite> in the case directory:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span><span class="nb">cd</span><span class="w"> </span>directChillFoam/tutorials/heatTransfer/directChillFoam/Lebon2020
+<span class="gp">$ </span>directChillFoam
+</pre></div>
+</div>
+</section>
+<section id="post-processing">
+<h2>Post-processing<a class="headerlink" href="#post-processing" title="Permalink to this heading">¶</a></h2>
+<section id="contour-plots">
+<h3>Contour plots<a class="headerlink" href="#contour-plots" title="Permalink to this heading">¶</a></h3>
+<p>The sump profile (<a class="reference internal" href="#lebon2020-sump"><span class="std std-numref">Fig. 7</span></a>) is plotted from the VTK files that are saved in the
+postProcessing directory using the <code class="docutils literal notranslate"><span class="pre">Lebon2020.plot_sump.plot_sump()</span></code> function.</p>
+<dl class="py function">
+<dt class="sig sig-object py">
+<span class="sig-prename descclassname"><span class="pre">Lebon2020.plot_sump.</span></span><span class="sig-name descname"><span class="pre">plot_sump</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">image_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'sump.png'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cmap</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'jet'</span></span></em><span class="sig-paren">)</span></dt>
+<dd><p>Plots sump contour.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>image_name</strong> (<em>str</em>) – Filename of image, including path.</p></li>
+<li><p><strong>cmap</strong> (<em>str</em><em> or </em><em>matplotlib.colormaps</em>) – Color map for plotting contour.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>0 if successful.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<figure class="align-default" id="id5">
+<span id="lebon2020-sump"></span><a class="reference internal image-reference" href="../_images/Lebon2020_Sump.png"><img alt="Predicted sump profile" src="../_images/Lebon2020_Sump.png" style="width: 80%;" /></a>
+<figcaption>
+<p><span class="caption-number">Fig. 7 </span><span class="caption-text">Predicted sump profile.</span><a class="headerlink" href="#id5" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+</section>
+<section id="validation">
+<h3>Validation<a class="headerlink" href="#validation" title="Permalink to this heading">¶</a></h3>
+<p>The simulation can be verified by comparing the predicted temperatures in the billet with experimental measurements. Use
+the <code class="docutils literal notranslate"><span class="pre">Lebon2020.plot_line.plot_line()</span></code> function to plot <a class="reference internal" href="#lebon2020-80"><span class="std std-numref">Fig. 8</span></a>:</p>
+<dl class="py function">
+<dt class="sig sig-object py">
+<span class="sig-prename descclassname"><span class="pre">Lebon2020.plot_line.</span></span><span class="sig-name descname"><span class="pre">plot_line</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">plot_time</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Experimental</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Image_Path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'.'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">offset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-0.01</span></span></em><span class="sig-paren">)</span></dt>
+<dd><p>Plots temperature graphs at plot_time.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>plot_time</strong> (<em>str</em>) – Time at which to plot the temperatures.</p></li>
+<li><p><strong>Experimental</strong> (<em>pandas.Dataframe</em>) – Dataframe containing experimental data.</p></li>
+<li><p><strong>Image_Path</strong> (<em>str</em>) – Absolute path of line plot.</p></li>
+<li><p><strong>offset</strong> (<em>float</em>) – Offset position of mould bottom in experiment.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>0 if successful.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<figure class="align-default" id="id6">
+<span id="lebon2020-80"></span><a class="reference internal image-reference" href="../_images/Lebon2020_80.0.png"><img alt="Temperature line plots" src="../_images/Lebon2020_80.0.png" style="width: 80%;" /></a>
+<figcaption>
+<p><span class="caption-number">Fig. 8 </span><span class="caption-text">Comparing the predicted temperatures (solid lines) with experimental data (markers).</span><a class="headerlink" href="#id6" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+</section>
+</section>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">directChillFoam</a></h1>
+
+
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../solver/directChillFoam.html">Direct-chill (DC) casting solver</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../src/index.html">Libraries</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Tutorials</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="Vreeman2002.html">Tutorial: Vreeman <em>et al.</em> (2002) - DC casting of a binary Al-Cu alloy</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Tutorial: Lebon <em>et al.</em> (2020) - 3D model of the DC casting of an A6060 billet</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#pre-processing">Pre-processing</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#mesh-generation">Mesh generation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#boundary-and-initial-conditions">Boundary and initial conditions</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#physical-properties">Physical properties</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#control">Control</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#discretization-and-solver-settings">Discretization and solver settings</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#run-the-application">Run the application</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#post-processing">Post-processing</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#contour-plots">Contour plots</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#validation">Validation</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="Subroto2021.html">Tutorial: Subroto <em>et al.</em> (2021) - DC casting of a ternary Al alloy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="modules.html">Python scripts documentation</a></li>
+</ul>
+</li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="index.html">Tutorials</a><ul>
+      <li>Previous: <a href="Vreeman2002.html" title="previous chapter">Tutorial: Vreeman <em>et al.</em> (2002) - DC casting of a binary Al-Cu alloy</a></li>
+      <li>Next: <a href="Subroto2021.html" title="next chapter">Tutorial: Subroto <em>et al.</em> (2021) - DC casting of a ternary Al alloy</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2023, Bruno Lebon.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 5.3.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.13</a>
+      
+      |
+      <a href="../_sources/tutorials/Lebon2020.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+    <a href="https://github.com/blebon/directChillFoam" class="github">
+        <img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub"  class="github"/>
+    </a>
+    
+
+    
+  </body>
+</html>

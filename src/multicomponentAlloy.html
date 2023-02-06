@@ -1,0 +1,227 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Solute equation solver &#8212; directChillFoam OF9.0.2 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/alabaster.css" />
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Boundary conditions" href="ThermophysicalTransportModels.html" />
+    <link rel="prev" title="Solute model" href="soluteModel.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="solute-equation-solver">
+<h1>Solute equation solver<a class="headerlink" href="#solute-equation-solver" title="Permalink to this heading">¶</a></h1>
+<div class="contents topic" id="contents">
+<p class="topic-title">Contents:</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#solute-equation-solver" id="id1">Solute equation solver</a></p>
+<ul>
+<li><p><a class="reference internal" href="#installation" id="id2">Installation</a></p></li>
+<li><p><a class="reference internal" href="#usage" id="id3">Usage</a></p></li>
+<li><p><a class="reference internal" href="#c-classes" id="id4">C++ Classes</a></p></li>
+<li><p><a class="reference internal" href="#testing" id="id5">Testing</a></p></li>
+</ul>
+</li>
+</ul>
+</div>
+<p>The multicomponent alloy class for solving the solute transport equation.</p>
+<section id="installation">
+<h2>Installation<a class="headerlink" href="#installation" title="Permalink to this heading">¶</a></h2>
+<p>Pre-requisites:</p>
+<ul class="simple">
+<li><p>A working installation of <a class="reference external" href="https://openfoam.org/release/9/">OpenFOAM 9</a>.</p></li>
+<li><p>The <a class="reference internal" href="soluteModel.html"><span class="doc">Solute model</span></a> library.</p></li>
+</ul>
+<p>In the directChillFoam/applications/solver/heatTransfer/directChillFoam/multicomponentAlloy directory, run:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>wmake<span class="w"> </span>libso
+</pre></div>
+</div>
+</section>
+<section id="usage">
+<h2>Usage<a class="headerlink" href="#usage" title="Permalink to this heading">¶</a></h2>
+<p>Create the alloy in the CreateFields.H file:</p>
+<div class="highlight-C notranslate"><div class="highlight"><pre><span></span><span class="n">multicomponentAlloy</span><span class="w"> </span><span class="n">alloy</span><span class="p">(</span><span class="s">&quot;alloy&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">U</span><span class="p">,</span><span class="w"> </span><span class="n">rho</span><span class="p">,</span><span class="w"> </span><span class="n">rho2</span><span class="p">,</span><span class="w"> </span><span class="n">phi</span><span class="p">,</span><span class="w"> </span><span class="n">fvModels</span><span class="p">,</span><span class="w"> </span><span class="n">fvConstraints</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>Solve the solute transport equations in the energy corrector loop:</p>
+<div class="highlight-C notranslate"><div class="highlight"><pre><span></span><span class="n">alloy</span><span class="p">.</span><span class="n">solve</span><span class="p">(</span><span class="n">Us</span><span class="p">,</span><span class="w"> </span><span class="n">fvModels</span><span class="p">,</span><span class="w"> </span><span class="n">fvConstraints</span><span class="p">);</span>
+</pre></div>
+</div>
+</section>
+<section id="c-classes">
+<h2>C++ Classes<a class="headerlink" href="#c-classes" title="Permalink to this heading">¶</a></h2>
+<dl class="cpp class">
+<dt class="sig sig-object cpp" id="_CPPv4N4Foam19multicomponentAlloyE">
+<span id="_CPPv3N4Foam19multicomponentAlloyE"></span><span id="_CPPv2N4Foam19multicomponentAlloyE"></span><span id="Foam::multicomponentAlloy"></span><span class="target" id="classFoam_1_1multicomponentAlloy"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">multicomponentAlloy</span></span></span><span class="w"> </span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="k"><span class="pre">public</span></span><span class="w"> </span><span class="n"><span class="pre">IOdictionary</span></span><a class="headerlink" href="#_CPPv4N4Foam19multicomponentAlloyE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4Foam19multicomponentAlloy19multicomponentAlloyERK4wordRK14volVectorFieldRK14volScalarFieldRK17dimensionedScalarRK18surfaceScalarFieldRK8fvModelsRK13fvConstraints">
+<span id="_CPPv3N4Foam19multicomponentAlloy19multicomponentAlloyERK4wordRK14volVectorFieldRK14volScalarFieldRK17dimensionedScalarRK18surfaceScalarFieldRK8fvModelsRK13fvConstraints"></span><span id="_CPPv2N4Foam19multicomponentAlloy19multicomponentAlloyERK4wordRK14volVectorFieldRK14volScalarFieldRK17dimensionedScalarRK18surfaceScalarFieldRK8fvModelsRK13fvConstraints"></span><span id="Foam::multicomponentAlloy::multicomponentAlloy__wordCR.volVectorFieldCR.volScalarFieldCR.dimensionedScalarCR.surfaceScalarFieldCR.fvModelsCR.fvConstraintsCR"></span><span class="target" id="classFoam_1_1multicomponentAlloy_1abb8b60e10be0d3c43b3525342c4c6f47"></span><span class="sig-name descname"><span class="n"><span class="pre">multicomponentAlloy</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">word</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">alloyName</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">volVectorField</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">U</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">volScalarField</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">rho</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">dimensionedScalar</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">rho2</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">surfaceScalarField</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">phi</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N4Foam19multicomponentAlloy19multicomponentAlloyERK4wordRK14volVectorFieldRK14volScalarFieldRK17dimensionedScalarRK18surfaceScalarFieldRK8fvModelsRK13fvConstraints" title="Foam::multicomponentAlloy::multicomponentAlloy::fvModels"><span class="n"><span class="pre">fvModels</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">fvModels</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N4Foam19multicomponentAlloy19multicomponentAlloyERK4wordRK14volVectorFieldRK14volScalarFieldRK17dimensionedScalarRK18surfaceScalarFieldRK8fvModelsRK13fvConstraints" title="Foam::multicomponentAlloy::multicomponentAlloy::fvConstraints"><span class="n"><span class="pre">fvConstraints</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">fvConstraints</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4Foam19multicomponentAlloy19multicomponentAlloyERK4wordRK14volVectorFieldRK14volScalarFieldRK17dimensionedScalarRK18surfaceScalarFieldRK8fvModelsRK13fvConstraints" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Construct from components. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4Foam19multicomponentAlloyD0Ev">
+<span id="_CPPv3N4Foam19multicomponentAlloyD0Ev"></span><span id="_CPPv2N4Foam19multicomponentAlloyD0Ev"></span><span id="Foam::multicomponentAlloy::~multicomponentAlloy"></span><span class="target" id="classFoam_1_1multicomponentAlloy_1ac6a5891f59481fb803343dd1df441bd5"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">~multicomponentAlloy</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4Foam19multicomponentAlloyD0Ev" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Destructor. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK4Foam19multicomponentAlloy7solutesEv">
+<span id="_CPPv3NK4Foam19multicomponentAlloy7solutesEv"></span><span id="_CPPv2NK4Foam19multicomponentAlloy7solutesEv"></span><span id="Foam::multicomponentAlloy::solutesC"></span><span class="target" id="classFoam_1_1multicomponentAlloy_1af6536708087b285ad6ebdc54665ded43"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">PtrDictionary</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="soluteModel.html#_CPPv4N4Foam11soluteModelE" title="Foam::soluteModel"><span class="n"><span class="pre">soluteModel</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">solutes</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK4Foam19multicomponentAlloy7solutesEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Return the solutes. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4Foam19multicomponentAlloy7solutesEv">
+<span id="_CPPv3N4Foam19multicomponentAlloy7solutesEv"></span><span id="_CPPv2N4Foam19multicomponentAlloy7solutesEv"></span><span id="Foam::multicomponentAlloy::solutes"></span><span class="target" id="classFoam_1_1multicomponentAlloy_1a897d86211bab86b8fe7b881b350f4f79"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="n"><span class="pre">PtrDictionary</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="soluteModel.html#_CPPv4N4Foam11soluteModelE" title="Foam::soluteModel"><span class="n"><span class="pre">soluteModel</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">solutes</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4Foam19multicomponentAlloy7solutesEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Return the solutes. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4Foam19multicomponentAlloy5solveERK14volVectorFieldRK8fvModelsRK13fvConstraints">
+<span id="_CPPv3N4Foam19multicomponentAlloy5solveERK14volVectorFieldRK8fvModelsRK13fvConstraints"></span><span id="_CPPv2N4Foam19multicomponentAlloy5solveERK14volVectorFieldRK8fvModelsRK13fvConstraints"></span><span id="Foam::multicomponentAlloy::solve__volVectorFieldCR.fvModelsCR.fvConstraintsCR"></span><span class="target" id="classFoam_1_1multicomponentAlloy_1a94496fb090c3779ceb54bb3d36eca8bd"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">solve</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">volVectorField</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">Us_</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">fvModels</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">fvModels_</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">fvConstraints</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">fvConstraints_</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4Foam19multicomponentAlloy5solveERK14volVectorFieldRK8fvModelsRK13fvConstraints" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Solve each solute equation. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4Foam19multicomponentAlloy4readEv">
+<span id="_CPPv3N4Foam19multicomponentAlloy4readEv"></span><span id="_CPPv2N4Foam19multicomponentAlloy4readEv"></span><span id="Foam::multicomponentAlloy::read"></span><span class="target" id="classFoam_1_1multicomponentAlloy_1a711af99511aca09838aa1ef35f9e86e2"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">read</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4Foam19multicomponentAlloy4readEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Read base transportProperties dictionary. </p>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+</section>
+<section id="testing">
+<h2>Testing<a class="headerlink" href="#testing" title="Permalink to this heading">¶</a></h2>
+<p>The unit tests for the multicomponentAlloy libraries require the Boost libraries (&gt;= 1.69.0). The tests are run in the tests/multicomponentAlloy/case folder:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>wmake<span class="w"> </span>..<span class="w"> </span><span class="c1"># Build the test executable</span>
+<span class="gp">$ </span>blockMesh<span class="w"> </span><span class="c1"># Create the mesh for the test case</span>
+<span class="gp">$ </span>./test_multicomponentAlloy<span class="w"> </span>--log_level<span class="o">=</span>all<span class="w"> </span><span class="c1"># Run the tests</span>
+</pre></div>
+</div>
+</section>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">directChillFoam</a></h1>
+
+
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../solver/directChillFoam.html">Direct-chill (DC) casting solver</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Libraries</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="soluteModel.html">Solute model</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Solute equation solver</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#installation">Installation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#usage">Usage</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#c-classes">C++ Classes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#testing">Testing</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="ThermophysicalTransportModels.html">Boundary conditions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fvConstraints.html">Constraints</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fvModels.html">Solidification sources</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/index.html">Tutorials</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="index.html">Libraries</a><ul>
+      <li>Previous: <a href="soluteModel.html" title="previous chapter">Solute model</a></li>
+      <li>Next: <a href="ThermophysicalTransportModels.html" title="next chapter">Boundary conditions</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2023, Bruno Lebon.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 5.3.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.13</a>
+      
+      |
+      <a href="../_sources/src/multicomponentAlloy.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+    <a href="https://github.com/blebon/directChillFoam" class="github">
+        <img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub"  class="github"/>
+    </a>
+    
+
+    
+  </body>
+</html>
