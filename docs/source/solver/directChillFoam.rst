@@ -51,8 +51,16 @@ In the repository root directory (containting the main CMakeLists.txt), run:
 
 .. code-block:: console
   
-  $ cmake -S . -B build # Build everything in a separate directory
+  $ cmake -DCMAKE_BUILD_TYPE=Release -S . -B build # Build everything in a separate directory
   $ cd build            # Enter build directory
+  $ make VERBOSE=1      # Compile and link all libraries and directChillFoam, and copy files to OpenFOAM path
+
+To compile directChillFoam in Debug mode, run:
+
+.. code-block:: console
+  
+  $ cmake -DCMAKE_BUILD_TYPE=Debug -S . -B debug # Build everything in a separate directory
+  $ cd debug            # Enter debug directory
   $ make VERBOSE=1      # Compile and link all libraries and directChillFoam, and copy files to OpenFOAM path
 
 Running the application

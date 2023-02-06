@@ -75,6 +75,6 @@ jobs:
         mkdir -p $FOAM_RUN
         mkdir -p $FOAM_USER_LIBBIN
         mkdir -p $FOAM_USER_APPBIN
-        cmake -S . -B build
+        cmake -DCMAKE_BUILD_TYPE=Release -S . -B build
         cd build
         make

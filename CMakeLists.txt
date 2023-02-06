@@ -52,7 +52,7 @@ endif(NOT ${Boost_FOUND})
 
 enable_testing()
 
-message(STATUS "Setting generic OpenFOAM compilation options")
+message(STATUS "Setting common OpenFOAM compilation options")
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
@@ -64,7 +64,12 @@ add_compile_definitions(WM_LABEL_SIZE=$ENV{WM_LABEL_SIZE})
 add_compile_options(
     -Wall -Wextra -Wold-style-cast -Wnon-virtual-dtor -Wno-unused-parameter -Wno-invalid-offsetof -Wno-attributes
 )
-add_compile_options(-O3)
+if(CMAKE_BUILD_TYPE MATCHES "Debug")
+    set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG}gdb3 -DFULLDEBUG -O0 -gdwarf-4")
+else()
+    set(CMAKE_CXX_FLAGS_RELEASE "-O3")
+endif(CMAKE_BUILD_TYPE MATCHES "Debug")
+message(STATUS "Compiling in ${CMAKE_BUILD_TYPE} mode")
 add_compile_definitions(NoRepository)
 if(CMAKE_COMPILER_IS_GNUCXX)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -ftemplate-depth-100")
