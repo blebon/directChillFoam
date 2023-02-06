@@ -67,6 +67,7 @@ add_compile_options(
 if(CMAKE_BUILD_TYPE MATCHES "Debug")
     set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG}gdb3 -DFULLDEBUG -O0 -gdwarf-4")
 else()
+    set(CMAKE_BUILD_TYPE Release)
     set(CMAKE_CXX_FLAGS_RELEASE "-O3")
 endif(CMAKE_BUILD_TYPE MATCHES "Debug")
 message(STATUS "Compiling in ${CMAKE_BUILD_TYPE} mode")
